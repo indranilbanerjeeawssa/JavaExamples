@@ -2,8 +2,11 @@ package kafka.producer;
 
 import java.util.Properties;
 import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.serialization.StringSerializer;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -27,7 +30,11 @@ public class SimpleKafkaProducer {
 			e.printStackTrace();
 		}
 		if (null != prop) {
-			SimpleKafkaProducer.kafkaSender(prop, kafkaTopic, seederKeyString, seederValueString, numberOfMessages);
+			Properties properties = new Properties();
+	        properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, prop.getProperty("bootstrap.servers"));
+	        properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+	        properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+			SimpleKafkaProducer.kafkaSender(properties, kafkaTopic, seederKeyString, seederValueString, numberOfMessages);
 		}
 	}
 	
@@ -40,11 +47,12 @@ public class SimpleKafkaProducer {
 	         try {
 				producer.send(new ProducerRecord<String, String>(kafkaTopic, 
 				    thisKey, thisValue));
+				producer.flush();
 			} catch (Exception e) {
 				System.out.println("Encountered a problem when sending a Kafka message. Ensure topic is valid");
 				e.printStackTrace();
 			}
-	         System.out.println("Sent out one Kafka message with key = " + thisKey + " and value = " + thisValue);      
+	        System.out.println("Sent out one Kafka message with key = " + thisKey + " and value = " + thisValue);      
 		}
 		producer.close();
 	}
