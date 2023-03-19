@@ -12,10 +12,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class SimpleKafkaProducer {
-	
+
 	Properties prop;
-	
-	
+
 	public static void main(String[] args) {
 		String propertyFile = args[0];
 		String kafkaTopic = args[1];
@@ -31,51 +30,52 @@ public class SimpleKafkaProducer {
 		}
 		if (null != prop) {
 			Properties properties = new Properties();
-	        properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, prop.getProperty("bootstrap.servers"));
-	        properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-	        properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-			SimpleKafkaProducer.kafkaSender(properties, kafkaTopic, seederKeyString, seederValueString, numberOfMessages);
+			properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, prop.getProperty("bootstrap.servers"));
+			properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+			properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+			SimpleKafkaProducer.kafkaSender(properties, kafkaTopic, seederKeyString, seederValueString,
+					numberOfMessages);
 		}
 	}
-	
-	public static void kafkaSender(Properties prop, String kafkaTopic, String seederKeyString, String seederValueString, int numberOfMessages) {
-		
-		for(int i = 1; i <= numberOfMessages; i++) {
-			Producer<String, String> producer = new KafkaProducer
-			         <String, String>(prop);
-			 String thisKey = seederKeyString.concat("-" + Integer.toString(i));
-			 String thisValue = seederValueString.concat("-" + Integer.toString(i));
-	         try {
-				producer.send(new ProducerRecord<String, String>(kafkaTopic, 
-				    thisKey, thisValue));
+
+	public static void kafkaSender(Properties prop, String kafkaTopic, String seederKeyString, String seederValueString,
+			int numberOfMessages) {
+
+		Producer<String, String> producer = new KafkaProducer<String, String>(prop);
+		for (int i = 1; i <= numberOfMessages; i++) {
+
+			String thisKey = seederKeyString.concat("-" + Integer.toString(i));
+			String thisValue = seederValueString.concat("-" + Integer.toString(i));
+			try {
+				producer.send(new ProducerRecord<String, String>(kafkaTopic, thisKey, thisValue));
 				producer.flush();
-				producer.close();
 			} catch (Exception e) {
 				System.out.println("Encountered a problem when sending a Kafka message. Ensure topic is valid");
 				e.printStackTrace();
 			}
-	        System.out.println("Sent out one Kafka message with key = " + thisKey + " and value = " + thisValue);      
+			System.out.println("Sent out one Kafka message with key = " + thisKey + " and value = " + thisValue);
 		}
-		
+		producer.close();
+
 	}
 
 	public static Properties readPropertiesFile(String fileName) throws FileNotFoundException, IOException {
-	      FileInputStream fis = null;
-	      Properties prop = null;
-	      try {
-	         fis = new FileInputStream(fileName);
-	         prop = new Properties();
-	         prop.load(fis);
-	      } catch(FileNotFoundException fnfe) {
-	         fnfe.printStackTrace();
-	         throw new FileNotFoundException("Not a valid property file path");
-	      } catch(IOException ioe) {
-	         ioe.printStackTrace();
-	         throw new IOException("Problem reading property file. Check permissions");
-	      } finally {
-	         fis.close();
-	      }
-	      return prop;
-	   }
-	
+		FileInputStream fis = null;
+		Properties prop = null;
+		try {
+			fis = new FileInputStream(fileName);
+			prop = new Properties();
+			prop.load(fis);
+		} catch (FileNotFoundException fnfe) {
+			fnfe.printStackTrace();
+			throw new FileNotFoundException("Not a valid property file path");
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+			throw new IOException("Problem reading property file. Check permissions");
+		} finally {
+			fis.close();
+		}
+		return prop;
+	}
+
 }
