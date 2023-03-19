@@ -39,22 +39,24 @@ public class SimpleKafkaProducer {
 	}
 	
 	public static void kafkaSender(Properties prop, String kafkaTopic, String seederKeyString, String seederValueString, int numberOfMessages) {
-		Producer<String, String> producer = new KafkaProducer
-		         <String, String>(prop);
+		
 		for(int i = 1; i <= numberOfMessages; i++) {
+			Producer<String, String> producer = new KafkaProducer
+			         <String, String>(prop);
 			 String thisKey = seederKeyString.concat("-" + Integer.toString(i));
 			 String thisValue = seederValueString.concat("-" + Integer.toString(i));
 	         try {
 				producer.send(new ProducerRecord<String, String>(kafkaTopic, 
 				    thisKey, thisValue));
 				producer.flush();
+				producer.close();
 			} catch (Exception e) {
 				System.out.println("Encountered a problem when sending a Kafka message. Ensure topic is valid");
 				e.printStackTrace();
 			}
 	        System.out.println("Sent out one Kafka message with key = " + thisKey + " and value = " + thisValue);      
 		}
-		producer.close();
+		
 	}
 
 	public static Properties readPropertiesFile(String fileName) throws FileNotFoundException, IOException {
