@@ -45,8 +45,8 @@ public class SimpleKafkaProducer {
 				e.printStackTrace();
 			}
 	         System.out.println("Sent out one Kafka message with key = " + thisKey + " and value = " + thisValue);      
-	         producer.close();
 		}
+		producer.close();
 	}
 
 	public static Properties readPropertiesFile(String fileName) throws FileNotFoundException, IOException {
