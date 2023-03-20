@@ -29,10 +29,14 @@ public class SimpleKafkaProducer {
 			e.printStackTrace();
 		}
 		if (null != prop) {
-			Properties properties = new Properties();
+			Properties properties = new Properties(prop);
 			properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, prop.getProperty("bootstrap.servers"));
 			properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 			properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+			properties.setProperty("security.protocol", "SASL_SSL");
+			properties.setProperty("sasl.mechanism", "AWS_MSK_IAM");
+			properties.setProperty("sasl.jaas.config", "software.amazon.msk.auth.iam.IAMLoginModule required;");
+			properties.setProperty("sasl.client.callback.handler.class", "software.amazon.msk.auth.iam.IAMClientCallbackHandler");
 			SimpleKafkaProducer.kafkaSender(properties, kafkaTopic, seederKeyString, seederValueString,
 					numberOfMessages);
 		}
