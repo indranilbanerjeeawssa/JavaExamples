@@ -100,9 +100,9 @@ public class Person {
 				+ "]";
 	}
 	
-	public String toJson(Person p) {
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		return gson.toJson(p);
+	public String toJson() {
+		Gson gson = new Gson();
+		return gson.toJson(this);
 	}
 	
 }

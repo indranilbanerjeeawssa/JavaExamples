@@ -14,6 +14,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class JsonKafkaProducer {
 
@@ -40,9 +42,9 @@ public class JsonKafkaProducer {
 			properties.setProperty("sasl.mechanism", "AWS_MSK_IAM");
 			properties.setProperty("sasl.jaas.config", "software.amazon.msk.auth.iam.IAMLoginModule required;");
 			properties.setProperty("sasl.client.callback.handler.class", "software.amazon.msk.auth.iam.IAMClientCallbackHandler");
-			JsonKafkaProducer.kafkaSender(properties, kafkaTopic, seederKeyString, numberOfMessages);
+			String kafkaMessageKey = seederKeyString + "-" + JsonKafkaProducer.getTodayDate();
+			JsonKafkaProducer.kafkaSender(properties, kafkaTopic, kafkaMessageKey, numberOfMessages);
 		}
-		
 	}
 
 	public static void kafkaSender(Properties prop, String kafkaTopic, String seederKeyString, int numberOfMessages) {
@@ -57,7 +59,7 @@ public class JsonKafkaProducer {
 		for (int i = 1; i <= numberOfMessagesToSend; i++) {
 			String thisKey = seederKeyString.concat("-" + Integer.toString(i));
 			Person thisPerson = JsonKafkaProducer.getPersonFromLine(people.get(i));
-			String thisPersonJson = thisPerson.toJson(thisPerson);
+			String thisPersonJson = thisPerson.toJson();
 			try {
 				producer.send(new ProducerRecord<String, String>(kafkaTopic, thisKey, thisPersonJson));
 				producer.flush();
@@ -91,7 +93,7 @@ public class JsonKafkaProducer {
 	}
 	
 	public static List<String> readDataFile() {
-		List<String> personList = new ArrayList();
+		List<String> personList = new ArrayList<String>();
 		InputStream is = JsonKafkaProducer.class.getClassLoader().getResourceAsStream("us-500.csv");
 		BufferedReader bf = new BufferedReader(new InputStreamReader(is));
 		String thisLine = null;
@@ -125,6 +127,13 @@ public class JsonKafkaProducer {
 		thisPerson.setEmail(fields[10]);
 		thisPerson.setWebsite(fields[11]);
 		return thisPerson;
+	}
+	
+	public static String getTodayDate() {
+		
+		LocalDateTime ldt = LocalDateTime.now();
+        String formattedDateStr = DateTimeFormatter.ofPattern("MM-dd-YYYY-HH-MM-SS").format(ldt);
+        return formattedDateStr;
 	}
 
 }
