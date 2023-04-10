@@ -45,6 +45,7 @@ public class JsonKafkaProducer {
 			String kafkaMessageKey = seederKeyString + "-" + JsonKafkaProducer.getTodayDate();
 			JsonKafkaProducer.kafkaSender(properties, kafkaTopic, kafkaMessageKey, numberOfMessages);
 		}
+		
 	}
 
 	public static void kafkaSender(Properties prop, String kafkaTopic, String seederKeyString, int numberOfMessages) {
@@ -112,7 +113,8 @@ public class JsonKafkaProducer {
 	
 	public static Person getPersonFromLine(String line) {
 		
-		String[] fields = line.split(",");
+		//String[] fields = line.split(",");
+		String[] fields = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
 		Person thisPerson = new Person();
 		thisPerson.setFirstname(fields[0]);
 		thisPerson.setLastname(fields[1]);
