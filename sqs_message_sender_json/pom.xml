@@ -62,11 +62,13 @@
 			<scope>test</scope>
 		</dependency>
 		
+<!-- https://mvnrepository.com/artifact/software.amazon.awssdk/sqs -->
 <dependency>
-    <groupId>com.amazonaws</groupId>
-    <artifactId>aws-java-sdk-sqs</artifactId>
-    <version>1.12.464</version>
+    <groupId>software.amazon.awssdk</groupId>
+    <artifactId>sqs</artifactId>
+    <version>2.20.62</version>
 </dependency>
+
 
 	</dependencies>
 	<build>
