@@ -42,7 +42,7 @@ public class JsonSQSProducer {
 			final SendMessageRequest sendMessageRequest = new SendMessageRequest();
 			sendMessageRequest.withMessageBody(thisPerson.toJson());
 			sendMessageRequest.withQueueUrl(sqsQueue);
-			sendMessageRequest.withMessageAttributes(messageAttributes);
+			//sendMessageRequest.withMessageAttributes(messageAttributes);
 			sqs.sendMessage(sendMessageRequest);
 		}
 	}
