@@ -10,10 +10,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import com.amazonaws.services.sqs.AmazonSQS;
-import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
-import com.amazonaws.services.sqs.model.MessageAttributeValue;
-import com.amazonaws.services.sqs.model.SendMessageRequest;
+
+import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
+import software.amazon.awssdk.services.sqs.model.SetQueueAttributesRequest;
+import software.amazon.awssdk.services.sqs.model.SqsException;
+import software.amazon.awssdk.services.sqs.SqsClient;
+import software.amazon.awssdk.services.sqs.model.CreateQueueRequest;
+import software.amazon.awssdk.services.sqs.model.GetQueueUrlRequest;
+import software.amazon.awssdk.services.sqs.model.MessageAttributeValue;
 
 public class JsonSQSProducer {
 	
@@ -23,11 +27,7 @@ public class JsonSQSProducer {
 	
 
 	public static void sqsSender(String sqsQueue, String messageKey, int numberOfMessages) {
-		AmazonSQS sqs = AmazonSQSClientBuilder.defaultClient();
-		final Map<String, MessageAttributeValue> messageAttributes = new HashMap<>();
-		messageAttributes.put("MessageKey", new MessageAttributeValue()
-		.withDataType("String")
-		.withStringValue(messageKey.concat(JsonSQSProducer.getTodayDate())));
+		SqsClient sqsClient = SqsClient.builder().build();
 		
 		List<String> people = JsonSQSProducer.readDataFile(); 
 		 int numberOfMessagesToSend=0; 
@@ -36,16 +36,35 @@ public class JsonSQSProducer {
 		 } else { 
 			 numberOfMessagesToSend = people.size(); 
 		 }
-		
 		for (int i=1;i<= numberOfMessagesToSend; i++) {
 			Person thisPerson = JsonSQSProducer.getPersonFromLine(people.get(i));
-			final SendMessageRequest sendMessageRequest = new SendMessageRequest();
-			sendMessageRequest.withMessageBody(thisPerson.toJson());
-			sendMessageRequest.withQueueUrl(sqsQueue);
-			//sendMessageRequest.withMessageAttributes(messageAttributes);
-			sqs.sendMessage(sendMessageRequest);
+			JsonSQSProducer.sendMessage(sqsClient, sqsQueue, thisPerson.toJson(), messageKey, i);
 		}
 	}
+	
+	public static void sendMessage(SqsClient sqsClient, String queueName, String message, String messageKey, int messageNumber) {
+        try {
+           GetQueueUrlRequest getQueueRequest = GetQueueUrlRequest.builder()
+                .queueName(queueName)
+                .build();
+
+            String queueUrl = sqsClient.getQueueUrl(getQueueRequest).queueUrl();
+            Map<String, MessageAttributeValue> attributes = new HashMap<String, MessageAttributeValue>();
+            attributes.put("BatchIdentifier", MessageAttributeValue.builder().stringValue(messageKey).build());
+            attributes.put("MessageNumber", MessageAttributeValue.builder().stringValue(Integer.toString(messageNumber)).build());
+            SendMessageRequest sendMsgRequest = SendMessageRequest.builder()
+                .queueUrl(queueUrl)
+                .messageBody(message)
+                .messageAttributes(attributes)
+                .build();
+
+            sqsClient.sendMessage(sendMsgRequest);
+
+        } catch (SqsException e) {
+            System.err.println(e.awsErrorDetails().errorMessage());
+            System.exit(1);
+        }
+    }
 	
 	public static List<String> readDataFile() {
 		List<String> personList = new ArrayList<String>();
