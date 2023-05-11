@@ -50,7 +50,7 @@ public class JsonSQSProducer {
 
             String queueUrl = sqsClient.getQueueUrl(getQueueRequest).queueUrl();
             Map<String, MessageAttributeValue> attributes = new HashMap<String, MessageAttributeValue>();
-            attributes.put("BatchIdentifier", MessageAttributeValue.builder().stringValue(messageKey).build());
+            attributes.put("BatchIdentifier", MessageAttributeValue.builder().dataType("String").stringValue(messageKey).build());
             attributes.put("MessageNumber", MessageAttributeValue.builder().dataType("String").stringValue(Integer.toString(messageNumber)).build());
             SendMessageRequest sendMsgRequest = SendMessageRequest.builder()
                 .queueUrl(queueUrl)
