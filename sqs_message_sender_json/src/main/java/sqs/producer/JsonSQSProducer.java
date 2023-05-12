@@ -10,12 +10,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
 import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
-import software.amazon.awssdk.services.sqs.model.SetQueueAttributesRequest;
 import software.amazon.awssdk.services.sqs.model.SqsException;
 import software.amazon.awssdk.services.sqs.SqsClient;
-import software.amazon.awssdk.services.sqs.model.CreateQueueRequest;
 import software.amazon.awssdk.services.sqs.model.GetQueueUrlRequest;
 import software.amazon.awssdk.services.sqs.model.MessageAttributeValue;
 
@@ -50,15 +47,20 @@ public class JsonSQSProducer {
 
             String queueUrl = sqsClient.getQueueUrl(getQueueRequest).queueUrl();
             Map<String, MessageAttributeValue> attributes = new HashMap<String, MessageAttributeValue>();
-            attributes.put("BatchIdentifier", MessageAttributeValue.builder().dataType("String").stringValue(messageKey).build());
+            attributes.put("MessageKey", MessageAttributeValue.builder().dataType("String").stringValue(messageKey + "-" + JsonSQSProducer.getTodayDate()).build());
             attributes.put("MessageNumber", MessageAttributeValue.builder().dataType("String").stringValue(Integer.toString(messageNumber)).build());
             SendMessageRequest sendMsgRequest = SendMessageRequest.builder()
                 .queueUrl(queueUrl)
                 .messageBody(message)
                 .messageAttributes(attributes)
                 .build();
-
+            System.out.println("**********************************************************");
+            System.out.println("Now going to send one SQS message to queue - " + queueName);
+            System.out.println("Message Key = " + messageKey + " and Message Number = " + Integer.toString(messageNumber));
+            System.out.println("Message Body = " + message);
             sqsClient.sendMessage(sendMsgRequest);
+            System.out.println("Now done sending one SQS message");
+            System.out.println("**********************************************************");
 
         } catch (SqsException e) {
             System.err.println(e.awsErrorDetails().errorMessage());
@@ -78,15 +80,12 @@ public class JsonSQSProducer {
 				thisLine = bf.readLine();
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return personList;
 	}
 	
 	public static Person getPersonFromLine(String line) {
-		
-		//String[] fields = line.split(",");
 		String[] fields = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
 		Person thisPerson = new Person();
 		thisPerson.setFirstname(fields[0]);
