@@ -1,0 +1,1 @@
+java -classpath ~/environment/JavaExamples/sqs_message_sender_json/target/json-sqs-producer-0.0.1-SNAPSHOT.jar sqs.producer.JsonSQSProducer <QueueName> <Key To Identify This Set Of Messages> <Number Of Messages>
