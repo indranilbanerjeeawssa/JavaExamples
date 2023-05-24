@@ -38,7 +38,7 @@ public class JsonKinesisProducer {
 	public static void sendMessage(KinesisClient kinesisClient, String streamName, Person person, String messageKey, int messageNumber) {
 		byte[] personBytes = person.toJson().getBytes();
 		PutRecordRequest request = PutRecordRequest.builder()
-	            .partitionKey(messageKey.concat(Integer.toString(messageNumber)))
+	            .partitionKey(messageKey.concat("-").concat(getTodayDate()).concat("-").concat(Integer.toString(messageNumber)))
 	            .streamName(streamName)
 	            .data(SdkBytes.fromByteArray(personBytes))
 	            .build();
@@ -48,7 +48,7 @@ public class JsonKinesisProducer {
             System.out.println("Message Key = " + messageKey + " and Message Number = " + Integer.toString(messageNumber));
             System.out.println("Message Body = " + person.toJson());
             kinesisClient.putRecord(request);
-            System.out.println("Now done sending one SQS message");
+            System.out.println("Now done sending one Kinesis message");
             System.out.println("**********************************************************");
         } catch (KinesisException e) {
             System.err.println(e.getMessage());
