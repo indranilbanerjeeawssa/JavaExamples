@@ -1,6 +1,7 @@
 package com.amazonaws.services.lambda.samples.events.kinesis;
 
 
+import java.text.DateFormat;
 import java.util.Map;
 import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
@@ -10,6 +11,7 @@ import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
+import com.amazonaws.services.lambda.runtime.events.KinesisEvent;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent.MessageAttribute;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
 import com.google.gson.Gson;
@@ -41,16 +43,29 @@ public class DynamoDBUpdater {
 		this.dynamoTable = dynamoDB.getTable(this.dynamoDBTableName);
 	}
 	
-	public PutItemOutcome insertIntoDynamoDB(SQSMessage msg, Gson gson, LambdaLogger logger) {
-		logger.log("Now inserting a row in DynamoDB for messageID = " + msg.getMessageId());
+	public PutItemOutcome insertIntoDynamoDB(KinesisEvent.KinesisEventRecord msg, Gson gson, LambdaLogger logger) {
+		logger.log("Now inserting a row in DynamoDB for message with sequence number = " + msg.getKinesis().getSequenceNumber());
 		Item item = new Item();
-		item.withPrimaryKey("MessageID", msg.getMessageId());
-		item.withString("ReceiptHandle", msg.getReceiptHandle());
-		item.withString("EventSourceARN", msg.getEventSourceArn());
+		KinesisEvent.Record kinesisRecord = msg.getKinesis();
+		item.withPrimaryKey("PartitionKey", msg.getKinesis().getPartitionKey());
+		item.withString("Sequence Number", msg.getKinesis().getSequenceNumber());
+		item.withString("EventSourceARN", msg.getEventSourceARN());
 		item.withString("EventSource", msg.getEventSource());
+		item.withString("EventName", msg.getEventName());
+		item.withString("EventVersion", msg.getEventVersion());
 		item.withString("AWSRegion", msg.getAwsRegion());
-		item.withString("MD5OfBody", msg.getMd5OfBody());
-		Person thisPerson = gson.fromJson(msg.getBody(), Person.class);
+		item.withString("EventID", msg.getEventID());
+		item.withString("InvokeIdentityARN", msg.getInvokeIdentityArn());
+		item.withString("ApproximateArrivalTimestamp", (msg.getKinesis().getApproximateArrivalTimestamp().toString()));
+		String encryptionType = "null";
+		if (null != msg.getKinesis().getEncryptionType()) {
+			encryptionType = msg.getKinesis().getEncryptionType();
+		}
+		item.withString("EncryptionType", encryptionType);
+		final byte[] bytes = new byte[kinesisRecord.getData().remaining()];
+		kinesisRecord.getData().duplicate().get(bytes);
+		String payload = new String(bytes);
+		Person thisPerson = gson.fromJson(payload, Person.class);
 		item.withString("Firstname", thisPerson.getFirstname());
 		item.withString("Lastname", thisPerson.getLastname());
 		item.withString("Company", thisPerson.getCompany());
@@ -63,16 +78,8 @@ public class DynamoDBUpdater {
 		item.withString("Cell_Phone", thisPerson.getCellPhone());
 		item.withString("Email", thisPerson.getEmail());
 		item.withString("Website", thisPerson.getWebsite());
-		Map<String, String> attributes = msg.getAttributes();
-	      attributes.forEach((k,v) -> {
-	    	  item.withString(k, v);
-	      });
-		item.withString("Md5OfMessageAttributes", msg.getMd5OfMessageAttributes());
-		Map<String, MessageAttribute> messageAttributes = msg.getMessageAttributes();
-	      messageAttributes.forEach((k,v) -> {
-	    	  item.withString(k, v.getStringValue());
-	      });
-	    logger.log("Now done inserting a row in DynamoDB for messageID = " + msg.getMessageId());
+		item.withLong("TimeOfInsertion", System.currentTimeMillis());
+		logger.log("Now done inserting a row in DynamoDB for message with sequence number = " + msg.getKinesis().getSequenceNumber());
 		return dynamoTable.putItem(item);
 	}
 	

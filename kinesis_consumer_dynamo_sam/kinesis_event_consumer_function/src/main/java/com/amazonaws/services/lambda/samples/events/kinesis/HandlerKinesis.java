@@ -84,6 +84,22 @@ public class HandlerKinesis implements RequestHandler<KinesisEvent, StreamsEvent
 				}
 				Person person = gson.fromJson(payload, Person.class);
 				logger.log("Person details = " + person.toString());
+				long timeNow = System.currentTimeMillis();
+				long receiveTime = msg.getKinesis().getApproximateArrivalTimestamp().getTime();
+				if ((person.getState().equalsIgnoreCase("CA")) && (timeNow - receiveTime <= 100000)) {
+					try {
+						throwit("Deliberately induced exception for CA persons");
+					} catch (Exception e) {
+						logger.log("An exception occurred while processing this Kinesis message - " + e.getMessage());
+						batchItemFailures.add(new StreamsEventResponse.BatchItemFailure(msg.getKinesis().getSequenceNumber()));
+						logger.log("Added message with messageID = " + msg.getKinesis().getSequenceNumber() + " to batchItemFailures list");
+						addToDynamoDB = false;
+					}
+				}
+				String AWS_SAM_LOCAL = System.getenv("AWS_SAM_LOCAL");
+				if ((null == AWS_SAM_LOCAL) && (addToDynamoDB)) {
+					ddbUpdater.insertIntoDynamoDB(msg, gson, logger);
+				}
 			} catch (Exception e) {
 				logger.log("An exception occurred while processing this Kinesis message - " + e.toString());
 				batchItemFailures.add(new StreamsEventResponse.BatchItemFailure(msg.getKinesis().getSequenceNumber()));
