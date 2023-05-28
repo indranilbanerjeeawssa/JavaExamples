@@ -86,7 +86,7 @@ public class HandlerKinesis implements RequestHandler<KinesisEvent, StreamsEvent
 				logger.log("Person details = " + person.toString());
 				long timeNow = System.currentTimeMillis();
 				long receiveTime = msg.getKinesis().getApproximateArrivalTimestamp().getTime();
-				if ((person.getState().equalsIgnoreCase("CA")) && (timeNow - receiveTime <= 100000)) {
+				if ((person.getState().equalsIgnoreCase("CA")) && (timeNow - receiveTime <= 30000)) {
 					try {
 						throwit("Deliberately induced exception for CA persons");
 					} catch (Exception e) {

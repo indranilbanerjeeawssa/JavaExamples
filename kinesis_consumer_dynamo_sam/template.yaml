@@ -37,7 +37,7 @@ Resources:
               - ReportBatchItemFailures
             MaximumBatchingWindowInSeconds: 300
             MaximumRecordAgeInSeconds: 7200
-            MaximumRetryAttempts: 5
+            MaximumRetryAttempts: 10
             
       Policies:
       - Statement:
