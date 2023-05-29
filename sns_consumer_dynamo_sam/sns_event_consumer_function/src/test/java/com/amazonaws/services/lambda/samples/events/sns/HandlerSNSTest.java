@@ -1,34 +1,25 @@
 package com.amazonaws.services.lambda.samples.events.sns;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.document.DynamoDB;
-import com.amazonaws.services.dynamodbv2.document.Item;
+import org.junit.jupiter.api.extension.ExtendWith;
 import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
-import com.amazonaws.services.dynamodbv2.document.Table;
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
+import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.events.SNSEvent;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent;
 import com.amazonaws.services.lambda.runtime.events.SNSEvent.SNSRecord;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import org.mockito.ArgumentMatchers;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-class DynamoDBUpdaterTest {
-	
+class HandlerSNSTest {
 	private static final String snsEventJson = "{\n"
 			+ "    \"records\": [\n"
 			+ "        {\n"
@@ -61,19 +52,12 @@ class DynamoDBUpdaterTest {
 			+ "    ]\n"
 			+ "}";
 
+	@Mock
+	DynamoDBUpdater ddbUpdater;	
+	
 	@Test
-	void testDynamoDBUpdater() {
-		DynamoDBUpdater ddbUpdater = new DynamoDBUpdater("DBTable");
-		assertNotNull(ddbUpdater);
-		assertEquals(ddbUpdater.dynamoDBTableName, "DBTable");
-		assertNotNull(ddbUpdater.client);
-		assertNotNull(ddbUpdater.dynamoDB);
-		assertNotNull(ddbUpdater.dynamoTable);
-	}
-
-	@Test
-	void testInsertIntoDynamoDB() {
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+	@ExtendWith(MockitoExtension.class)
+	void invokeTest() {
 		ObjectMapper om = new ObjectMapper().registerModule(new JodaModule());
 		SNSEvent event = null;
 		try {
@@ -83,21 +67,14 @@ class DynamoDBUpdaterTest {
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
-		List<SNSRecord> records = event.getRecords();
-		for(SNSRecord msg : records){
-			Table dynamoDbTable = mock(Table.class);
-		    AmazonDynamoDB client = mock(AmazonDynamoDB.class);
-			DynamoDB dynamoDB = mock(DynamoDB.class);
-		    PutItemOutcome putoutcome = mock(PutItemOutcome.class);
-		    LambdaLogger logger = mock(LambdaLogger.class);
-		    DynamoDBUpdater ddbUpdater = new DynamoDBUpdater("DBTable");
-		    ddbUpdater.client = client;
-		    ddbUpdater.dynamoDB = dynamoDB;
-		    ddbUpdater.dynamoTable = dynamoDbTable;
-		    when(ddbUpdater.dynamoTable.putItem(ArgumentMatchers.any(Item.class))).thenReturn(putoutcome);
-			PutItemOutcome putOutcome = ddbUpdater.insertIntoDynamoDB(msg, gson, logger);
-			assertNotNull(putOutcome);
-		}
-	    
+		Context context = new TestContext();
+		PutItemOutcome putItemOutcome = mock(PutItemOutcome.class);
+		DynamoDBUpdater dbUpdater = mock(DynamoDBUpdater.class);
+		HandlerSNS handler = new HandlerSNS();
+		handler.ddbUpdater = dbUpdater;
+		//when(handler.ddbUpdater.insertIntoDynamoDB(ArgumentMatchers.any(SNSRecord.class), ArgumentMatchers.any(Gson.class), ArgumentMatchers.any(LambdaLogger.class))).thenReturn(putItemOutcome);
+		String result = handler.handleRequest(event, context);
+		assertEquals(result, "200-OK");
 	}
+
 }

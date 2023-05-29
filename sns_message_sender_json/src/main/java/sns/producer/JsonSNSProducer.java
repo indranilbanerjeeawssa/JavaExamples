@@ -38,7 +38,7 @@ public class JsonSNSProducer {
 		 }
 		for (int i=1;i<= numberOfMessagesToSend; i++) {
 			Person thisPerson = JsonSNSProducer.getPersonFromLine(people.get(i));
-			JsonSNSProducer.sendMessage(snsClient, snsTopicARN, thisPerson.toJson(), messageKey, i);
+			JsonSNSProducer.sendMessage(snsClient, snsTopicARN, thisPerson.toJson(), messageKey.concat("-").concat(JsonSNSProducer.getTodayDate()), i);
 		}
 	}
 	
@@ -69,13 +69,13 @@ public class JsonSNSProducer {
 	public static void sendMessage(SnsClient snsClient, String topicARN, String message, String messageKey, int messageNumber) {
 		try {
 			Map<String, MessageAttributeValue> attributes = new HashMap<String, MessageAttributeValue>();
-            attributes.put("MessageKey", MessageAttributeValue.builder().dataType("String").stringValue(messageKey + "-" + JsonSNSProducer.getTodayDate()).build());
+            attributes.put("MessageKey", MessageAttributeValue.builder().dataType("String").stringValue(messageKey).build());
             attributes.put("MessageNumber", MessageAttributeValue.builder().dataType("String").stringValue(Integer.toString(messageNumber)).build());
             PublishRequest request = PublishRequest.builder()
                 .message(message)
                 .topicArn(topicARN)
                 .messageAttributes(attributes)
-                .subject("Sending Message with Key = " + messageKey + "-" + JsonSNSProducer.getTodayDate() + " and message number = " + Integer.toString(messageNumber))
+                .subject("Sending Message with Key = " + messageKey + " and message number = " + Integer.toString(messageNumber))
                 .build();
             System.out.println("**********************************************************");
             System.out.println("Now going to send one SNS message to topic - " + topicARN);

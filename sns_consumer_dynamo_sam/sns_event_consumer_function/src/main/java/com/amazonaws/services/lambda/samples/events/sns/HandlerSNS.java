@@ -22,11 +22,13 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent.MessageAttribute;
 import com.amazonaws.services.lambda.runtime.events.SNSEvent;
+import com.amazonaws.services.lambda.runtime.events.SNSEvent.SNSRecord;
 import com.amazonaws.services.lambda.runtime.events.SQSBatchResponse;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,22 +39,52 @@ public class HandlerSNS implements RequestHandler<SNSEvent, String>{
 	Gson gson = new GsonBuilder().setPrettyPrinting().create();
 	String dynamoDBTableName = System.getenv("DYNAMO_DB_TABLE");
 	DynamoDBUpdater ddbUpdater = new DynamoDBUpdater(dynamoDBTableName);
-	boolean addToDynamoDB;
+	boolean addToDynamoDB=true;
 	ObjectMapper objectMapper = new ObjectMapper().registerModule(new JodaModule());
 	@Override
 	public String handleRequest(SNSEvent event, Context context)
 	{
 		LambdaLogger logger = context.getLogger();
-		logger.log("Begin Event *************");
 		try {
-			logger.log(objectMapper.writeValueAsString(event));
-		} catch (JsonProcessingException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.log("Begin Event *************");
+			try {
+				logger.log(objectMapper.writeValueAsString(event));
+			} catch (JsonProcessingException e1) {
+				logger.log("An exception occurred " + e1.getMessage());
+				throw new RuntimeException(e1);
+			}
+			logger.log("End Event ***************");
+			List<SNSRecord> records = event.getRecords();
+			for (SNSRecord record : records) {
+				logger.log("Event Source = " + record.getEventSource());
+				logger.log("Event Subscription ARN = " + record.getEventSubscriptionArn());
+				logger.log("Event Version = " + record.getEventVersion());
+				logger.log("Signing Cert URL = " + record.getSNS().getSigningCertUrl());
+				logger.log("Message ID = " + record.getSNS().getMessageId());
+				logger.log("Subject = " + record.getSNS().getSubject());
+				logger.log("Unsubscribe URL = " + record.getSNS().getUnsubscribeUrl());
+				logger.log("Signature URL = " + record.getSNS().getSignatureVersion());
+				logger.log("Signature = " + record.getSNS().getSignature());
+				logger.log("Type = " + record.getSNS().getType());
+				logger.log("Topic ARN = " + record.getSNS().getTopicArn());
+				logger.log("Timestamp = " + record.getSNS().getTimestamp().toString());
+				String message = record.getSNS().getMessage();
+				Person person = gson.fromJson(message, Person.class);
+				logger.log("This person = " + person.toString());
+				Map<String, SNSEvent.MessageAttribute> attributes = record.getSNS().getMessageAttributes();
+				attributes.forEach((k,v) -> {
+					logger.log("Attribute: " + k + ", Value: " + v.getValue());
+				});
+				logger.log(record.getSNS().getSignatureVersion());
+				String AWS_SAM_LOCAL = System.getenv("AWS_SAM_LOCAL");
+				if ((null == AWS_SAM_LOCAL) && (addToDynamoDB)) {
+					ddbUpdater.insertIntoDynamoDB(record, gson, logger);
+				}
+			}
+		} catch (JsonSyntaxException e) {
+			logger.log("An exception occurred " + e.getMessage());
+			throw new RuntimeException(e);
 		}
-		logger.log("End Event ***************");
-		
-
 		return new String("200-OK");
 	}
 	

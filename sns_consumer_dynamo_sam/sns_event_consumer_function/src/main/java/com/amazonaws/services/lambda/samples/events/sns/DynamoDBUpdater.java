@@ -10,6 +10,8 @@ import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
+import com.amazonaws.services.lambda.runtime.events.SNSEvent;
+import com.amazonaws.services.lambda.runtime.events.SNSEvent.SNSRecord;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent.MessageAttribute;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
 import com.google.gson.Gson;
@@ -25,7 +27,7 @@ public class DynamoDBUpdater {
 	public DynamoDBUpdater(String dynamoDBTableName) {
 		super();
 		if (null == dynamoDBTableName) {
-			this.dynamoDBTableName = "SQS_LAMBDA_DYNAMO_TABLE";
+			this.dynamoDBTableName = "SNS_LAMBDA_DYNAMO_TABLE";
 		} else {
 			this.dynamoDBTableName = dynamoDBTableName;
 		}
@@ -41,16 +43,23 @@ public class DynamoDBUpdater {
 		this.dynamoTable = dynamoDB.getTable(this.dynamoDBTableName);
 	}
 	
-	public PutItemOutcome insertIntoDynamoDB(SQSMessage msg, Gson gson, LambdaLogger logger) {
-		logger.log("Now inserting a row in DynamoDB for messageID = " + msg.getMessageId());
+	public PutItemOutcome insertIntoDynamoDB(SNSRecord record, Gson gson, LambdaLogger logger) {
+		logger.log("Now inserting a row in DynamoDB for messageID = " + record.getSNS().getMessageId());
 		Item item = new Item();
-		item.withPrimaryKey("MessageID", msg.getMessageId());
-		item.withString("ReceiptHandle", msg.getReceiptHandle());
-		item.withString("EventSourceARN", msg.getEventSourceArn());
-		item.withString("EventSource", msg.getEventSource());
-		item.withString("AWSRegion", msg.getAwsRegion());
-		item.withString("MD5OfBody", msg.getMd5OfBody());
-		Person thisPerson = gson.fromJson(msg.getBody(), Person.class);
+		item.withPrimaryKey("MessageID", record.getSNS().getMessageId());
+		item.withString("EventSource", record.getEventSource());
+		item.withString("EventSubscriptionARN", record.getEventSubscriptionArn());
+		item.withString("EventVersion", record.getEventVersion());
+		item.withString("SigningCertURL", record.getSNS().getSigningCertUrl());
+		item.withString("MessageID", record.getSNS().getMessageId());
+		item.withString("Subject", record.getSNS().getSubject());
+		item.withString("UnsubscribeURL", record.getSNS().getUnsubscribeUrl());
+		item.withString("SignatureURL", record.getSNS().getSignatureVersion());
+		item.withString("Signature", record.getSNS().getSignature());
+		item.withString("Type", record.getSNS().getType());
+		item.withString("TopicARN", record.getSNS().getTopicArn());
+		item.withString("Timestamp", record.getSNS().getTimestamp().toString());
+		Person thisPerson = gson.fromJson(record.getSNS().getMessage(), Person.class);
 		item.withString("Firstname", thisPerson.getFirstname());
 		item.withString("Lastname", thisPerson.getLastname());
 		item.withString("Company", thisPerson.getCompany());
@@ -63,16 +72,11 @@ public class DynamoDBUpdater {
 		item.withString("Cell_Phone", thisPerson.getCellPhone());
 		item.withString("Email", thisPerson.getEmail());
 		item.withString("Website", thisPerson.getWebsite());
-		Map<String, String> attributes = msg.getAttributes();
-	      attributes.forEach((k,v) -> {
-	    	  item.withString(k, v);
-	      });
-		item.withString("Md5OfMessageAttributes", msg.getMd5OfMessageAttributes());
-		Map<String, MessageAttribute> messageAttributes = msg.getMessageAttributes();
-	      messageAttributes.forEach((k,v) -> {
-	    	  item.withString(k, v.getStringValue());
-	      });
-	    logger.log("Now done inserting a row in DynamoDB for messageID = " + msg.getMessageId());
+		Map<String, SNSEvent.MessageAttribute> attributes = record.getSNS().getMessageAttributes();
+		attributes.forEach((k,v) -> {
+			item.withString(k, v.getValue());
+		});
+	    logger.log("Now done inserting a row in DynamoDB for messageID = " + record.getSNS().getMessageId());
 		return dynamoTable.putItem(item);
 	}
 	
