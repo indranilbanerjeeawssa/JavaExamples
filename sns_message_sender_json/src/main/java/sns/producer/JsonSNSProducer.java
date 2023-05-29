@@ -75,6 +75,7 @@ public class JsonSNSProducer {
                 .message(message)
                 .topicArn(topicARN)
                 .messageAttributes(attributes)
+                .subject("Sending Message with Key = " + messageKey + "-" + JsonSNSProducer.getTodayDate() + " and message number = " + Integer.toString(messageNumber))
                 .build();
             System.out.println("**********************************************************");
             System.out.println("Now going to send one SNS message to topic - " + topicARN);
