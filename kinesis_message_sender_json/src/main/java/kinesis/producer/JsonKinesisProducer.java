@@ -16,7 +16,12 @@ import software.amazon.awssdk.services.kinesis.model.PutRecordRequest;
 public class JsonKinesisProducer {
 	
 	public static void main(String[] args) {
-		JsonKinesisProducer.kinesisSender(args[0], args[1], Integer.parseInt(args[2]));
+		try {
+			JsonKinesisProducer.kinesisSender(args[0], args[1].concat(JsonKinesisProducer.getTodayDate()), Integer.parseInt(args[2]));
+		} catch (NumberFormatException e) {
+			System.err.println("Make sure to enter three parameters: 1 - Kinesis Stream Name, 2 - A string to be used as a key for the batch, 3 - Number of messages to send out in the batch");
+			e.printStackTrace();
+		}
 	}
 		
 	public static void kinesisSender(String kinesisStream, String messageKey, int numberOfMessages) {
@@ -38,7 +43,7 @@ public class JsonKinesisProducer {
 	public static void sendMessage(KinesisClient kinesisClient, String streamName, Person person, String messageKey, int messageNumber) {
 		byte[] personBytes = person.toJson().getBytes();
 		PutRecordRequest request = PutRecordRequest.builder()
-	            .partitionKey(messageKey.concat("-").concat(getTodayDate()).concat("-").concat(Integer.toString(messageNumber)))
+	            .partitionKey(messageKey.concat("-").concat(Integer.toString(messageNumber)))
 	            .streamName(streamName)
 	            .data(SdkBytes.fromByteArray(personBytes))
 	            .build();

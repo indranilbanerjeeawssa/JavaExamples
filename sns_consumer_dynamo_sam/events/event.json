@@ -1,31 +1,31 @@
 {
-    "Records": [
-        {
-            "sns": {
-                "messageAttributes": {
-                    "MessageKey": {
-                        "type": "String",
-                        "value": "TestKey03-05-29-2023-06-05-49"
-                    },
-                    "MessageNumber": {
-                        "type": "String",
-                        "value": "89"
-                    }
-                },
-                "signingCertUrl": "https://sns.us-west-2.amazonaws.com/SimpleNotificationService-01d088a6f77103d0fe307c0069e40ed6.pem",
-                "messageId": "e31e34d1-7349-539d-9b0e-683f306298ac",
-                "message": "{\"firstname\":\"Tyra\",\"lastname\":\"Shields\",\"company\":\"\\\"Assink, Anne H Esq\\\"\",\"street\":\"3 Fort Worth Ave\",\"city\":\"Philadelphia\",\"county\":\"Philadelphia\",\"state\":\"PA\",\"zip\":\"19106\",\"homePhone\":\"215-255-1641\",\"cellPhone\":\"215-228-8264\",\"email\":\"tshields@gmail.com\",\"website\":\"http://www.assinkannehesq.com\"}",
-                "subject": "Sending Message with Key = TestKey03-05-29-2023-06-05-49 and message number = 89",
-                "unsubscribeUrl": "https://sns.us-west-2.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:us-west-2:664251831272:LambdaSNSTopicDynamoJavaSAM:740325aa-8302-42e6-ab5c-70c2c38633d3",
-                "type": "Notification",
-                "signatureVersion": "1",
-                "signature": "VzYoZ8lESJ+s9sMsy1Xlb8CfV8Y7M8Qk/w18onb2jEd0Q71GI8q1688PGQU3EFHkRtKLB/DYFPCZzZDezhmpQo6iHqSW2yVGgb5nt9x6NcccFOhK7jRl7QEmEkTmVn1AbtmJOL7ya5U+CZDbMKebCJnRdWgRlrtbE06TaklPnv0REHavXJ4c3fPdkDWc8mBiOhRX6+aAVII9D9Zt7zQLl6ROI8xH6RzIe0ZOy7gv9pF3YycAnrjX3ibD+5+7hvFKZPvgnhDansm++MjHa/mON5L08VxTY9lEFiTlQv2L7bS6XihwhWpmk6uQHQWpdURMdZsL2l2WRUNR+IROhvEQqg==",
-                "timestamp": 1685340395498,
-                "topicArn": "arn:aws:sns:us-west-2:664251831272:LambdaSNSTopicDynamoJavaSAM"
-            },
-            "eventVersion": "1.0",
-            "eventSource": "aws:sns",
-            "eventSubscriptionArn": "arn:aws:sns:us-west-2:664251831272:LambdaSNSTopicDynamoJavaSAM:740325aa-8302-42e6-ab5c-70c2c38633d3"
-        }
-    ]
+  "Records": [
+    {
+      "EventVersion": "1.0",
+      "EventSubscriptionArn": "arn:aws:sns:us-east-1:123456789012:sns-lambda:21be56ed-a058-49f5-8c98-aedd2564c486",
+      "EventSource": "aws:sns",
+      "Sns": {
+        "SignatureVersion": "1",
+        "Timestamp": "2019-01-02T12:45:07.000Z",
+        "Signature": "tcc6faL2yUC6dgZdmrwh1Y4cGa/ebXEkAi6RibDsvpi+tE/1+82j...65r==",
+        "SigningCertUrl": "https://sns.us-east-1.amazonaws.com/SimpleNotificationService-ac565b8b1a6c5d002d285f9598aa1d9b.pem",
+        "MessageId": "95df01b4-ee98-5cb9-9903-4c221d41eb5e",
+        "Message": "{\"firstname\":\"Mitsue\",\"lastname\":\"Tollner\",\"company\":\"Morlong Associates\",\"street\":\"7 Eads St\",\"city\":\"Chicago\",\"county\":\"Cook\",\"state\":\"IL\",\"zip\":\"60632\",\"homePhone\":\"773-573-6914\",\"cellPhone\":\"773-924-8565\",\"email\":\"mitsue_tollner@yahoo.com\",\"website\":\"http://www.morlongassociates.com\"}",
+        "MessageAttributes": {
+          "MessageKey": {
+                "Type": "String",
+                "Value": "TestKey07-05-29-2023-10-05-75"
+          },
+          "MessageNumber": {
+                "Type": "String",
+                "Value": "6"
+          }
+        },
+        "Type": "Notification",
+        "UnsubscribeUrl": "https://sns.us-east-1.amazonaws.com/?Action=Unsubscribe&amp;SubscriptionArn=arn:aws:sns:us-east-1:123456789012:test-lambda:21be56ed-a058-49f5-8c98-aedd2564c486",
+        "TopicArn":"arn:aws:sns:us-east-1:123456789012:sns-lambda",
+        "Subject": "TestInvoke"
+      }
+    }
+  ]
 }

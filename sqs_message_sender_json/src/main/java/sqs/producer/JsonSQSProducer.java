@@ -19,7 +19,12 @@ import software.amazon.awssdk.services.sqs.model.MessageAttributeValue;
 public class JsonSQSProducer {
 	
 	public static void main(String[] args) {
-		JsonSQSProducer.sqsSender(args[0], args[1], Integer.parseInt(args[2]));
+		try {
+			JsonSQSProducer.sqsSender(args[0], args[1].concat(JsonSQSProducer.getTodayDate()), Integer.parseInt(args[2]));
+		} catch (NumberFormatException e) {
+			System.out.println("Pass three parameters: 1 - Queue Name, 2 - A string to be used as key for this batch of messages, 3 - Number of Messages in this batch");
+			e.printStackTrace();
+		}
 	}
 	
 
@@ -47,7 +52,7 @@ public class JsonSQSProducer {
 
             String queueUrl = sqsClient.getQueueUrl(getQueueRequest).queueUrl();
             Map<String, MessageAttributeValue> attributes = new HashMap<String, MessageAttributeValue>();
-            attributes.put("MessageKey", MessageAttributeValue.builder().dataType("String").stringValue(messageKey + "-" + JsonSQSProducer.getTodayDate()).build());
+            attributes.put("MessageKey", MessageAttributeValue.builder().dataType("String").stringValue(messageKey).build());
             attributes.put("MessageNumber", MessageAttributeValue.builder().dataType("String").stringValue(Integer.toString(messageNumber)).build());
             SendMessageRequest sendMsgRequest = SendMessageRequest.builder()
                 .queueUrl(queueUrl)

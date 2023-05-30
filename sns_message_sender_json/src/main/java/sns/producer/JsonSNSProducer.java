@@ -23,7 +23,12 @@ import software.amazon.awssdk.services.sns.model.MessageAttributeValue;
 public class JsonSNSProducer {
 	
 	public static void main(String[] args) {
-		JsonSNSProducer.snsSender(args[0], args[1], Integer.parseInt(args[2]));
+		try {
+			JsonSNSProducer.snsSender(args[0], args[1].concat("-").concat(JsonSNSProducer.getTodayDate()), Integer.parseInt(args[2]));
+		} catch (NumberFormatException e) {
+			System.out.println("Pass three parameters in that order - 1 - The Topic Name, 2 - The");
+			e.printStackTrace();
+		}
 	}
 	
 	public static void snsSender(String snsTopic, String messageKey, int numberOfMessages) {
@@ -38,7 +43,7 @@ public class JsonSNSProducer {
 		 }
 		for (int i=1;i<= numberOfMessagesToSend; i++) {
 			Person thisPerson = JsonSNSProducer.getPersonFromLine(people.get(i));
-			JsonSNSProducer.sendMessage(snsClient, snsTopicARN, thisPerson.toJson(), messageKey.concat("-").concat(JsonSNSProducer.getTodayDate()), i);
+			JsonSNSProducer.sendMessage(snsClient, snsTopicARN, thisPerson.toJson(), messageKey, i);
 		}
 	}
 	
