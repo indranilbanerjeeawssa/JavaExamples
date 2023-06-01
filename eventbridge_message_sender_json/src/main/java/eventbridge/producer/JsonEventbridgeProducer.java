@@ -28,7 +28,6 @@ public class JsonEventbridgeProducer {
 	
 	public static void eventbridgeSender(String eventbridgeBus, String messageKey, int numberOfMessages) {
 		EventBridgeClient eventbridgeClient = EventBridgeClient.builder().build();
-		//String snsTopicARN = JsonEventbridgeProducer.getTopicARNFromTopicName(snsClient, snsTopic);
 		List<String> people = JsonEventbridgeProducer.readDataFile(); 
 		 int numberOfMessagesToSend=0; 
 		 if (people.size() > numberOfMessages) { 
@@ -51,8 +50,8 @@ public class JsonEventbridgeProducer {
 			PutEventsRequestEntry entry = PutEventsRequestEntry.
 										  builder().
 										  detail(message).
-										  detailType("PersonCustomEvent").
-										  source("EventbridgeMessageSenderJava").
+										  detailType(PersonWithKeyAndNumber.class.getName()).
+										  source(JsonEventbridgeProducer.class.getName()).
 										  eventBusName(eventbridgeBus).time(Instant.now()).
 										  build();
 			PutEventsRequest eventsRequest = PutEventsRequest.builder()
