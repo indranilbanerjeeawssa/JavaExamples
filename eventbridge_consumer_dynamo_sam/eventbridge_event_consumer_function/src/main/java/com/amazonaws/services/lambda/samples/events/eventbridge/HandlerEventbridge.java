@@ -16,6 +16,7 @@ package com.amazonaws.services.lambda.samples.events.eventbridge;
 
 import java.util.List;
 import java.util.Map;
+import java.util.LinkedHashMap;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
@@ -33,14 +34,17 @@ public class HandlerEventbridge implements RequestHandler<ScheduledEvent, String
 	String dynamoDBTableName = System.getenv("DYNAMO_DB_TABLE");
 	DynamoDBUpdater ddbUpdater = new DynamoDBUpdater(dynamoDBTableName);
 	boolean addToDynamoDB=true;
-	ObjectMapper objectMapper = new ObjectMapper().registerModule(new JodaModule());
+	//ObjectMapper objectMapper = new ObjectMapper().registerModule(new JodaModule());
 	@Override
 	public String handleRequest(ScheduledEvent event, Context context)
 	{
 		LambdaLogger logger = context.getLogger();
-		logger.log("Begin Event *************");
+		
 		try {
-			logger.log(objectMapper.writeValueAsString(event));
+			logger.log("Begin Event *************");
+			//logger.log(objectMapper.writeValueAsString(event));
+			logger.log(gson.toJson(event));
+			logger.log("End Event ***************");
 			logger.log("AWS Account = " + event.getAccount());
 			logger.log("AWS Region = " + event.getRegion());
 			logger.log("Event Source = " + event.getSource());
@@ -56,24 +60,31 @@ public class HandlerEventbridge implements RequestHandler<ScheduledEvent, String
 				}
 			}
 			Map<String, Object> eventDetail = event.getDetail();
-			eventDetail.forEach((k,v) -> {
-				logger.log("Attribute: " + k + ", Value: " + v.toString());
-				if (k.equalsIgnoreCase("person")) {
-					try {
-						Person thisPerson = objectMapper.readValue(v.toString(), Person.class);
-						logger.log("Person in Message = " + thisPerson.toString());
-					} catch (JsonMappingException e) {
-						logger.log("Exception occurred while parsing to Person class - " + e.getMessage());
-					} catch (JsonProcessingException e) {
-						logger.log("Exception occurred while parsing to Person class - " + e.getMessage());
-					}
-				}
-			});
-		} catch (JsonProcessingException e1) {
+			PersonWithKeyAndNumber personWithKeyAndNumber = gson.fromJson(gson.toJson(eventDetail), PersonWithKeyAndNumber.class);
+			logger.log("PersonWithKeyAndNumber = " + personWithKeyAndNumber.toString());
+			logger.log("Message Key = " + personWithKeyAndNumber.getMessageKey());
+			logger.log("Message Number = " + personWithKeyAndNumber.messageNumber);
+			logger.log("Firstname = " + personWithKeyAndNumber.getPerson().getFirstname());
+			logger.log("Lastname = " + personWithKeyAndNumber.getPerson().getLastname());
+			logger.log("Company = " + personWithKeyAndNumber.getPerson().getCompany());
+			logger.log("Street = " + personWithKeyAndNumber.getPerson().getStreet());
+			logger.log("City = " + personWithKeyAndNumber.getPerson().getCity());
+			logger.log("County = " + personWithKeyAndNumber.getPerson().getCounty());
+			logger.log("State = " + personWithKeyAndNumber.getPerson().getState());
+			logger.log("Zip = " + personWithKeyAndNumber.getPerson().getZip());
+			logger.log("Cellphone = " + personWithKeyAndNumber.getPerson().getCellPhone());
+			logger.log("Homephone = " + personWithKeyAndNumber.getPerson().getHomePhone());
+			logger.log("Email = " + personWithKeyAndNumber.getPerson().getEmail());
+			logger.log("Website = " + personWithKeyAndNumber.getPerson().getWebsite());
+			String AWS_SAM_LOCAL = System.getenv("AWS_SAM_LOCAL");
+			if ((null == AWS_SAM_LOCAL) && (addToDynamoDB)) {
+				ddbUpdater.insertIntoDynamoDB(event, gson, logger);
+			}
+		} catch (Exception e1) {
 			logger.log("An exception occurred " + e1.getMessage());
 			throw new RuntimeException(e1);
 		}
-		logger.log("End Event ***************");
+		
 		return new String("200-OK");
 	}
 }

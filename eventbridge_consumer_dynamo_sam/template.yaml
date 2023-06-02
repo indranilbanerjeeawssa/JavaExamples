@@ -58,7 +58,7 @@ Resources:
     Properties:
       TableName: EventbridgeDynamoDBTableJava
       PrimaryKey:
-        Name: MessageID
+        Name: EventID
         Type: String 
   EventbridgeEventLambdaRule:
     Type: AWS::Events::Rule

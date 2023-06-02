@@ -19,38 +19,35 @@ import com.google.gson.Gson;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import com.amazonaws.services.lambda.runtime.events.ScheduledEvent;
 
 class HandlerEventbridgeTest {
-	private static final String snsEventJson = "{\n"
-			+ "    \"records\": [\n"
-			+ "        {\n"
-			+ "            \"sns\": {\n"
-			+ "                \"messageAttributes\": {\n"
-			+ "                    \"MessageKey\": {\n"
-			+ "                        \"type\": \"String\",\n"
-			+ "                        \"value\": \"TestKey03-05-29-2023-06-05-49\"\n"
-			+ "                    },\n"
-			+ "                    \"MessageNumber\": {\n"
-			+ "                        \"type\": \"String\",\n"
-			+ "                        \"value\": \"89\"\n"
-			+ "                    }\n"
-			+ "                },\n"
-			+ "                \"signingCertUrl\": \"https://sns.us-west-2.amazonaws.com/SimpleNotificationService-01d088a6f77103d0fe307c0069e40ed6.pem\",\n"
-			+ "                \"messageId\": \"e31e34d1-7349-539d-9b0e-683f306298ac\",\n"
-			+ "                \"message\": \"{\\\"firstname\\\":\\\"Tyra\\\",\\\"lastname\\\":\\\"Shields\\\",\\\"company\\\":\\\"\\\\\\\"Assink, Anne H Esq\\\\\\\"\\\",\\\"street\\\":\\\"3 Fort Worth Ave\\\",\\\"city\\\":\\\"Philadelphia\\\",\\\"county\\\":\\\"Philadelphia\\\",\\\"state\\\":\\\"PA\\\",\\\"zip\\\":\\\"19106\\\",\\\"homePhone\\\":\\\"215-255-1641\\\",\\\"cellPhone\\\":\\\"215-228-8264\\\",\\\"email\\\":\\\"tshields@gmail.com\\\",\\\"website\\\":\\\"http://www.assinkannehesq.com\\\"}\",\n"
-			+ "                \"subject\": \"Sending Message with Key = TestKey03-05-29-2023-06-05-49 and message number = 89\",\n"
-			+ "                \"unsubscribeUrl\": \"https://sns.us-west-2.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:us-west-2:664251831272:LambdaSNSTopicDynamoJavaSAM:740325aa-8302-42e6-ab5c-70c2c38633d3\",\n"
-			+ "                \"type\": \"Notification\",\n"
-			+ "                \"signatureVersion\": \"1\",\n"
-			+ "                \"signature\": \"VzYoZ8lESJ+s9sMsy1Xlb8CfV8Y7M8Qk/w18onb2jEd0Q71GI8q1688PGQU3EFHkRtKLB/DYFPCZzZDezhmpQo6iHqSW2yVGgb5nt9x6NcccFOhK7jRl7QEmEkTmVn1AbtmJOL7ya5U+CZDbMKebCJnRdWgRlrtbE06TaklPnv0REHavXJ4c3fPdkDWc8mBiOhRX6+aAVII9D9Zt7zQLl6ROI8xH6RzIe0ZOy7gv9pF3YycAnrjX3ibD+5+7hvFKZPvgnhDansm++MjHa/mON5L08VxTY9lEFiTlQv2L7bS6XihwhWpmk6uQHQWpdURMdZsL2l2WRUNR+IROhvEQqg==\",\n"
-			+ "                \"timestamp\": 1685340395498,\n"
-			+ "                \"topicArn\": \"arn:aws:sns:us-west-2:664251831272:LambdaSNSTopicDynamoJavaSAM\"\n"
-			+ "            },\n"
-			+ "            \"eventVersion\": \"1.0\",\n"
-			+ "            \"eventSource\": \"aws:sns\",\n"
-			+ "            \"eventSubscriptionArn\": \"arn:aws:sns:us-west-2:664251831272:LambdaSNSTopicDynamoJavaSAM:740325aa-8302-42e6-ab5c-70c2c38633d3\"\n"
-			+ "        }\n"
-			+ "    ]\n"
+	private static final String eventbridgeEventJson = "{\n"
+			+ "    \"account\": \"664251831272\",\n"
+			+ "    \"region\": \"us-west-2\",\n"
+			+ "    \"detail\": {\n"
+			+ "        \"person\": {\n"
+			+ "            \"firstname\": \"Carma\",\n"
+			+ "            \"lastname\": \"Vanheusen\",\n"
+			+ "            \"company\": \"Springfield Div Oh Edison Co\",\n"
+			+ "            \"street\": \"68556 Central Hwy\",\n"
+			+ "            \"city\": \"San Leandro\",\n"
+			+ "            \"county\": \"Alameda\",\n"
+			+ "            \"state\": \"CA\",\n"
+			+ "            \"zip\": \"94577\",\n"
+			+ "            \"homePhone\": \"510-503-7169\",\n"
+			+ "            \"cellPhone\": \"510-452-4835\",\n"
+			+ "            \"email\": \"carma@cox.net\",\n"
+			+ "            \"website\": \"http://www.springfielddivohedisonco.com\"\n"
+			+ "        },\n"
+			+ "        \"messageKey\": \"TestKey06-06-01-2023-07-06-60\",\n"
+			+ "        \"messageNumber\": 95\n"
+			+ "    },\n"
+			+ "    \"detailType\": \"eventbridge.producer.PersonWithKeyAndNumber\",\n"
+			+ "    \"source\": \"eventbridge.producer.JsonEventbridgeProducer\",\n"
+			+ "    \"id\": \"6df79d5f-e740-b135-1088-d3a1f948eda3\",\n"
+			+ "    \"time\": 1685604509000,\n"
+			+ "    \"resources\": []\n"
 			+ "}";
 
 	@Mock
@@ -59,7 +56,23 @@ class HandlerEventbridgeTest {
 	@Test
 	@ExtendWith(MockitoExtension.class)
 	void invokeTest() {
-		assertEquals(2,2);
+		ObjectMapper om = new ObjectMapper().registerModule(new JodaModule());
+		ScheduledEvent event = null;
+		try {
+			event = om.readValue(eventbridgeEventJson, ScheduledEvent.class);
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		Context context = new TestContext();
+		PutItemOutcome putItemOutcome = mock(PutItemOutcome.class);
+		DynamoDBUpdater dbUpdater = mock(DynamoDBUpdater.class);
+		HandlerEventbridge handler = new HandlerEventbridge();
+		handler.ddbUpdater = dbUpdater;
+		//when(handler.ddbUpdater.insertIntoDynamoDB(ArgumentMatchers.any(SNSRecord.class), ArgumentMatchers.any(Gson.class), ArgumentMatchers.any(LambdaLogger.class))).thenReturn(putItemOutcome);
+		String result = handler.handleRequest(event, context);
+		assertEquals(result, "200-OK");
 	}
 
 }
