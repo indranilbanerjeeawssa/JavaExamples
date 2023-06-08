@@ -9,6 +9,9 @@ import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueReques
 import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueResponse;
 
 
+
+
+
 public class SecretsManagerDecoder {
 	
 	public static String getSecret() {
