@@ -2,21 +2,14 @@ package com.amazonaws.services.lambda.samples.events.eventbridge;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
+//import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.events.SNSEvent;
-import com.amazonaws.services.lambda.runtime.events.SNSEvent.SNSRecord;
-import com.amazonaws.services.lambda.samples.events.eventbridge.DynamoDBUpdater;
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
-import com.google.gson.Gson;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import com.amazonaws.services.lambda.runtime.events.ScheduledEvent;
@@ -66,7 +59,7 @@ class HandlerEventbridgeTest {
 			e.printStackTrace();
 		}
 		Context context = new TestContext();
-		PutItemOutcome putItemOutcome = mock(PutItemOutcome.class);
+		//PutItemOutcome putItemOutcome = mock(PutItemOutcome.class);
 		DynamoDBUpdater dbUpdater = mock(DynamoDBUpdater.class);
 		HandlerEventbridge handler = new HandlerEventbridge();
 		handler.ddbUpdater = dbUpdater;

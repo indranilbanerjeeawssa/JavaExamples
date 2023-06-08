@@ -16,17 +16,12 @@ package com.amazonaws.services.lambda.samples.events.eventbridge;
 
 import java.util.List;
 import java.util.Map;
-import java.util.LinkedHashMap;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.ScheduledEvent;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.joda.JodaModule;
 
 // Handler value: example.HandlerSQS
 public class HandlerEventbridge implements RequestHandler<ScheduledEvent, String>{

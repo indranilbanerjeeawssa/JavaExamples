@@ -4,9 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
@@ -14,11 +11,6 @@ import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
-import com.amazonaws.services.lambda.runtime.events.SNSEvent;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent;
-import com.amazonaws.services.lambda.runtime.events.SNSEvent.SNSRecord;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
-import com.amazonaws.services.lambda.samples.events.eventbridge.DynamoDBUpdater;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

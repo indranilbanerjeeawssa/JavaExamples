@@ -10,8 +10,6 @@ import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
-import com.amazonaws.services.lambda.runtime.events.SNSEvent;
-import com.amazonaws.services.lambda.runtime.events.SNSEvent.SNSRecord;
 import com.amazonaws.services.lambda.runtime.events.ScheduledEvent;
 import com.google.gson.Gson;
 
@@ -73,7 +71,7 @@ public class DynamoDBUpdater {
 		item.withString("Homephone", personWithKeyAndNumber.getPerson().getHomePhone());
 		item.withString("Email", personWithKeyAndNumber.getPerson().getEmail());
 		item.withString("Website", personWithKeyAndNumber.getPerson().getWebsite());
-	    logger.log("Now inserting a row in DynamoDB for eventID = " + event.getId());
+	    logger.log("Now finished inserting a row in DynamoDB for eventID = " + event.getId());
 	    return dynamoTable.putItem(item);
 	}
 	
