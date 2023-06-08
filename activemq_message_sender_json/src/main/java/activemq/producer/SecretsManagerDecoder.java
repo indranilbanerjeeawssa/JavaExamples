@@ -1,5 +1,8 @@
 package activemq.producer;
 
+import com.amazonaws.regions.DefaultAwsRegionProviderChain;
+import software.amazon.awssdk.regions.Region;
+
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
 import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueRequest;
@@ -11,8 +14,17 @@ public class SecretsManagerDecoder {
 	public static String getSecret() {
 
 		String secretName = "AmazonMQCredentials";
-	    SecretsManagerClient client = SecretsManagerClient.builder()
-	    		.credentialsProvider(DefaultCredentialsProvider.builder().build())
+		
+		DefaultAwsRegionProviderChain defaultAwsRegionProviderChain = new DefaultAwsRegionProviderChain();
+		String regionString = defaultAwsRegionProviderChain.getRegion();
+		Region region = Region.of(regionString);
+		
+		//final var regionProvider = DefaultAwsRegionProviderChain. builder().build();
+        //final var region = regionProvider.getRegion();
+		
+		
+		SecretsManagerClient client = SecretsManagerClient.builder()
+	            .region(region)
 	            .build();
 
 	    GetSecretValueRequest getSecretValueRequest = GetSecretValueRequest.builder()
