@@ -17,12 +17,8 @@ public class SecretsManagerDecoder {
 		
 		DefaultAwsRegionProviderChain defaultAwsRegionProviderChain = new DefaultAwsRegionProviderChain();
 		String regionString = defaultAwsRegionProviderChain.getRegion();
+		System.out.println("regionString = " + regionString);
 		Region region = Region.of(regionString);
-		
-		//final var regionProvider = DefaultAwsRegionProviderChain. builder().build();
-        //final var region = regionProvider.getRegion();
-		
-		
 		SecretsManagerClient client = SecretsManagerClient.builder()
 	            .region(region)
 	            .build();
