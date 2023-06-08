@@ -13,13 +13,38 @@ public class SecretsManagerDecoder {
 	
 	public static String getSecret() {
 
-		String secretName = "AmazonMQCredentials";
+//		String secretName = "AmazonMQCredentials";
+//		
+//		DefaultAwsRegionProviderChain defaultAwsRegionProviderChain = new DefaultAwsRegionProviderChain();
+//		String regionString = defaultAwsRegionProviderChain.getRegion();
+//		System.out.println("regionString = " + regionString);
+//		Region region = Region.of(regionString);
+//		SecretsManagerClient client = SecretsManagerClient.builder()
+//	            .region(region)
+//	            .build();
+//
+//	    GetSecretValueRequest getSecretValueRequest = GetSecretValueRequest.builder()
+//	            .secretId(secretName)
+//	            .build();
+//
+//	    GetSecretValueResponse getSecretValueResponse = null;
+//
+//	    try {
+//	        getSecretValueResponse = client.getSecretValue(getSecretValueRequest);
+//	    } catch (Exception e) {
+//	        e.printStackTrace();
+//	    }
+//	    if (null != getSecretValueResponse) {
+//	    	return getSecretValueResponse.secretString();
+//	    } else {
+//	    	return "Sorry mate! No secret found";
+//	    }
 		
-		DefaultAwsRegionProviderChain defaultAwsRegionProviderChain = new DefaultAwsRegionProviderChain();
-		String regionString = defaultAwsRegionProviderChain.getRegion();
-		System.out.println("regionString = " + regionString);
-		Region region = Region.of(regionString);
-		SecretsManagerClient client = SecretsManagerClient.builder()
+		String secretName = "AmazonMQCredentials";
+	    Region region = Region.of("us-west-2");
+
+	    // Create a Secrets Manager client
+	    SecretsManagerClient client = SecretsManagerClient.builder()
 	            .region(region)
 	            .build();
 
@@ -27,18 +52,20 @@ public class SecretsManagerDecoder {
 	            .secretId(secretName)
 	            .build();
 
-	    GetSecretValueResponse getSecretValueResponse = null;
+	    GetSecretValueResponse getSecretValueResponse;
 
 	    try {
 	        getSecretValueResponse = client.getSecretValue(getSecretValueRequest);
 	    } catch (Exception e) {
-	        e.printStackTrace();
+	        // For a list of exceptions thrown, see
+	        // https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
+	        throw e;
 	    }
-	    if (null != getSecretValueResponse) {
-	    	return getSecretValueResponse.secretString();
-	    } else {
-	    	return "Sorry mate! No secret found";
-	    }
+
+	    String secret = getSecretValueResponse.secretString();
+	    return secret;
+		
+		
 	}
 	
 	public static void main(String[] args) {
