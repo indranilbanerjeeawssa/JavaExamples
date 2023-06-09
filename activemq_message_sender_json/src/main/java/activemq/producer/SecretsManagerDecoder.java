@@ -1,16 +1,12 @@
 package activemq.producer;
 
+import com.google.gson.Gson;
 
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.regions.providers.DefaultAwsRegionProviderChain;
-import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
 import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueRequest;
 import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueResponse;
-
-
-
-
 
 public class SecretsManagerDecoder {
 	
@@ -20,7 +16,7 @@ public class SecretsManagerDecoder {
 		
 		DefaultAwsRegionProviderChain defaultAwsRegionProviderChain = new DefaultAwsRegionProviderChain();
 		Region region = defaultAwsRegionProviderChain.getRegion();
-		System.out.println("regionString = " + region.toString());
+		System.out.println("region = " + region.toString());
 		
 		SecretsManagerClient client = SecretsManagerClient.builder()
 	            .region(region)
@@ -42,13 +38,12 @@ public class SecretsManagerDecoder {
 	    } else {
 	    	return "Sorry mate! No secret found";
 	    }
-		
-
-		
-		
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(SecretsManagerDecoder.getSecret());
+		Gson gson = new Gson();
+		User user = gson.fromJson(SecretsManagerDecoder.getSecret(), User.class);
+		System.out.println("Username = " + user.getUsername());
+		System.out.println("Password = " + user.getPassword());
 	}
 }
