@@ -40,10 +40,8 @@ public class SecretsManagerDecoder {
 	    }
 	}
 	
-	public static void main(String[] args) {
+	public static User getUsernameAndPassword() {
 		Gson gson = new Gson();
-		User user = gson.fromJson(SecretsManagerDecoder.getSecret(), User.class);
-		System.out.println("Username = " + user.getUsername());
-		System.out.println("Password = " + user.getPassword());
+		return gson.fromJson(SecretsManagerDecoder.getSecret(), User.class);
 	}
 }

@@ -3,11 +3,12 @@ package activemq.producer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import org.apache.kafka.clients.producer.Producer;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.common.serialization.StringSerializer;
+
+
+import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.jms.pool.PooledConnectionFactory;
+import javax.jms.*;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -22,33 +23,23 @@ public class JsonActiveMQProducer {
 	Properties prop;
 
 	public static void main(String[] args) {
-		String propertyFile = args[0];
-		String kafkaTopic = args[1];
+		
+		String activeMQEndpoint = args[0];
+		String activeMQUsername = SecretsManagerDecoder.getUsernameAndPassword().getUsername();
+		String activeMQPassword = SecretsManagerDecoder.getUsernameAndPassword().getPassword();
+		String activeMQQueue = args[1];
 		String seederKeyString = args[2];
 		int numberOfMessages = Integer.parseInt(args[3]);
-		Properties prop = null;
+		String activeMQMessageKey = seederKeyString + "-" + JsonActiveMQProducer.getTodayDate();
 		try {
-			prop = JsonActiveMQProducer.readPropertiesFile(propertyFile);
-		} catch (IOException e) {
-			System.out.println("Please specify a valid Kafka Properties File as the first argument");
+			JsonActiveMQProducer.activeMQQueueSender(activeMQEndpoint, activeMQUsername, activeMQPassword, activeMQQueue, activeMQMessageKey, numberOfMessages);
+		} catch (Exception e) {
+			System.out.println("Exception occurred");
 			e.printStackTrace();
 		}
-		if (null != prop) {
-			Properties properties = new Properties(prop);
-			properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, prop.getProperty("bootstrap.servers"));
-			properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-			properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-			properties.setProperty("security.protocol", "SASL_SSL");
-			properties.setProperty("sasl.mechanism", "AWS_MSK_IAM");
-			properties.setProperty("sasl.jaas.config", "software.amazon.msk.auth.iam.IAMLoginModule required;");
-			properties.setProperty("sasl.client.callback.handler.class", "software.amazon.msk.auth.iam.IAMClientCallbackHandler");
-			String kafkaMessageKey = seederKeyString + "-" + JsonActiveMQProducer.getTodayDate();
-			JsonActiveMQProducer.kafkaSender(properties, kafkaTopic, kafkaMessageKey, numberOfMessages);
-		}
-		
 	}
 
-	public static void kafkaSender(Properties prop, String kafkaTopic, String seederKeyString, int numberOfMessages) {
+	public static void activeMQQueueSender(String activeMQEndpoint, String activeMQUsername, String activeMQPassword, String activeMQQueue, String seederKeyString, int numberOfMessages) throws Exception {
 		List<String> people = JsonActiveMQProducer.readDataFile();
 		int numberOfMessagesToSend=0;
 		if (people.size() > numberOfMessages) {
@@ -56,22 +47,53 @@ public class JsonActiveMQProducer {
 		} else {
 			numberOfMessagesToSend = people.size();
 		}
-		Producer<String, String> producer = new KafkaProducer<String, String>(prop);
-		for (int i = 1; i <= numberOfMessagesToSend; i++) {
-			String thisKey = seederKeyString.concat("-" + Integer.toString(i));
-			Person thisPerson = JsonActiveMQProducer.getPersonFromLine(people.get(i));
-			String thisPersonJson = thisPerson.toJson();
-			try {
-				producer.send(new ProducerRecord<String, String>(kafkaTopic, thisKey, thisPersonJson));
-				producer.flush();
-			} catch (Exception e) {
-				System.out.println("Encountered a problem when sending a Kafka message. Ensure topic is valid");
-				e.printStackTrace();
+		
+		final ActiveMQConnectionFactory connectionFactory =
+                createActiveMQConnectionFactory(activeMQEndpoint, activeMQUsername, activeMQPassword);
+        final PooledConnectionFactory pooledConnectionFactory =
+                createPooledConnectionFactory(connectionFactory);
+		
+        final Connection producerConnection = pooledConnectionFactory
+                .createConnection();
+        producerConnection.start();
+    
+        // Create a session.
+        final Session producerSession = producerConnection
+                .createSession(false, Session.AUTO_ACKNOWLEDGE);
+    
+        // Create a queue 
+   
+        Destination producerDestination;
+		try {
+			producerDestination = producerSession
+			        .createQueue(activeMQQueue);
+			// Create a producer from the session to the queue.
+	        final MessageProducer producer = producerSession
+	                .createProducer(producerDestination);
+	        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+	        
+	        for (int i = 1; i <= numberOfMessagesToSend; i++) {
+				Person thisPerson = JsonActiveMQProducer.getPersonFromLine(people.get(i));
+				String thisPersonJson = thisPerson.toJson();
+				// Create a message.
+		        TextMessage producerMessage = producerSession
+		                .createTextMessage(thisPersonJson);
+		        producerMessage.setStringProperty("MessageBatchIdentifier", seederKeyString);
+		        producerMessage.setIntProperty("MessageNumberInBatch", i);
+		        // Send the message.
+		        producer.send(producerMessage);
+		        System.out.println("Sent out one message - Number " + i);
 			}
-			System.out.println("Sent out one Kafka message with key = " + thisKey + " and value = " + thisPersonJson);
+	        producer.close();
+	        
+		} catch (Exception e1) {
+			System.out.println("Queue creation failed. Queue may already exist");
+			System.out.println(e1.getMessage());
+			e1.printStackTrace();
+		} finally {
+			producerSession.close();
+	        producerConnection.close();
 		}
-		producer.close();
-
 	}
 
 	public static Properties readPropertiesFile(String fileName) throws FileNotFoundException, IOException {
@@ -137,5 +159,26 @@ public class JsonActiveMQProducer {
         String formattedDateStr = DateTimeFormatter.ofPattern("MM-dd-YYYY-HH-MM-SS").format(ldt);
         return formattedDateStr;
 	}
+	
+	private static PooledConnectionFactory
+    createPooledConnectionFactory(ActiveMQConnectionFactory connectionFactory) {
+        // Create a pooled connection factory.
+        final PooledConnectionFactory pooledConnectionFactory =
+                new PooledConnectionFactory();
+        pooledConnectionFactory.setConnectionFactory(connectionFactory);
+        pooledConnectionFactory.setMaxConnections(10);
+        return pooledConnectionFactory;
+    }
+    
+    private static ActiveMQConnectionFactory createActiveMQConnectionFactory(String activeMQEndpoint, String activeMQUsername, String activeMQPassword) {
+        // Create a connection factory.
+        final ActiveMQConnectionFactory connectionFactory =
+                new ActiveMQConnectionFactory(activeMQEndpoint);
+    
+        // Pass the sign-in credentials.
+        connectionFactory.setUserName(activeMQUsername);
+        connectionFactory.setPassword(activeMQPassword);
+        return connectionFactory;
+    }
 
 }

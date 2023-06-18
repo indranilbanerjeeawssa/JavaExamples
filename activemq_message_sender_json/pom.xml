@@ -64,13 +64,12 @@
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/software.amazon.awssdk/regions -->
 		<dependency>
-        	<groupId>software.amazon.awssdk</groupId>
-        	<artifactId>bom</artifactId>
-        	<version>${aws.java.sdk.version}</version>
-        	<type>pom</type>
-        	<scope>import</scope>
-      	</dependency>
-
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>bom</artifactId>
+			<version>${aws.java.sdk.version}</version>
+			<type>pom</type>
+			<scope>import</scope>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-ec2 -->
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
@@ -85,11 +84,10 @@
 		<!-- https://mvnrepository.com/artifact/software.amazon.awssdk/utils -->
 		<!-- https://mvnrepository.com/artifact/software.amazon.awssdk/utils -->
 		<dependency>
-    		<groupId>software.amazon.awssdk</groupId>
-    		<artifactId>utils</artifactId>
-    		<version>2.20.68</version>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>utils</artifactId>
+			<version>2.20.68</version>
 		</dependency>
-		
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
@@ -105,6 +103,16 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
 			<version>2.15.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-client</artifactId>
+			<version>5.15.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-pool</artifactId>
+			<version>5.15.8</version>
 		</dependency>
 	</dependencies>
 	<build>
