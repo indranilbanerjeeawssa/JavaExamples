@@ -7,8 +7,12 @@ import java.util.Properties;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.jms.pool.PooledConnectionFactory;
-import javax.jms.*;
-
+import javax.jms.TextMessage;
+import javax.jms.Connection;
+import javax.jms.Session;
+import javax.jms.Destination;
+import javax.jms.MessageProducer;
+import javax.jms.DeliveryMode;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -33,9 +37,11 @@ public class JsonActiveMQProducer {
 		String activeMQMessageKey = seederKeyString + "-" + JsonActiveMQProducer.getTodayDate();
 		try {
 			JsonActiveMQProducer.activeMQQueueSender(activeMQEndpoint, activeMQUsername, activeMQPassword, activeMQQueue, activeMQMessageKey, numberOfMessages);
+			System.exit(0);
 		} catch (Exception e) {
 			System.out.println("Exception occurred");
 			e.printStackTrace();
+			System.exit(-1);
 		}
 	}
 
@@ -78,6 +84,8 @@ public class JsonActiveMQProducer {
 				// Create a message.
 		        TextMessage producerMessage = producerSession
 		                .createTextMessage(thisPersonJson);
+		        producerMessage.setJMSCorrelationID(seederKeyString + "-" + i);
+		        producerMessage.setJMSType("TextMessage");
 		        producerMessage.setStringProperty("MessageBatchIdentifier", seederKeyString);
 		        producerMessage.setIntProperty("MessageNumberInBatch", i);
 		        // Send the message.
