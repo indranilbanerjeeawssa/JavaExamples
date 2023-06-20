@@ -11,6 +11,8 @@ import javax.jms.TextMessage;
 import javax.jms.Connection;
 import javax.jms.Session;
 import javax.jms.Destination;
+import javax.jms.Message;
+import javax.jms.MessageConsumer;
 import javax.jms.MessageProducer;
 import javax.jms.DeliveryMode;
 import java.io.BufferedReader;
@@ -32,12 +34,11 @@ public class JsonActiveMQConsumer {
 		String activeMQUsername = SecretsManagerDecoder.getUsernameAndPassword().getUsername();
 		String activeMQPassword = SecretsManagerDecoder.getUsernameAndPassword().getPassword();
 		String activeMQQueue = args[1];
-		String seederKeyString = args[2];
-		int numberOfMessages = Integer.parseInt(args[3]);
-		String activeMQMessageKey = seederKeyString + "-" + JsonActiveMQConsumer.getTodayDate();
+		
+		
 		try {
-			JsonActiveMQConsumer.activeMQQueueReceiver(activeMQEndpoint, activeMQUsername, activeMQPassword, activeMQQueue, activeMQMessageKey, numberOfMessages);
-			System.exit(0);
+			JsonActiveMQConsumer.activeMQQueueReceiver(activeMQEndpoint, activeMQUsername, activeMQPassword, activeMQQueue);
+			
 		} catch (Exception e) {
 			System.out.println("Exception occurred");
 			e.printStackTrace();
@@ -45,63 +46,37 @@ public class JsonActiveMQConsumer {
 		}
 	}
 
-	public static void activeMQQueueReceiver(String activeMQEndpoint, String activeMQUsername, String activeMQPassword, String activeMQQueue, String seederKeyString, int numberOfMessages) throws Exception {
-		List<String> people = JsonActiveMQConsumer.readDataFile();
-		int numberOfMessagesToSend=0;
-		if (people.size() > numberOfMessages) {
-			numberOfMessagesToSend = numberOfMessages;
-		} else {
-			numberOfMessagesToSend = people.size();
+	public static void activeMQQueueReceiver(String activeMQEndpoint, String activeMQUsername, String activeMQPassword, String activeMQQueue) throws Exception {
+		
+		// Create a connection factory.
+		final ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(activeMQEndpoint);
+
+		// Pass the username and password.
+		connectionFactory.setUserName(activeMQUsername);
+		connectionFactory.setPassword(activeMQPassword);
+
+		// Establish a connection for the consumer.
+		final Connection consumerConnection = connectionFactory.createConnection();
+		consumerConnection.start();
+		
+		// Create a session.
+		final Session consumerSession = consumerConnection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+
+		// Create a queue named "MyQueue".
+		final Destination consumerDestination = consumerSession.createQueue(activeMQQueue);
+
+		// Create a message consumer from the session to the queue.
+		final MessageConsumer consumer = consumerSession.createConsumer(consumerDestination);
+		
+		while (true) {
+			// Begin to wait for messages.
+			final Message consumerMessage = consumer.receive();
+
+			// Receive the message when it arrives.
+			final TextMessage consumerTextMessage = (TextMessage) consumerMessage;
+			System.out.println("Message received: " + consumerTextMessage.getText());
 		}
 		
-		final ActiveMQConnectionFactory connectionFactory =
-                createActiveMQConnectionFactory(activeMQEndpoint, activeMQUsername, activeMQPassword);
-        final PooledConnectionFactory pooledConnectionFactory =
-                createPooledConnectionFactory(connectionFactory);
-		
-        final Connection producerConnection = pooledConnectionFactory
-                .createConnection();
-        producerConnection.start();
-    
-        // Create a session.
-        final Session producerSession = producerConnection
-                .createSession(false, Session.AUTO_ACKNOWLEDGE);
-    
-        // Create a queue 
-   
-        Destination producerDestination;
-		try {
-			producerDestination = producerSession
-			        .createQueue(activeMQQueue);
-			// Create a producer from the session to the queue.
-	        final MessageProducer producer = producerSession
-	                .createProducer(producerDestination);
-	        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-	        
-	        for (int i = 1; i <= numberOfMessagesToSend; i++) {
-				Person thisPerson = JsonActiveMQConsumer.getPersonFromLine(people.get(i));
-				String thisPersonJson = thisPerson.toJson();
-				// Create a message.
-		        TextMessage producerMessage = producerSession
-		                .createTextMessage(thisPersonJson);
-		        producerMessage.setJMSCorrelationID(seederKeyString + "-" + i);
-		        producerMessage.setJMSType("TextMessage");
-		        producerMessage.setStringProperty("MessageBatchIdentifier", seederKeyString);
-		        producerMessage.setIntProperty("MessageNumberInBatch", i);
-		        // Send the message.
-		        producer.send(producerMessage);
-		        System.out.println("Sent out one message - Number " + i);
-			}
-	        producer.close();
-	        
-		} catch (Exception e1) {
-			System.out.println("Queue creation failed. Queue may already exist");
-			System.out.println(e1.getMessage());
-			e1.printStackTrace();
-		} finally {
-			producerSession.close();
-	        producerConnection.close();
-		}
 	}
 
 	public static Properties readPropertiesFile(String fileName) throws FileNotFoundException, IOException {
@@ -123,70 +98,8 @@ public class JsonActiveMQConsumer {
 		return prop;
 	}
 	
-	public static List<String> readDataFile() {
-		List<String> personList = new ArrayList<String>();
-		InputStream is = JsonActiveMQConsumer.class.getClassLoader().getResourceAsStream("us-500.csv");
-		BufferedReader bf = new BufferedReader(new InputStreamReader(is));
-		String thisLine = null;
-		try {
-			thisLine = bf.readLine();
-			while (null != thisLine) {
-				personList.add(thisLine);
-				thisLine = bf.readLine();
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return personList;
-	}
+
 	
-	public static Person getPersonFromLine(String line) {
-		
-		//String[] fields = line.split(",");
-		String[] fields = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-		Person thisPerson = new Person();
-		thisPerson.setFirstname(fields[0]);
-		thisPerson.setLastname(fields[1]);
-		thisPerson.setCompany(fields[2]);
-		thisPerson.setStreet(fields[3]);
-		thisPerson.setCity(fields[4]);
-		thisPerson.setCounty(fields[5]);
-		thisPerson.setState(fields[6]);
-		thisPerson.setZip(fields[7]);
-		thisPerson.setHomePhone(fields[8]);
-		thisPerson.setCellPhone(fields[9]);
-		thisPerson.setEmail(fields[10]);
-		thisPerson.setWebsite(fields[11]);
-		return thisPerson;
-	}
-	
-	public static String getTodayDate() {
-		
-		LocalDateTime ldt = LocalDateTime.now();
-        String formattedDateStr = DateTimeFormatter.ofPattern("MM-dd-YYYY-HH-MM-SS").format(ldt);
-        return formattedDateStr;
-	}
-	
-	private static PooledConnectionFactory
-    createPooledConnectionFactory(ActiveMQConnectionFactory connectionFactory) {
-        // Create a pooled connection factory.
-        final PooledConnectionFactory pooledConnectionFactory =
-                new PooledConnectionFactory();
-        pooledConnectionFactory.setConnectionFactory(connectionFactory);
-        pooledConnectionFactory.setMaxConnections(10);
-        return pooledConnectionFactory;
-    }
-    
-    private static ActiveMQConnectionFactory createActiveMQConnectionFactory(String activeMQEndpoint, String activeMQUsername, String activeMQPassword) {
-        // Create a connection factory.
-        final ActiveMQConnectionFactory connectionFactory =
-                new ActiveMQConnectionFactory(activeMQEndpoint);
-    
-        // Pass the sign-in credentials.
-        connectionFactory.setUserName(activeMQUsername);
-        connectionFactory.setPassword(activeMQPassword);
-        return connectionFactory;
-    }
+
 
 }
