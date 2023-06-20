@@ -1,6 +1,7 @@
 package activemq.consumer;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
@@ -74,7 +75,24 @@ public class JsonActiveMQConsumer {
 
 			// Receive the message when it arrives.
 			final TextMessage consumerTextMessage = (TextMessage) consumerMessage;
-			System.out.println("Message received: " + consumerTextMessage.getText());
+			System.out.println("*****Starting to print details of new message*****");
+			System.out.println("Delivery Mode = " + consumerTextMessage.getJMSDeliveryMode());
+			System.out.println("CorrelationID = " + consumerTextMessage.getJMSCorrelationID());
+			System.out.println("Expiration = " + consumerTextMessage.getJMSExpiration());
+			System.out.println("MessageID = " + consumerTextMessage.getJMSMessageID());
+			System.out.println("Priority = " + consumerTextMessage.getJMSPriority());
+			System.out.println("TimeStamp = " + consumerTextMessage.getJMSTimestamp());
+			System.out.println("Type = " + consumerTextMessage.getJMSType());
+			System.out.println("Destination = " + consumerTextMessage.getJMSDestination());
+			System.out.println("Redelivered = " + consumerTextMessage.getJMSRedelivered());
+			System.out.println("ReplyTo = " + consumerTextMessage.getJMSReplyTo());
+			System.out.println("CorrelationID = " + consumerTextMessage.getText());
+			Enumeration propertyNames = consumerTextMessage.getPropertyNames();
+			while (propertyNames.hasMoreElements()) {
+				Object thisPropertyObject = propertyNames.nextElement();
+				System.out.println(thisPropertyObject.toString());
+			}
+			System.out.println("*****Finishing printing details of new message*****");
 		}
 		
 	}
