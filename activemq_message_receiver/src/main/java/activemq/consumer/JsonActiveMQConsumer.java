@@ -1,29 +1,14 @@
 package activemq.consumer;
 
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Properties;
-
-
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.apache.activemq.jms.pool.PooledConnectionFactory;
 import javax.jms.TextMessage;
 import javax.jms.Connection;
 import javax.jms.Session;
 import javax.jms.Destination;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
-import javax.jms.MessageProducer;
-import javax.jms.DeliveryMode;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class JsonActiveMQConsumer {
 
@@ -72,10 +57,11 @@ public class JsonActiveMQConsumer {
 		while (true) {
 			// Begin to wait for messages.
 			final Message consumerMessage = consumer.receive();
-
+			long currentTime = System.currentTimeMillis();
 			// Receive the message when it arrives.
 			final TextMessage consumerTextMessage = (TextMessage) consumerMessage;
 			System.out.println("*****Starting to print details of new message*****");
+			System.out.println("Received message with CorrelationID = " + consumerTextMessage.getJMSCorrelationID() + " at time = " + currentTime);
 			System.out.println("Delivery Mode = " + consumerTextMessage.getJMSDeliveryMode());
 			System.out.println("CorrelationID = " + consumerTextMessage.getJMSCorrelationID());
 			System.out.println("Expiration = " + consumerTextMessage.getJMSExpiration());
@@ -86,38 +72,15 @@ public class JsonActiveMQConsumer {
 			System.out.println("Destination = " + consumerTextMessage.getJMSDestination());
 			System.out.println("Redelivered = " + consumerTextMessage.getJMSRedelivered());
 			System.out.println("ReplyTo = " + consumerTextMessage.getJMSReplyTo());
-			System.out.println("CorrelationID = " + consumerTextMessage.getText());
+			System.out.println("Person = " + consumerTextMessage.getText());
 			Enumeration propertyNames = consumerTextMessage.getPropertyNames();
 			while (propertyNames.hasMoreElements()) {
 				Object thisPropertyObject = propertyNames.nextElement();
-				System.out.println(thisPropertyObject.toString());
+				System.out.println("Attribute = " + thisPropertyObject.toString() + " and Value = " + consumerTextMessage.getObjectProperty(thisPropertyObject.toString()).toString());
 			}
 			System.out.println("*****Finishing printing details of new message*****");
 		}
 		
 	}
-
-	public static Properties readPropertiesFile(String fileName) throws FileNotFoundException, IOException {
-		FileInputStream fis = null;
-		Properties prop = null;
-		try {
-			fis = new FileInputStream(fileName);
-			prop = new Properties();
-			prop.load(fis);
-		} catch (FileNotFoundException fnfe) {
-			fnfe.printStackTrace();
-			throw new FileNotFoundException("Not a valid property file path");
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-			throw new IOException("Problem reading property file. Check permissions");
-		} finally {
-			fis.close();
-		}
-		return prop;
-	}
-	
-
-	
-
 
 }

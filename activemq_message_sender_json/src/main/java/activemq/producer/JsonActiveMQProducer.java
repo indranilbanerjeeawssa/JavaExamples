@@ -88,9 +88,12 @@ public class JsonActiveMQProducer {
 		        producerMessage.setJMSType("TextMessage");
 		        producerMessage.setStringProperty("MessageBatchIdentifier", seederKeyString);
 		        producerMessage.setIntProperty("MessageNumberInBatch", i);
+		        producerMessage.setJMSExpiration(1800000);
+		        producerMessage.setJMSDeliveryMode(DeliveryMode.PERSISTENT);
 		        // Send the message.
+		        long currentTime = System.currentTimeMillis();
 		        producer.send(producerMessage);
-		        System.out.println("Sent out one message - Number " + i);
+		        System.out.println("Sent out one message - Number " + i + " at time = " + currentTime);
 			}
 	        producer.close();
 	        

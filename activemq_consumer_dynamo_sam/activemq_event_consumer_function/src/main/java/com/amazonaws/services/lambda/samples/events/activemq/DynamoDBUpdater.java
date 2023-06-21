@@ -2,7 +2,6 @@ package com.amazonaws.services.lambda.samples.events.activemq;
 
 
 import java.util.Base64;
-import java.util.Map;
 import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
@@ -12,9 +11,6 @@ import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.events.ActiveMQEvent;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent.MessageAttribute;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 public class DynamoDBUpdater {
@@ -44,7 +40,7 @@ public class DynamoDBUpdater {
 		this.dynamoTable = dynamoDB.getTable(this.dynamoDBTableName);
 	}
 	
-	public PutItemOutcome insertIntoDynamoDB(ActiveMQEvent.ActiveMQMessage msg, Gson gson, LambdaLogger logger) {
+	public PutItemOutcome insertIntoDynamoDB(ActiveMQEvent.ActiveMQMessage msg, Gson gson, LambdaLogger logger, long receiveTime) {
 		logger.log("Now inserting a row in DynamoDB for messageID = " + msg.getMessageID());
 		Item item = new Item();
 		item.withPrimaryKey("MessageID", msg.getMessageID());
@@ -87,6 +83,7 @@ public class DynamoDBUpdater {
 		item.withLong("TimeStamp", msg.getTimestamp());
 		item.withString("Queue", msg.getDestination().getPhysicalName());
 		item.withBoolean("WhetherRedelivered", msg.getRedelivered());
+		item.withLong("ReceiveTime", receiveTime);
 	    logger.log("Now done inserting a row in DynamoDB for messageID = " + msg.getMessageID());
 		return dynamoTable.putItem(item);
 	}

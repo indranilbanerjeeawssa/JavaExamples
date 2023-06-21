@@ -14,21 +14,14 @@ objects of the KafkaMessage class
 
 package com.amazonaws.services.lambda.samples.events.activemq;
 
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.List;
-import java.util.Map;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-
 import com.amazonaws.services.lambda.runtime.events.ActiveMQEvent;
-import com.amazonaws.services.lambda.runtime.events.SQSBatchResponse;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 // Handler value: example.HandlerSQS
@@ -41,7 +34,6 @@ public class HandlerActiveMQ implements RequestHandler<ActiveMQEvent, String>{
 	@Override
 	public String handleRequest(ActiveMQEvent event, Context context)
 	{
-		List<SQSBatchResponse.BatchItemFailure> batchItemFailures = new ArrayList<SQSBatchResponse.BatchItemFailure>();
 		LambdaLogger logger = context.getLogger();
 		logger.log("Begin Event *************");
 		try {
@@ -53,7 +45,8 @@ public class HandlerActiveMQ implements RequestHandler<ActiveMQEvent, String>{
 		logger.log("End Event ***************");
 		for(ActiveMQEvent.ActiveMQMessage msg : event.getMessages()){
 			try {
-				addToDynamoDB = false;
+				addToDynamoDB = true;
+				long currentTime = System.currentTimeMillis();
 				logger.log("Begin Message *************");
 				logger.log(objectMapper.writeValueAsString(msg));
 				logger.log("End Message ***************");
@@ -81,20 +74,15 @@ public class HandlerActiveMQ implements RequestHandler<ActiveMQEvent, String>{
 				logger.log("WhetherRedelivered = " + msg.getRedelivered());
 				Person thisPerson = gson.fromJson(decodedData, Person.class);
 				logger.log("This person = " + thisPerson.toJson());
-				
-				
 				String AWS_SAM_LOCAL = System.getenv("AWS_SAM_LOCAL");
 				if ((null == AWS_SAM_LOCAL) && (addToDynamoDB)) {
-					ddbUpdater.insertIntoDynamoDB(msg, gson, logger);
+					ddbUpdater.insertIntoDynamoDB(msg, gson, logger, currentTime);
 				}
 			} catch (Exception e) {
+				logger.log("An exception happened - " + e.getMessage());
 				return "500";
 			}
 		}
 		return "200";
-	}
-	
-	public void throwit(String message) throws Exception{
-		throw new Exception(message);
 	}
 }
