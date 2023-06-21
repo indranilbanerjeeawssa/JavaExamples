@@ -40,10 +40,12 @@ public class DynamoDBUpdater {
 		this.dynamoTable = dynamoDB.getTable(this.dynamoDBTableName);
 	}
 	
-	public PutItemOutcome insertIntoDynamoDB(ActiveMQEvent.ActiveMQMessage msg, Gson gson, LambdaLogger logger, long receiveTime) {
+	public PutItemOutcome insertIntoDynamoDB(ActiveMQEvent.ActiveMQMessage msg, Gson gson, LambdaLogger logger, long receiveTime, String eventSource, String eventSourceARN) {
 		logger.log("Now inserting a row in DynamoDB for messageID = " + msg.getMessageID());
 		Item item = new Item();
 		item.withPrimaryKey("MessageID", msg.getMessageID());
+		item.withString("EventSource", eventSource);
+		item.withString("EventSourceARN", eventSourceARN);
 		String base64EncodedData = msg.getData();
 		String decodedData = "";
 		if (null != base64EncodedData) {

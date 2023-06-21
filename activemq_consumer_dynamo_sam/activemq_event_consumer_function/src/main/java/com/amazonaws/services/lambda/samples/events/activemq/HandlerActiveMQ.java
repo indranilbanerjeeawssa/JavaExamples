@@ -59,6 +59,8 @@ public class HandlerActiveMQ implements RequestHandler<ActiveMQEvent, String>{
 				} 
 				logger.log(decodedData);
 				logger.log("End Message Body ***************");
+				logger.log("EventSource = " + event.getEventSource());
+				logger.log("EventSourceARN = " + event.getEventSourceArn());
 				logger.log("CorrelationID = " + msg.getCorrelationID());
 				logger.log("MessageID = " + msg.getMessageID());
 				logger.log("MessageType = " + msg.getMessageType());
@@ -76,7 +78,7 @@ public class HandlerActiveMQ implements RequestHandler<ActiveMQEvent, String>{
 				logger.log("This person = " + thisPerson.toJson());
 				String AWS_SAM_LOCAL = System.getenv("AWS_SAM_LOCAL");
 				if ((null == AWS_SAM_LOCAL) && (addToDynamoDB)) {
-					ddbUpdater.insertIntoDynamoDB(msg, gson, logger, currentTime);
+					ddbUpdater.insertIntoDynamoDB(msg, gson, logger, currentTime, event.getEventSource(), event.getEventSourceArn());
 				}
 			} catch (Exception e) {
 				logger.log("An exception happened - " + e.getMessage());

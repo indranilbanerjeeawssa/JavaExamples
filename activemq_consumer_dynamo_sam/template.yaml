@@ -36,7 +36,7 @@ Resources:
           Type: MQ
           Properties:
             BatchSize: 10
-            MaximumBatchingWindowInSeconds: 300
+            MaximumBatchingWindowInSeconds: 5
             Broker:
               !Join ['', ["arn:", "aws:", "mq:", !Ref "AWS::Region", ":", !Ref "AWS::AccountId", ":", "broker:", !Ref ActiveMQBrokerName, ":", !Ref ActiveMQBrokerUniqueString]]
             Queues:
