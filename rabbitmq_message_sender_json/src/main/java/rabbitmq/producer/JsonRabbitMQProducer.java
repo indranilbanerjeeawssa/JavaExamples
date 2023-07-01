@@ -73,35 +73,40 @@ public class JsonRabbitMQProducer {
 		channel.exchangeDeclare(rabbitMQExchange, BuiltinExchangeType.DIRECT, true);
 		channel.queueDeclare(rabbitMQQueue, true, false, false, null);
 		channel.queueBind(rabbitMQQueue, rabbitMQExchange, rabbitMQExchange.concat("-").concat(rabbitMQQueue));
-		for (int i = 1; i <= numberOfMessagesToSend; i++) {
-			Person thisPerson = JsonRabbitMQProducer.getPersonFromLine(people.get(i));
-			String thisPersonJson = thisPerson.toJson();
-			byte[] messageBodyBytes = thisPersonJson.getBytes();
-			Map<String,Object>headerMap = new HashMap<String, Object>();
-			headerMap.put("MessageBatchIdentifier", seederKeyString);
-			headerMap.put("MessageNumberInBatch", Integer.valueOf(i));
-			AMQP.BasicProperties basicProperties = new AMQP.BasicProperties.Builder()
-					                               .appId("rabbitmq.producer.JsonRabbitMQProducer")
-					                               .clusterId(rabbitMQEndpoint)
-					                               .contentEncoding("UTF-8")
-					                               .contentType("text/plain")
-					                               .correlationId(seederKeyString.concat("-").concat(Integer.toString(i)))
-					                               .deliveryMode(2)
-					                               .expiration("60000")
-					                               .headers(headerMap)
-					                               .messageId(seederKeyString.concat(":").concat(Integer.toString(i)))
-					                               .priority(1)
-					                               .timestamp(new Date(System.currentTimeMillis()))
-					                               .type("JsonRabbitMQProducer")
-					                               .userId(rabbitMQUsername)
-					                               .build();
-			System.out.println("Now sending out one message - Number " + i);
-			channel.basicPublish(rabbitMQExchange, 
-					             rabbitMQExchange.concat("-").concat(rabbitMQQueue),
-					             basicProperties,
-		                         messageBodyBytes);
-	        
-	        System.out.println("Sent out one message - Number " + i + " at time = " + System.currentTimeMillis());
+		try {
+			for (int i = 1; i <= numberOfMessagesToSend; i++) {
+				Person thisPerson = JsonRabbitMQProducer.getPersonFromLine(people.get(i));
+				String thisPersonJson = thisPerson.toJson();
+				byte[] messageBodyBytes = thisPersonJson.getBytes();
+				Map<String,Object>headerMap = new HashMap<String, Object>();
+				headerMap.put("MessageBatchIdentifier", seederKeyString);
+				headerMap.put("MessageNumberInBatch", Integer.valueOf(i));
+				AMQP.BasicProperties basicProperties = new AMQP.BasicProperties.Builder()
+						                               .appId("rabbitmq.producer.JsonRabbitMQProducer")
+						                               .clusterId(rabbitMQEndpoint)
+						                               .contentEncoding("UTF-8")
+						                               .contentType("text/plain")
+						                               .correlationId(seederKeyString.concat("-").concat(Integer.toString(i)))
+						                               .deliveryMode(2)
+						                               .expiration("60000")
+						                               .headers(headerMap)
+						                               .messageId(seederKeyString.concat(":").concat(Integer.toString(i)))
+						                               .priority(1)
+						                               .timestamp(new Date(System.currentTimeMillis()))
+						                               .type("JsonRabbitMQProducer")
+						                               .userId(rabbitMQUsername)
+						                               .build();
+				System.out.println("Now sending out one message - Number " + i);
+				channel.basicPublish(rabbitMQExchange, 
+						             rabbitMQExchange.concat("-").concat(rabbitMQQueue),
+						             basicProperties,
+			                         messageBodyBytes);
+			    
+			    System.out.println("Sent out one message - Number " + i + " at time = " + System.currentTimeMillis());
+			}
+		} catch (Exception e) {
+			System.out.println("An exception occurred - " + e.getMessage());
+			e.printStackTrace();
 		}
 
 	}
