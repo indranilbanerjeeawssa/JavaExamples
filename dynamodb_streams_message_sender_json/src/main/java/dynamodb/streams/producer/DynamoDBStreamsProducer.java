@@ -78,8 +78,8 @@ public class DynamoDBStreamsProducer {
 		item.withDouble("RandomDouble", rand.nextDouble());
 		item.withFloat("RandomFloat", rand.nextFloat());
 		item.withLong("RandomLong", rand.nextLong());
-		BigDecimal bigDecimal = new BigDecimal(Math.random());
-		item.withBigDecimalSet("RandomBigDecimal", bigDecimal);
+		//BigDecimal bigDecimal = new BigDecimal(Math.random());
+		//item.with withBigDecimal("RandomBigDecimal", bigDecimal);
 		BigInteger bigInteger = new BigInteger(4, rand);
 		item.withBigInteger("RandomBigInteger", bigInteger);
 		if (thisPerson.getState().equalsIgnoreCase("CA")) {
@@ -88,21 +88,21 @@ public class DynamoDBStreamsProducer {
 			item.withBoolean("IsFromCalifornia", false);
 		}
 		item.withNull("NullAttribute");
-//		item.withNumber("RandomNumber1", rand.nextInt());
-//		item.withNumber("RandomNumber2", rand.nextDouble());
-//		item.withNumber("RandomNumber3", rand.nextFloat());
-//		item.withNumber("RandomNumber4", rand.nextLong());
-//		Map<String, Object> personMap = new HashMap<String, Object>();
-//		personMap.put("FirstnameAsMapKey", thisPerson.getFirstname());
-//		personMap.put("LastnameAsMapKey", thisPerson.getLastname());
-//		personMap.put("StreetAsMapKey", thisPerson.getStreet());
-//		personMap.put("CityAsMapKey", thisPerson.getCity());
-//		personMap.put("StateAsMapKey", thisPerson.getState());
-//		personMap.put("CountyAsMapKey", thisPerson.getCounty());
-//		personMap.put("ZipAsMapKey", thisPerson.getZip());
-//		personMap.put("CurrentTimeAsMapKey", System.currentTimeMillis());
-//		personMap.put("MessageNumberAsMapKey", Integer.valueOf(messageNumber));
-//		item.withMap("PersonAsMap", personMap);
+		item.withNumber("RandomNumber1", rand.nextInt());
+		item.withNumber("RandomNumber2", rand.nextDouble());
+		item.withNumber("RandomNumber3", rand.nextFloat());
+		item.withNumber("RandomNumber4", rand.nextLong());
+		Map<String, Object> personMap = new HashMap<String, Object>();
+		personMap.put("FirstnameAsMapKey", thisPerson.getFirstname());
+		personMap.put("LastnameAsMapKey", thisPerson.getLastname());
+		personMap.put("StreetAsMapKey", thisPerson.getStreet());
+		personMap.put("CityAsMapKey", thisPerson.getCity());
+		personMap.put("StateAsMapKey", thisPerson.getState());
+		personMap.put("CountyAsMapKey", thisPerson.getCounty());
+		personMap.put("ZipAsMapKey", thisPerson.getZip());
+		personMap.put("CurrentTimeAsMapKey", System.currentTimeMillis());
+		personMap.put("MessageNumberAsMapKey", Integer.valueOf(messageNumber));
+		item.withMap("PersonAsMap", personMap);
 //		List<Object> personAsList = new ArrayList<Object>();
 //		personAsList.add(thisPerson.getFirstname());
 //		personAsList.add(thisPerson.getLastname());
