@@ -14,18 +14,21 @@ objects of the KafkaMessage class
 
 package com.amazonaws.services.lambda.samples.events.dynamodbstreams;
 
-import java.util.ArrayList;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.GZIPInputStream;
+
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent.MessageAttribute;
 import com.amazonaws.services.lambda.runtime.events.DynamodbEvent;
 import com.amazonaws.services.lambda.runtime.events.DynamodbEvent.DynamodbStreamRecord;
-import com.amazonaws.services.lambda.runtime.events.SQSBatchResponse;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
+import com.amazonaws.services.lambda.runtime.events.models.dynamodb.AttributeValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -49,78 +52,142 @@ public class HandlerDynamoDBStreams implements RequestHandler<DynamodbEvent, Str
 			logger.log(e1.getMessage());
 		}
 		logger.log("End Event ***************");
-		List<DynamodbStreamRecord> records = event.getRecords();
-		for (DynamodbStreamRecord record : records){
-			logger.log("EventID = " + record.getEventID());
-	        logger.log("EventName = " + record.getEventName());
-	        logger.log("AWSRegion = " + record.getAwsRegion());
-	        logger.log("EventSource = " + record.getEventSource());
-	        logger.log("EventVersion = " + record.getEventVersion());
-	        logger.log("UserIdentityPrincipal = " + record.getUserIdentity().getPrincipalId());
-	        logger.log("UserIdentityType = " + record.getUserIdentity().getType());
-	        logger.log("DynamoDBSequenceNumber = " + record.getDynamodb().getSequenceNumber());
-	        logger.log("StreamViewType = " + record.getDynamodb().getStreamViewType());
-	        logger.log("CreationDateTime = " + record.getDynamodb().getApproximateCreationDateTime().toString());
-	        //logger.log(record.getDynamodb().);
-	        //logger.log();
-	        
-	        //logger.log(record.getDynamodb().toString());
-	    }
+		try {
+			List<DynamodbStreamRecord> records = event.getRecords();
+			for (DynamodbStreamRecord record : records){
+				logger.log("Now going to log a new message");
+				logger.log("EventID = " + record.getEventID());
+			    logger.log("EventName = " + record.getEventName());
+			    logger.log("AWSRegion = " + record.getAwsRegion());
+			    logger.log("EventSource = " + record.getEventSource());
+			    logger.log("EventVersion = " + record.getEventVersion());
+			    if (null!=record.getUserIdentity()) {
+			    	logger.log("UserIdentityPrincipal = " + record.getUserIdentity().getPrincipalId());
+			        logger.log("UserIdentityType = " + record.getUserIdentity().getType());
+			    } else {
+			    	logger.log("UserIdentityPrincipal = null");
+			    	logger.log("UserIdentityType = null");
+			    }
+			    logger.log("DynamoDBSequenceNumber = " + record.getDynamodb().getSequenceNumber());
+			    logger.log("StreamViewType = " + record.getDynamodb().getStreamViewType());
+			    logger.log("CreationDateTime = " + record.getDynamodb().getApproximateCreationDateTime().toString());
+			    logger.log("SizeBytes = " + record.getDynamodb().getSizeBytes());
+			    if (null == record.getDynamodb().getOldImage()) {
+			    	logger.log("OldImage = null");
+			    } else {
+			    	Map<String, AttributeValue> oldImage = record.getDynamodb().getOldImage();
+			    	logger.log("Now going to call logger for OldImage");
+			    	logMapDynamoDBRecordValues(oldImage, logger);
+			    }
+			    if (null == record.getDynamodb().getKeys()) {
+			    	logger.log("Keys = null");
+			    } else {
+			    	Map<String, AttributeValue> keys = record.getDynamodb().getKeys();
+			    	logger.log("Now going to call logger for Keys");
+				    logMapDynamoDBRecordValues(keys, logger);
+			    }
+			    if (null == record.getDynamodb().getNewImage()) {
+			    	logger.log("NewImage = null");
+			    } else {
+			    	Map<String, AttributeValue> newImage = record.getDynamodb().getNewImage();
+			    	logger.log("Now going to call logger for NewImage");
+			    	logMapDynamoDBRecordValues(newImage, logger);
+			    }
+			    logger.log("Now done logging a new message");
+			}
+		} catch (Exception e) {
+			logger.log("An exception occurred - " + e.getMessage());
+			return "500-ERROR";
+		}
 		return "200-OK";
-//		for(SQSMessage msg : event.getRecords()){
-//			try {
-//				addToDynamoDB = true;
-//				logger.log("Begin Message *************");
-//				logger.log(objectMapper.writeValueAsString(msg));
-//				logger.log("End Message ***************");
-//				logger.log("Begin Message Body *************");
-//				logger.log(msg.getBody());
-//				logger.log("End Message Body ***************");
-//				Person thisPerson = gson.fromJson(msg.getBody(), Person.class);
-//				logger.log("This person = " + thisPerson.toJson());
-//				logger.log("Message ID = " + msg.getMessageId());
-//				logger.log("Receipt Handle = " + msg.getReceiptHandle());
-//				logger.log("Event Source ARN = " + msg.getEventSourceArn());
-//				logger.log("Event Source = " + msg.getEventSource());
-//				logger.log("AWS Region = " + msg.getAwsRegion());
-//				logger.log("MD5 Of Body = " + msg.getMd5OfBody());
-//				logger.log("MD5 Of Message Attributes = " + msg.getMd5OfMessageAttributes());
-//				Map<String, String> attributes = msg.getAttributes();
-//				attributes.forEach((k,v) -> {
-//					logger.log("Attribute: " + k + ", Value: " + v);
-//					if (k.equalsIgnoreCase("ApproximateFirstReceiveTimestamp")) {
-//						long timeNow = System.currentTimeMillis();
-//						long receiveTime = Long.parseLong(v);
-//						if ((thisPerson.getState().equalsIgnoreCase("CA")) && (timeNow - receiveTime <= 10000)) {
-//							try {
-//								throwit("Deliberately induced exception for CA persons");
-//							} catch (Exception e) {
-//								logger.log("An exception occurred while processing this SQS message - " + e.getMessage());
-//								batchItemFailures.add(new SQSBatchResponse.BatchItemFailure(msg.getMessageId()));
-//								logger.log("Added message with messageID = " + msg.getMessageId() + " to batchItemFailures list");
-//								addToDynamoDB = false;
-//							}
-//						}
-//					}
-//				});
-//				Map<String, MessageAttribute> messageAttributes = msg.getMessageAttributes();
-//				messageAttributes.forEach((k,v) -> {
-//					logger.log("Message Attribute: " + k + ", Value: " + v.getStringValue());
-//				});
-//				String AWS_SAM_LOCAL = System.getenv("AWS_SAM_LOCAL");
-//				if ((null == AWS_SAM_LOCAL) && (addToDynamoDB)) {
-//					ddbUpdater.insertIntoDynamoDB(msg, gson, logger);
-//				}
-//			} catch (Exception e) {
-//				logger.log("An exception occurred while processing this SQS message - " + e.getMessage());
-//				batchItemFailures.add(new SQSBatchResponse.BatchItemFailure(msg.getMessageId()));
-//				logger.log("Added message with messageID = " + msg.getMessageId() + " to batchItemFailures list");
-//			}
-//		}
-//		return new SQSBatchResponse(batchItemFailures);
+	}
+	
+	public void logMapDynamoDBRecordValues(Map<String, AttributeValue> mapOfMessages, LambdaLogger logger) {
+		try {
+			mapOfMessages.forEach((k, v) -> {
+				if (null == k){
+					logger.log("Key = null");
+				} else if (null == v) {
+					logger.log("Value = null");
+				} else if (null != v.getNULL()) {
+					logger.log("Key = " + k + " and Value = null");
+				} else if (null != v.getBOOL()) {
+					logger.log("Key = " + k + " and Value = " + v.getBOOL().toString());
+				} else if (null != v.getS()) {
+					logger.log("Key = " + k + " and Value = " + v.getS());
+				} else if (null != v.getN()) {
+					logger.log("Key = " + k + " and Value = " + v.getN());
+				} else if (null != v.getB()) {
+					ByteBuffer bb = v.getB().asReadOnlyBuffer();
+			        String s = "Could not decrypt binary data";
+					try {
+						s = uncompressString(bb);
+					} catch (IOException e) {
+						logger.log("Could not decrypt binary data - " + e.getMessage());
+					}
+			        logger.log("Key = " + k + " and Base64 Encoded Value of Binary = " + s);
+				} else if (null != v.getM()) {
+					logMapDynamoDBRecordValues(v.getM(), logger);
+				} else if (null != v.getSS()) {
+					int i=1;
+					for (String s: v.getSS()) {
+						logger.log("Key = " + k + "-" + i + " and value = " + s);
+						i++;
+					}
+				} else if (null != v.getNS()) {
+					int i=1;
+					for (String s: v.getNS()) {
+						logger.log("Key = " + k + "-" + i + " and value = " + s);
+						i++;
+					}
+				} else if (null!= v.getL()) {
+					int i=1;
+					Map<String, AttributeValue> subMap = new HashMap<String, AttributeValue>();
+					for (AttributeValue a: v.getL()) {
+						subMap.put(k + "-" + i, a);
+						i++;
+					}
+					logMapDynamoDBRecordValues(subMap, logger);
+				} else if (null != v.getBS()) {
+					int i=1;
+					for (ByteBuffer bb: v.getBS()) {
+						ByteBuffer bb1 = bb.asReadOnlyBuffer();
+				        String s = "Could not decrypt binary data";
+						try {
+							s = uncompressString(bb1);
+						} catch (IOException e) {
+							logger.log("Could not decrypt binary data - " + e.getMessage());
+						}
+				        logger.log("Key = " + k + "-" + i + " and Base64 Encoded Value of Binary = " + s);
+					}
+				}
+			});
+		} catch (Exception e) {
+			logger.log(e.getMessage());
+			logger.log(e.toString());
+		}
 	}
 	
 	public void throwit(String message) throws Exception{
 		throw new Exception(message);
 	}
+	
+	//uncompressString code taken as-is from https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/JavaDocumentAPIBinaryTypeExample.html
+	private String uncompressString(ByteBuffer input) throws IOException {
+        byte[] bytes = input.array();
+        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        GZIPInputStream is = new GZIPInputStream(bais);
+        int chunkSize = 1024;
+        byte[] buffer = new byte[chunkSize];
+        int length = 0;
+        while ((length = is.read(buffer, 0, chunkSize)) != -1) {
+            baos.write(buffer, 0, length);
+        }
+        String result = new String(baos.toByteArray(), "UTF-8");
+        is.close();
+        baos.close();
+        bais.close();
+        return result;
+    }
 }

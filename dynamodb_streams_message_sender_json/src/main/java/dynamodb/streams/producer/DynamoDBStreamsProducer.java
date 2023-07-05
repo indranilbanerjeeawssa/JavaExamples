@@ -1,7 +1,13 @@
 package dynamodb.streams.producer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
@@ -11,6 +17,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -64,6 +72,65 @@ public class DynamoDBStreamsProducer {
 		long now = Instant.now().getEpochSecond();
 		long ttl = 3600;
 		item.withLong("TimeToLive", now + ttl);
+		//Entering random numbers of different types
+		Random rand = new Random();
+		item.withInt("RandomInteger", rand.nextInt());
+		item.withDouble("RandomDouble", rand.nextDouble());
+		item.withFloat("RandomFloat", rand.nextFloat());
+		item.withLong("RandomLong", rand.nextLong());
+		BigDecimal bigDecimal = new BigDecimal(Math.random());
+		item.withBigDecimalSet("RandomBigDecimal", bigDecimal);
+		BigInteger bigInteger = new BigInteger(4, rand);
+		item.withBigInteger("RandomBigInteger", bigInteger);
+		if (thisPerson.getState().equalsIgnoreCase("CA")) {
+			item.withBoolean("IsFromCalifornia", true);
+		} else {
+			item.withBoolean("IsFromCalifornia", false);
+		}
+		item.withNull("NullAttribute");
+		item.withNumber("RandomNumber1", rand.nextInt());
+		item.withNumber("RandomNumber2", rand.nextDouble());
+		item.withNumber("RandomNumber3", rand.nextFloat());
+		item.withNumber("RandomNumber4", rand.nextLong());
+		Map<String, Object> personMap = new HashMap<String, Object>();
+		personMap.put("FirstnameAsMapKey", thisPerson.getFirstname());
+		personMap.put("LastnameAsMapKey", thisPerson.getLastname());
+		personMap.put("StreetAsMapKey", thisPerson.getStreet());
+		personMap.put("CityAsMapKey", thisPerson.getCity());
+		personMap.put("StateAsMapKey", thisPerson.getState());
+		personMap.put("CountyAsMapKey", thisPerson.getCounty());
+		personMap.put("ZipAsMapKey", thisPerson.getZip());
+		personMap.put("CurrentTimeAsMapKey", System.currentTimeMillis());
+		personMap.put("MessageNumberAsMapKey", Integer.valueOf(messageNumber));
+		item.withMap("PersonAsMap", personMap);
+		List<Object> personAsList = new ArrayList<Object>();
+		personAsList.add(thisPerson.getFirstname());
+		personAsList.add(thisPerson.getLastname());
+		personAsList.add(thisPerson.getStreet());
+		personAsList.add(thisPerson.getCity());
+		personAsList.add(thisPerson.getState());
+		personAsList.add(thisPerson.getCounty());
+		personAsList.add(thisPerson.getZip());
+		personAsList.add(System.currentTimeMillis());
+		personAsList.add(Integer.valueOf(messageNumber));
+		item.withList("PersonAsList", personAsList);
+		Set<String> personAsStringSet = new HashSet<String>();
+		personAsStringSet.add(thisPerson.getFirstname());
+		personAsStringSet.add(thisPerson.getLastname());
+		personAsStringSet.add(thisPerson.getStreet());
+		personAsStringSet.add(thisPerson.getCity());
+		personAsStringSet.add(thisPerson.getState());
+		personAsStringSet.add(thisPerson.getCounty());
+		personAsStringSet.add(thisPerson.getZip());
+		item.withStringSet("PersonAsStringSet", personAsStringSet);
+		Set<Number> numberSet = new HashSet<Number>();
+		numberSet.add(rand.nextInt());
+		numberSet.add(rand.nextDouble());
+		numberSet.add(rand.nextFloat());
+		numberSet.add(rand.nextLong());
+		numberSet.add(new BigDecimal(Math.random()));
+		numberSet.add(new BigInteger(4, rand));
+		item.withNumberSet("NumberSet", numberSet);
 		dynamoTable.putItem(item);
 	    System.out.println("Now done inserting a row in DynamoDB for messageID = " + messageKey + "-" + messageNumber);
     }
