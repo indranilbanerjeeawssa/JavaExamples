@@ -88,10 +88,10 @@ public class DynamoDBStreamsProducer {
 			item.withBoolean("IsFromCalifornia", false);
 		}
 		item.withNull("NullAttribute");
-		item.withNumber("RandomNumber1", rand.nextInt());
-		item.withNumber("RandomNumber2", rand.nextDouble());
-		item.withNumber("RandomNumber3", rand.nextFloat());
-		item.withNumber("RandomNumber4", rand.nextLong());
+//		item.withNumber("RandomNumber1", rand.nextInt());
+//		item.withNumber("RandomNumber2", rand.nextDouble());
+//		item.withNumber("RandomNumber3", rand.nextFloat());
+//		item.withNumber("RandomNumber4", rand.nextLong());
 //		Map<String, Object> personMap = new HashMap<String, Object>();
 //		personMap.put("FirstnameAsMapKey", thisPerson.getFirstname());
 //		personMap.put("LastnameAsMapKey", thisPerson.getLastname());
