@@ -78,10 +78,10 @@ public class DynamoDBStreamsProducer {
 		item.withDouble("RandomDouble", rand.nextDouble());
 		item.withFloat("RandomFloat", rand.nextFloat());
 		item.withLong("RandomLong", rand.nextLong());
-		BigDecimal bigDecimal = new BigDecimal(Math.random());
-		item.withBigDecimalSet("RandomBigDecimal", bigDecimal);
-		BigInteger bigInteger = new BigInteger(4, rand);
-		item.withBigInteger("RandomBigInteger", bigInteger);
+		//BigDecimal bigDecimal = new BigDecimal(Math.random());
+		//item.withBigDecimalSet("RandomBigDecimal", bigDecimal);
+		//BigInteger bigInteger = new BigInteger(4, rand);
+		//item.withBigInteger("RandomBigInteger", bigInteger);
 		if (thisPerson.getState().equalsIgnoreCase("CA")) {
 			item.withBoolean("IsFromCalifornia", true);
 		} else {
