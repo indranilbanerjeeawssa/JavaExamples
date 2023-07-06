@@ -137,7 +137,20 @@ public class DynamoDBStreamsProducer {
 		numberSet.add(rand.nextLong());
 		numberSet.add(new BigInteger(64, rand));
 		item.withNumberSet("NumberSet", numberSet);
-		byte[] binaryFile = readBinaryFile("cleanliness.docx");
+		byte[] binaryFile;
+		int remainder = messageNumber % 4;
+		switch (remainder) {
+			case 0: binaryFile = readBinaryFile("cleanliness.docx");
+								 break;
+			case 1: binaryFile = readBinaryFile("Customers.xlsx");
+			 					 break;
+			case 2: binaryFile = readBinaryFile("cleanliness.docx");
+			 					 break;
+			case 3: binaryFile = readBinaryFile("DynamoDB.pptx");
+			 					 break;
+			default: binaryFile = readBinaryFile("cleanliness.docx");
+			 					 break;
+		}
 		item.withBinary("BinaryFile", binaryFile);
 //		Commenting out the below section that adds a set of binary files to DynamoDB
 //		This generates too much data. Can be uncommented for testing if needed

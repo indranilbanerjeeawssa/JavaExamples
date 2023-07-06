@@ -41,6 +41,7 @@ public class HandlerDynamoDBStreams implements RequestHandler<DynamodbEvent, Str
 	public String handleRequest(DynamodbEvent event, Context context)
 	{
 		LambdaLogger logger = context.getLogger();
+		addToDynamoDB = true;
 		logger.log("Begin Event *************");
 		try {
 			logger.log(objectMapper.writeValueAsString(event));
@@ -90,6 +91,10 @@ public class HandlerDynamoDBStreams implements RequestHandler<DynamodbEvent, Str
 			    	logMapDynamoDBRecordValues(newImage, logger);
 			    }
 			    logger.log("Now done logging a new message");
+			    String AWS_SAM_LOCAL = System.getenv("AWS_SAM_LOCAL");
+				if ((null == AWS_SAM_LOCAL) && (addToDynamoDB)) {
+					ddbUpdater.insertIntoDynamoDB(record, gson, logger);
+				}
 			}
 		} catch (Exception e) {
 			logger.log("An exception occurred - " + e.getMessage());
