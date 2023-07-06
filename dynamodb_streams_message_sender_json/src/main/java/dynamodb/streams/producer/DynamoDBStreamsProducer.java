@@ -128,7 +128,7 @@ public class DynamoDBStreamsProducer {
 		numberSet.add(rand.nextDouble());
 		numberSet.add(rand.nextFloat());
 		numberSet.add(rand.nextLong());
-		numberSet.add(new BigDecimal(Math.random()));
+		//numberSet.add(new BigDecimal(Math.random()));
 		numberSet.add(new BigInteger(64, rand));
 		item.withNumberSet("NumberSet", numberSet);
 		dynamoTable.putItem(item);
