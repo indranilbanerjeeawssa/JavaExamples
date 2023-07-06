@@ -138,14 +138,12 @@ public class DynamoDBStreamsProducer {
 		numberSet.add(new BigInteger(64, rand));
 		item.withNumberSet("NumberSet", numberSet);
 		byte[] binaryFile = readBinaryFile("cleanliness.docx");
-		if (null != binaryFile) {
-			String binaryFileString = Base64.getEncoder().encodeToString(binaryFile);
-			System.out.println("Binary File = " + binaryFileString);
-			item.withBinary("BinaryFile", binaryFile);
-		} else {
-			System.out.println("Binary File is null");
-		}
-		
+		item.withBinary("BinaryFile", binaryFile);
+		Set<byte[]> binarySet = new HashSet<byte[]>();
+		binarySet.add(readBinaryFile("Customers.xlsx"));
+		binarySet.add(readBinaryFile("MyBinaryFile.pdf"));
+		binarySet.add(readBinaryFile("DynamoDB.pptx"));
+		item.withBinarySet("SetOfBinaryFiles", binarySet);
 		dynamoTable.putItem(item);
 	    System.out.println("Now done inserting a row in DynamoDB for messageID = " + messageKey + "-" + messageNumber);
     }
@@ -171,7 +169,7 @@ public class DynamoDBStreamsProducer {
 		byte[] buffer = null;
 		try {
 			InputStream fis = DynamoDBStreamsProducer.class.getClassLoader().getResourceAsStream(filename);
-			buffer = fis.readAllBytes();
+			buffer = fis. readAllBytes();
 			fis.close();
 		} catch (Exception e) {
 			e.printStackTrace();
