@@ -14,11 +14,13 @@ import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -78,8 +80,6 @@ public class DynamoDBStreamsProducer {
 		item.withDouble("RandomDouble", rand.nextDouble());
 		item.withFloat("RandomFloat", rand.nextFloat());
 		item.withLong("RandomLong", rand.nextLong());
-		//BigDecimal bigDecimal = new BigDecimal(Math.random());
-		//item.with withBigDecimal("RandomBigDecimal", bigDecimal);
 		BigInteger bigInteger = new BigInteger(32, rand);
 		item.withBigInteger("RandomBigInteger", bigInteger);
 		if (thisPerson.getState().equalsIgnoreCase("CA")) {
@@ -128,9 +128,10 @@ public class DynamoDBStreamsProducer {
 		numberSet.add(rand.nextDouble());
 		numberSet.add(rand.nextFloat());
 		numberSet.add(rand.nextLong());
-		//numberSet.add(new BigDecimal(Math.random()));
 		numberSet.add(new BigInteger(64, rand));
 		item.withNumberSet("NumberSet", numberSet);
+		ByteBuffer animal = readBinaryFile("llama.jpeg");
+		item.withBinary("AnimalPicture", animal);
 		dynamoTable.putItem(item);
 	    System.out.println("Now done inserting a row in DynamoDB for messageID = " + messageKey + "-" + messageNumber);
     }
@@ -150,6 +151,20 @@ public class DynamoDBStreamsProducer {
 			e.printStackTrace();
 		}
 		return personList;
+	}
+	
+	public static ByteBuffer readBinaryFile (String filename) {
+		ByteBuffer buffer = null;
+		try {
+			InputStream fis = DynamoDBStreamsProducer.class.getClassLoader().getResourceAsStream(filename);
+			byte[] body = fis.readAllBytes();
+			buffer = ByteBuffer.allocate(body.length);
+			buffer.put(body, 0, body.length);
+			buffer.position(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return buffer;
 	}
 	
 	public static Person getPersonFromLine(String line) {
