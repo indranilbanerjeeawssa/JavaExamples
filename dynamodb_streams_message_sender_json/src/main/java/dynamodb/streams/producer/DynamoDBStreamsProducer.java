@@ -162,6 +162,7 @@ public class DynamoDBStreamsProducer {
 			InputStream fis = DynamoDBStreamsProducer.class.getClassLoader().getResourceAsStream(filename);
 			buffer = fis.readAllBytes();
 			File outputFile = new File ("/Users/ibanerj/Documents/temp/pictures/File" + number + ".jpeg");
+			outputFile.createNewFile();
 			FileOutputStream fos = new FileOutputStream(outputFile);
 			fos.write(buffer);
 			fis.close();
