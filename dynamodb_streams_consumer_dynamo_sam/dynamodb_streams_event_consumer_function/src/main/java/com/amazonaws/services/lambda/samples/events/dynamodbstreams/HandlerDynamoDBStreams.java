@@ -14,15 +14,11 @@ objects of the KafkaMessage class
 
 package com.amazonaws.services.lambda.samples.events.dynamodbstreams;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.GZIPInputStream;
-
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
@@ -34,7 +30,7 @@ import com.google.gson.GsonBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-// Handler value: example.HandlerSQS
+
 public class HandlerDynamoDBStreams implements RequestHandler<DynamodbEvent, String>{
 	Gson gson = new GsonBuilder().setPrettyPrinting().create();
 	String dynamoDBTableName = System.getenv("DYNAMO_DB_TABLE");
@@ -118,11 +114,12 @@ public class HandlerDynamoDBStreams implements RequestHandler<DynamodbEvent, Str
 				} else if (null != v.getN()) {
 					logger.log("Key = " + k + " and Value = " + v.getN());
 				} else if (null != v.getB()) {
-					ByteBuffer bb = v.getB().asReadOnlyBuffer();
+					ByteBuffer bb = v.getB();
 			        String s = "Could not decrypt binary data";
 					try {
-						s = uncompressString(bb);
-					} catch (IOException e) {
+						byte[] thisByteArray = bb.array();
+						s = Base64.getEncoder().encodeToString(thisByteArray);
+					} catch (Exception e) {
 						logger.log("Could not decrypt binary data - " + e.getMessage());
 					}
 			        logger.log("Key = " + k + " and Base64 Encoded Value of Binary = " + s);
@@ -151,11 +148,11 @@ public class HandlerDynamoDBStreams implements RequestHandler<DynamodbEvent, Str
 				} else if (null != v.getBS()) {
 					int i=1;
 					for (ByteBuffer bb: v.getBS()) {
-						ByteBuffer bb1 = bb.asReadOnlyBuffer();
 				        String s = "Could not decrypt binary data";
 						try {
-							s = uncompressString(bb1);
-						} catch (IOException e) {
+							byte[] thisByteArray = bb.array();
+							s = Base64.getEncoder().encodeToString(thisByteArray);
+						} catch (Exception e) {
 							logger.log("Could not decrypt binary data - " + e.getMessage());
 						}
 				        logger.log("Key = " + k + "-" + i + " and Base64 Encoded Value of Binary = " + s);
@@ -171,23 +168,5 @@ public class HandlerDynamoDBStreams implements RequestHandler<DynamodbEvent, Str
 	public void throwit(String message) throws Exception{
 		throw new Exception(message);
 	}
-	
-	//uncompressString code taken as-is from https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/JavaDocumentAPIBinaryTypeExample.html
-	private String uncompressString(ByteBuffer input) throws IOException {
-        byte[] bytes = input.array();
-        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        GZIPInputStream is = new GZIPInputStream(bais);
-        int chunkSize = 1024;
-        byte[] buffer = new byte[chunkSize];
-        int length = 0;
-        while ((length = is.read(buffer, 0, chunkSize)) != -1) {
-            baos.write(buffer, 0, length);
-        }
-        String result = new String(baos.toByteArray(), "UTF-8");
-        is.close();
-        baos.close();
-        bais.close();
-        return result;
-    }
+
 }

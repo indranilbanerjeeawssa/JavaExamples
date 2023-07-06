@@ -139,11 +139,13 @@ public class DynamoDBStreamsProducer {
 		item.withNumberSet("NumberSet", numberSet);
 		byte[] binaryFile = readBinaryFile("cleanliness.docx");
 		item.withBinary("BinaryFile", binaryFile);
-		Set<byte[]> binarySet = new HashSet<byte[]>();
-		binarySet.add(readBinaryFile("Customers.xlsx"));
-		binarySet.add(readBinaryFile("MyBinaryFile.pdf"));
-		binarySet.add(readBinaryFile("DynamoDB.pptx"));
-		item.withBinarySet("SetOfBinaryFiles", binarySet);
+//		Commenting out the below section that adds a set of binary files to DynamoDB
+//		This generates too much data. Can be uncommented for testing if needed
+//		Set<byte[]> binarySet = new HashSet<byte[]>();
+//		binarySet.add(readBinaryFile("Customers.xlsx"));
+//		binarySet.add(readBinaryFile("MyBinaryFile.pdf"));
+//		binarySet.add(readBinaryFile("DynamoDB.pptx"));
+//		item.withBinarySet("SetOfBinaryFiles", binarySet);
 		dynamoTable.putItem(item);
 	    System.out.println("Now done inserting a row in DynamoDB for messageID = " + messageKey + "-" + messageNumber);
     }
