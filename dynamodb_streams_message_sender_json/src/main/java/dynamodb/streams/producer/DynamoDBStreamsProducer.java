@@ -1,6 +1,7 @@
 package dynamodb.streams.producer;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -13,6 +14,9 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.Table;
+
+import software.amazon.awssdk.utils.Logger;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -133,8 +137,15 @@ public class DynamoDBStreamsProducer {
 		numberSet.add(rand.nextLong());
 		numberSet.add(new BigInteger(64, rand));
 		item.withNumberSet("NumberSet", numberSet);
-		byte[] animal = readBinaryFile("llama.jpeg", messageNumber);
-		item.withBinary("AnimalPicture", animal);
+		byte[] animal = readBinaryFile("horse.jpeg");
+		if (null != animal) {
+			String animalstring = Base64.getEncoder().encodeToString(animal);
+			System.out.println("Animal Picture = " + animalstring);
+			item.withBinary("AnimalPicture", animal);
+		} else {
+			System.out.println("Animal Picture is null");
+		}
+		
 		dynamoTable.putItem(item);
 	    System.out.println("Now done inserting a row in DynamoDB for messageID = " + messageKey + "-" + messageNumber);
     }
@@ -156,17 +167,12 @@ public class DynamoDBStreamsProducer {
 		return personList;
 	}
 	
-	public static byte[] readBinaryFile (String filename, int number) {
+	public static byte[] readBinaryFile (String filename) {
 		byte[] buffer = null;
 		try {
 			InputStream fis = DynamoDBStreamsProducer.class.getClassLoader().getResourceAsStream(filename);
 			buffer = fis.readAllBytes();
-			File outputFile = new File ("/Users/ibanerj/Documents/temp/pictures/File" + number + ".jpeg");
-			outputFile.createNewFile();
-			FileOutputStream fos = new FileOutputStream(outputFile);
-			fos.write(buffer);
 			fis.close();
-			fos.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
