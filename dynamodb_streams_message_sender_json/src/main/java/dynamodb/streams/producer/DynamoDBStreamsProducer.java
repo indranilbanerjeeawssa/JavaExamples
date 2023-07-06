@@ -14,7 +14,10 @@ import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -130,7 +133,7 @@ public class DynamoDBStreamsProducer {
 		numberSet.add(rand.nextLong());
 		numberSet.add(new BigInteger(64, rand));
 		item.withNumberSet("NumberSet", numberSet);
-		ByteBuffer animal = readBinaryFile("llama.jpeg");
+		byte[] animal = readBinaryFile("llama.jpeg", messageNumber);
 		item.withBinary("AnimalPicture", animal);
 		dynamoTable.putItem(item);
 	    System.out.println("Now done inserting a row in DynamoDB for messageID = " + messageKey + "-" + messageNumber);
@@ -153,17 +156,20 @@ public class DynamoDBStreamsProducer {
 		return personList;
 	}
 	
-	public static ByteBuffer readBinaryFile (String filename) {
-		ByteBuffer buffer = null;
+	public static byte[] readBinaryFile (String filename, int number) {
+		byte[] buffer = null;
 		try {
 			InputStream fis = DynamoDBStreamsProducer.class.getClassLoader().getResourceAsStream(filename);
-			byte[] body = fis.readAllBytes();
-			buffer = ByteBuffer.allocate(body.length);
-			buffer.put(body, 0, body.length);
-			buffer.position(0);
+			buffer = fis.readAllBytes();
+			File outputFile = new File ("/Users/ibanerj/Documents/temp/pictures/File" + number + ".jpeg");
+			FileOutputStream fos = new FileOutputStream(outputFile);
+			fos.write(buffer);
+			fis.close();
+			fos.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		return buffer;
 	}
 	
