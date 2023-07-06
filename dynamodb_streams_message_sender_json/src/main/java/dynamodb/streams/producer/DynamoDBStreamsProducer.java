@@ -137,13 +137,13 @@ public class DynamoDBStreamsProducer {
 		numberSet.add(rand.nextLong());
 		numberSet.add(new BigInteger(64, rand));
 		item.withNumberSet("NumberSet", numberSet);
-		byte[] animal = readBinaryFile("horse.jpeg");
-		if (null != animal) {
-			String animalstring = Base64.getEncoder().encodeToString(animal);
-			System.out.println("Animal Picture = " + animalstring);
-			item.withBinary("AnimalPicture", animal);
+		byte[] binaryFile = readBinaryFile("cleanliness.docx");
+		if (null != binaryFile) {
+			String binaryFileString = Base64.getEncoder().encodeToString(binaryFile);
+			System.out.println("Binary File = " + binaryFileString);
+			item.withBinary("BinaryFile", binaryFile);
 		} else {
-			System.out.println("Animal Picture is null");
+			System.out.println("Binary File is null");
 		}
 		
 		dynamoTable.putItem(item);
