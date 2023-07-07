@@ -28,6 +28,10 @@ public class JsonS3Producer {
 
 	public static void s3Sender(String s3Bucket, String s3Prefix, String objectKey, int numberOfObjects) {
 		
+		DefaultAwsRegionProviderChain defaultAwsRegionProviderChain = new DefaultAwsRegionProviderChain();
+		Region region = defaultAwsRegionProviderChain.getRegion();
+		System.out.println("region = " + region.toString());
+		S3Client s3Client = S3Client.builder().region(region).build();
 		
 		List<String> people = JsonS3Producer.readDataFile(); 
 		 int numberOfObjectsToCreate=0; 
@@ -38,18 +42,12 @@ public class JsonS3Producer {
 		 }
 		for (int i=1;i<= numberOfObjectsToCreate; i++) {
 			Person thisPerson = JsonS3Producer.getPersonFromLine(people.get(i));
-			JsonS3Producer.writeFileToS3(s3Bucket, s3Prefix, thisPerson.toJson(), objectKey, i);
+			JsonS3Producer.writeFileToS3(s3Client, s3Bucket, s3Prefix, thisPerson.toJson(), objectKey, i);
 		}
 	}
 	
-	public static void writeFileToS3(String s3Bucket, String s3Prefix, String objectData, String objectKey, int objectNumber) {
+	public static void writeFileToS3(S3Client s3Client, String s3Bucket, String s3Prefix, String objectData, String objectKey, int objectNumber) {
         try {
-        	
-        	DefaultAwsRegionProviderChain defaultAwsRegionProviderChain = new DefaultAwsRegionProviderChain();
-    		Region region = defaultAwsRegionProviderChain.getRegion();
-    		System.out.println("region = " + region.toString());
-           
-        	S3Client s3Client = S3Client.builder().region(region).build();
         	String s3ObjectKey = "";
         	if ("".equals(s3Prefix)) {
         		s3ObjectKey = objectKey + "-" + objectNumber;
