@@ -1,33 +1,22 @@
 package dynamodb.streams.producer;
 
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.Table;
-
-import software.amazon.awssdk.utils.Logger;
-
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -139,16 +128,23 @@ public class DynamoDBStreamsProducer {
 		item.withNumberSet("NumberSet", numberSet);
 		byte[] binaryFile;
 		int remainder = messageNumber % 4;
+		System.out.println("messageNumber = " + messageNumber);
+		System.out.println("remainder = " + remainder);
 		switch (remainder) {
 			case 0: binaryFile = readBinaryFile("cleanliness.docx");
+			                     System.out.println("Entering Case 0");
 								 break;
 			case 1: binaryFile = readBinaryFile("Customers.xlsx");
+								 System.out.println("Entering Case 1");
 			 					 break;
 			case 2: binaryFile = readBinaryFile("cleanliness.docx");
+								 System.out.println("Entering Case 2");
 			 					 break;
 			case 3: binaryFile = readBinaryFile("DynamoDB.pptx");
+			                     System.out.println("Entering Case 3");
 			 					 break;
 			default: binaryFile = readBinaryFile("cleanliness.docx");
+			                     System.out.println("Entering Default");
 			 					 break;
 		}
 		item.withBinary("BinaryFile", binaryFile);
