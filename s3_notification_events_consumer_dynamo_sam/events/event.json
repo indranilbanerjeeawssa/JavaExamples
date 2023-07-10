@@ -1,0 +1,41 @@
+{
+    "records": [
+        {
+            "awsRegion": "us-west-2",
+            "eventName": "ObjectCreated:Put",
+            "eventSource": "aws:s3",
+            "eventTime": 1688795534441,
+            "eventVersion": "2.1",
+            "requestParameters": {
+                "sourceIPAddress": "54.184.79.130"
+            },
+            "responseElements": {
+                "xAmzId2": "7JSwuyMkdCQc904yqRct34vknaSsVKtYdWjmVRMnc/ARJnZ0PpZZreLa1AK/Pbt/SYS+v0gICkbsfNe8iy9iIPqG0H3TldYS",
+                "xAmzRequestId": "F49T7T6DVE376K47"
+            },
+            "s3": {
+                "configurationId": "4a835247-3536-4997-bb29-2418748df1f2",
+                "bucket": {
+                    "name": "lambda-test-bucket-664251831272",
+                    "ownerIdentity": {
+                        "principalId": "A20OBFAW7REP2D"
+                    },
+                    "arn": "arn:aws:s3:::lambda-test-bucket-664251831272"
+                },
+                "object": {
+                    "key": "folder1/folder3/TestMessage0807-08-2023-05-07-73-58",
+                    "size": 300,
+                    "eTag": "62695cdd13ba05fd5516cb4d8e1bb863",
+                    "versionId": "",
+                    "sequencer": "0064A8F98E6A8F6822",
+                    "sizeAsLong": 300,
+                    "urlDecodedKey": "folder1/folder3/TestMessage0807-08-2023-05-07-73-58"
+                },
+                "s3SchemaVersion": "1.0"
+            },
+            "userIdentity": {
+                "principalId": "AWS:AROAZVKD6SPUBDQBNO3D6:i-006b46228e77ad83f"
+            }
+        }
+    ]
+}

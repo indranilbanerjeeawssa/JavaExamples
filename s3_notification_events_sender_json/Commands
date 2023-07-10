@@ -1,1 +1,5 @@
-java -classpath ~/environment/JavaExamples/sqs_message_sender_json/target/json-sqs-producer-0.0.1-SNAPSHOT.jar sqs.producer.JsonSQSProducer <QueueName> <Key To Identify This Set Of Messages> <Number Of Messages>
+java -classpath <Location of Project>/s3_notification_events_sender_json/target/json-s3-producer-0.0.1-SNAPSHOT.jar s3.producer.JsonS3Producer <S3 Bucket Name> <S3 Prefix> <Some String to be used for Object Naming> <Number Of Objects to upload to S3>
+
+Example:
+
+java -classpath /home/ec2-user/environment/JavaExamples/s3_notification_events_sender_json/target/json-s3-producer-0.0.1-SNAPSHOT.jar s3.producer.JsonS3Producer testbucket-664251831272 folder1/folder2 TestMessage01 100
