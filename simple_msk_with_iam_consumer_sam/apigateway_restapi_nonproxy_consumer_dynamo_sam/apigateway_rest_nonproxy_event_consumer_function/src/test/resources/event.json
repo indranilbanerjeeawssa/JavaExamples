@@ -1,0 +1,93 @@
+{
+    "resource": "/customers",
+    "path": "/customers",
+    "httpMethod": "POST",
+    "headers": {
+        "Accept": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2",
+        "CloudFront-Forwarded-Proto": "https",
+        "CloudFront-Is-Desktop-Viewer": "true",
+        "CloudFront-Is-Mobile-Viewer": "false",
+        "CloudFront-Is-SmartTV-Viewer": "false",
+        "CloudFront-Is-Tablet-Viewer": "false",
+        "CloudFront-Viewer-ASN": "16509",
+        "CloudFront-Viewer-Country": "US",
+        "Content-Type": "application/json",
+        "Host": "abcdefghij.execute-api.us-west-2.amazonaws.com",
+        "User-Agent": "Java/17.0.7",
+        "Via": "1.1 b9ead8d9e99fb1a70cc9b3ee9d847ec6.cloudfront.net (CloudFront)",
+        "X-Amz-Cf-Id": "i77hdOvtOQx-6ctzL5epbEHhCcOK4rtKyxwvnO5f-a0Q4WAI80pCsg==",
+        "X-Amzn-Trace-Id": "Root=1-64af2e92-28233df32e11ffd628340766",
+        "X-Forwarded-For": "34.220.235.167, 130.176.100.77",
+        "X-Forwarded-Port": "443",
+        "X-Forwarded-Proto": "https"
+    },
+    "multiValueHeaders": {
+        "Accept": [
+            "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+        ],
+        "CloudFront-Forwarded-Proto": [
+            "https"
+        ],
+        "CloudFront-Is-Desktop-Viewer": [
+            "true"
+        ],
+        "CloudFront-Is-Mobile-Viewer": [
+            "false"
+        ],
+        "CloudFront-Is-SmartTV-Viewer": [
+            "false"
+        ],
+        "CloudFront-Is-Tablet-Viewer": [
+            "false"
+        ],
+        "CloudFront-Viewer-ASN": [
+            "16509"
+        ],
+        "CloudFront-Viewer-Country": [
+            "US"
+        ],
+        "Content-Type": [
+            "application/json"
+        ],
+        "Host": [
+            "abcdefghij.execute-api.us-west-2.amazonaws.com"
+        ],
+        "User-Agent": [
+            "Java/17.0.7"
+        ],
+        "Via": [
+            "1.1 b9ead8d9e99fb1a70cc9b3ee9d847ec6.cloudfront.net (CloudFront)"
+        ],
+        "X-Amz-Cf-Id": [
+            "i77hdOvtOQx-6ctzL5epbEHhCcOK4rtKyxwvnO5f-a0Q4WAI80pCsg=="
+        ],
+        "X-Amzn-Trace-Id": [
+            "Root=1-64af2e92-28233df32e11ffd628340766"
+        ],
+        "X-Forwarded-For": [
+            "34.220.201.167, 130.176.100.84"
+        ],
+        "X-Forwarded-Port": [
+            "443"
+        ],
+        "X-Forwarded-Proto": [
+            "https"
+        ]
+    },
+    "requestContext": {
+        "accountId": "123456789012",
+        "stage": "Prod",
+        "resourceId": "noadda",
+        "requestId": "fe644f3d-8f5f-40da-969d-e9a445328778",
+        "identity": {
+            "sourceIp": "34.220.201.199",
+            "userAgent": "Java/17.0.7"
+        },
+        "resourcePath": "/customers",
+        "httpMethod": "POST",
+        "apiId": "abcdefghij",
+        "path": "/Prod/customers"
+    },
+    "body": "{\"person\":{\"firstname\":\"Alease\",\"lastname\":\"Buemi\",\"company\":\"Porto Cayo At Hawks Cay\",\"street\":\"4 Webbs Chapel Rd\",\"city\":\"Boulder\",\"county\":\"Boulder\",\"state\":\"CO\",\"zip\":\"80303\",\"homePhone\":\"303-301-4946\",\"cellPhone\":\"303-521-9860\",\"email\":\"alease@buemi.com\",\"website\":\"http://www.portocayoathawkscay.com\"},\"id\":\"TestCustomers0607-12-2023-22-07-09-100\"}",
+    "isBase64Encoded": false
+}

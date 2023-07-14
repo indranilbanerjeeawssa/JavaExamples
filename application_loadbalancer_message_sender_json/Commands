@@ -1,0 +1,4 @@
+java -classpath <Location of project>/apigateway_restapi_nonproxy_message_sender_json/target/json-apigateway-rest-nonproxy-producer-0.0.1-SNAPSHOT.jar apigateway.rest.nonproxy.producer.JsonAPIGatewayRESTProducer https://<API Gateway Unique String>.execute-api.<AWS Region>.amazonaws.com/Prod/customers <Unique String representing this batch of messages> <Number of messages in this batch>
+
+Example:
+java -classpath /home/ec2-user/environment/JavaExamples/apigateway_restapi_nonproxy_message_sender_json/target/json-apigateway-rest-nonproxy-producer-0.0.1-SNAPSHOT.jar apigateway.rest.nonproxy.producer.JsonAPIGatewayRESTProducer https://abcdefghij.execute-api.us-west-2.amazonaws.com/Prod/customers TestCustomers01 100
