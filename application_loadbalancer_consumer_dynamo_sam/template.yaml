@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  apigateway_rest_nonproxy_event_consumer_function
+  application_loadbalancer_event_consumer_function
 
   Sample SAM Template for apigateway_rest_nonproxy_event_consumer_function
 
@@ -17,6 +17,7 @@ Resources:
     Properties:
       CodeUri: application_loadbalancer_event_consumer_function
       Handler: com.amazonaws.services.lambda.samples.events.application.loadbalancer.HandlerApplicationLoadbalancer::handleRequest
+      FunctionName: java-application-loadbalancer-consumer-dynamodb-sam 
       Runtime: java11
       Architectures:
         - x86_64
@@ -59,7 +60,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
-          CidrIp: 0.0.0.0/0
+          CidrIp: !Ref CIDRForALB
   ApplicationLoadBalancerForLambda:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
@@ -86,8 +87,11 @@ Resources:
       Port: 80
       Protocol: HTTP
       DefaultActions:
-        - TargetGroupArn: !Ref ApplicationLoadBalancerForLambdaTargetGroup
-          Type: forward
+        - FixedResponseConfig:
+            StatusCode: 403
+            ContentType: text/plain
+            MessageBody: Incorrect request
+          Type: fixed-response
   ApplicationLoadBalancerForLambdaHttpListenerRule1:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
     Properties: 
@@ -129,6 +133,9 @@ Parameters:
   Subnet3:
     Type: String
     Description: The third of the three private subnets in the DocumentDB cluster's VPC
+  CIDRForALB:
+    Type: String
+    Description: The CIDR range from where to allow traffic into the ALB on port 80
 Outputs:
   ApplicationLoadBalancerForLambdaTargetFunction:
     Description: "ApplicationLoadBalancerForLambdaTargetFunction Lambda Function ARN"

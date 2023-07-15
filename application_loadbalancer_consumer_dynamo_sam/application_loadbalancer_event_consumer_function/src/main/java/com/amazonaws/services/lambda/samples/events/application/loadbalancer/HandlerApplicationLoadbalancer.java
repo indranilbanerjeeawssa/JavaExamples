@@ -23,31 +23,42 @@ public class HandlerApplicationLoadbalancer implements RequestHandler<Applicatio
 	ObjectMapper objectMapper = new ObjectMapper();
 
 	public ApplicationLoadBalancerResponseEvent handleRequest(final ApplicationLoadBalancerRequestEvent input, final Context context) {
-		addToDynamoDB = false;
+		addToDynamoDB = true;
 		LambdaLogger logger = context.getLogger();
     	
 		logger.log("Request = " + gson.toJson(input));
 		logger.log(input.getBody());
-    	
-//    	PersonWithID thisPerson = gson.fromJson(input.getBody(), PersonWithID.class);
-//    	logger.log("PersonID = " + thisPerson.getId());
-//    	logger.log("Firstname = " + thisPerson.getPerson().getFirstname());
-//    	logger.log("Lastname = " + thisPerson.getPerson().getLastname());
-//    	logger.log("Street = " + thisPerson.getPerson().getStreet());
-//    	logger.log("City = " + thisPerson.getPerson().getCity());
-//    	logger.log("County = " + thisPerson.getPerson().getCounty());
-//    	logger.log("State = " + thisPerson.getPerson().getState());
-//    	logger.log("Zip = " + thisPerson.getPerson().getZip());
-//    	logger.log("CellPhone = " + thisPerson.getPerson().getCellPhone());
-//    	logger.log("HomePhone = " + thisPerson.getPerson().getHomePhone());
-//    	logger.log("Email = " + thisPerson.getPerson().getEmail());
-//    	logger.log("Company = " + thisPerson.getPerson().getCompany());
-//    	logger.log("Website = " + thisPerson.getPerson().getWebsite());
+    	logger.log("TargetGroupArn = " + input.getRequestContext().getElb().getTargetGroupArn());
+    	logger.log("HttpMethod" + input.getHttpMethod());
+    	logger.log("Path = " + input.getPath());
+    	Map<String, String> queryStringParameters = input.getQueryStringParameters();
+    	queryStringParameters.forEach((k,v) -> {
+    		logger.log("QueryStringParameter_" + k + " = " + v);
+    	});
+    	Map<String, String> headers = input.getHeaders();
+    	headers.forEach((k, v) -> {
+    		logger.log("Header_" + k + " = " + v);
+    	});
+    	PersonWithID thisPerson = gson.fromJson(input.getBody(), PersonWithID.class);
+    	logger.log("PersonID = " + thisPerson.getId());
+    	logger.log("Firstname = " + thisPerson.getPerson().getFirstname());
+    	logger.log("Lastname = " + thisPerson.getPerson().getLastname());
+    	logger.log("Street = " + thisPerson.getPerson().getStreet());
+    	logger.log("City = " + thisPerson.getPerson().getCity());
+    	logger.log("County = " + thisPerson.getPerson().getCounty());
+    	logger.log("State = " + thisPerson.getPerson().getState());
+    	logger.log("Zip = " + thisPerson.getPerson().getZip());
+    	logger.log("CellPhone = " + thisPerson.getPerson().getCellPhone());
+    	logger.log("HomePhone = " + thisPerson.getPerson().getHomePhone());
+    	logger.log("Email = " + thisPerson.getPerson().getEmail());
+    	logger.log("Company = " + thisPerson.getPerson().getCompany());
+    	logger.log("Website = " + thisPerson.getPerson().getWebsite());
+    	logger.log("IsBase64Encoded = " + input.getIsBase64Encoded());
     	String customerId = java.util.UUID.randomUUID().toString();
-//    	String AWS_SAM_LOCAL = System.getenv("AWS_SAM_LOCAL");
-//		if ((null == AWS_SAM_LOCAL) && (addToDynamoDB)) {
-//			ddbUpdater.insertIntoDynamoDB(input, customerId, gson, logger);
-//		}
+    	String AWS_SAM_LOCAL = System.getenv("AWS_SAM_LOCAL");
+		if ((null == AWS_SAM_LOCAL) && (addToDynamoDB)) {
+			ddbUpdater.insertIntoDynamoDB(input, customerId, gson, logger);
+		}
     	
     	Map<String, String> outputHeaders = new HashMap<>();
     	outputHeaders.put("Content-Type", "application/json");

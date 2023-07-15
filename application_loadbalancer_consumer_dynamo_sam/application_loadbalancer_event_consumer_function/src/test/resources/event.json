@@ -1,93 +1,24 @@
 {
-    "resource": "/customers",
-    "path": "/customers",
-    "httpMethod": "POST",
-    "headers": {
-        "Accept": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2",
-        "CloudFront-Forwarded-Proto": "https",
-        "CloudFront-Is-Desktop-Viewer": "true",
-        "CloudFront-Is-Mobile-Viewer": "false",
-        "CloudFront-Is-SmartTV-Viewer": "false",
-        "CloudFront-Is-Tablet-Viewer": "false",
-        "CloudFront-Viewer-ASN": "16509",
-        "CloudFront-Viewer-Country": "US",
-        "Content-Type": "application/json",
-        "Host": "abcdefghij.execute-api.us-west-2.amazonaws.com",
-        "User-Agent": "Java/17.0.7",
-        "Via": "1.1 b9ead8d9e99fb1a70cc9b3ee9d847ec6.cloudfront.net (CloudFront)",
-        "X-Amz-Cf-Id": "i77hdOvtOQx-6ctzL5epbEHhCcOK4rtKyxwvnO5f-a0Q4WAI80pCsg==",
-        "X-Amzn-Trace-Id": "Root=1-64af2e92-28233df32e11ffd628340766",
-        "X-Forwarded-For": "34.220.235.167, 130.176.100.77",
-        "X-Forwarded-Port": "443",
-        "X-Forwarded-Proto": "https"
-    },
-    "multiValueHeaders": {
-        "Accept": [
-            "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
-        ],
-        "CloudFront-Forwarded-Proto": [
-            "https"
-        ],
-        "CloudFront-Is-Desktop-Viewer": [
-            "true"
-        ],
-        "CloudFront-Is-Mobile-Viewer": [
-            "false"
-        ],
-        "CloudFront-Is-SmartTV-Viewer": [
-            "false"
-        ],
-        "CloudFront-Is-Tablet-Viewer": [
-            "false"
-        ],
-        "CloudFront-Viewer-ASN": [
-            "16509"
-        ],
-        "CloudFront-Viewer-Country": [
-            "US"
-        ],
-        "Content-Type": [
-            "application/json"
-        ],
-        "Host": [
-            "abcdefghij.execute-api.us-west-2.amazonaws.com"
-        ],
-        "User-Agent": [
-            "Java/17.0.7"
-        ],
-        "Via": [
-            "1.1 b9ead8d9e99fb1a70cc9b3ee9d847ec6.cloudfront.net (CloudFront)"
-        ],
-        "X-Amz-Cf-Id": [
-            "i77hdOvtOQx-6ctzL5epbEHhCcOK4rtKyxwvnO5f-a0Q4WAI80pCsg=="
-        ],
-        "X-Amzn-Trace-Id": [
-            "Root=1-64af2e92-28233df32e11ffd628340766"
-        ],
-        "X-Forwarded-For": [
-            "34.220.201.167, 130.176.100.84"
-        ],
-        "X-Forwarded-Port": [
-            "443"
-        ],
-        "X-Forwarded-Proto": [
-            "https"
-        ]
-    },
     "requestContext": {
-        "accountId": "123456789012",
-        "stage": "Prod",
-        "resourceId": "noadda",
-        "requestId": "fe644f3d-8f5f-40da-969d-e9a445328778",
-        "identity": {
-            "sourceIp": "34.220.201.199",
-            "userAgent": "Java/17.0.7"
-        },
-        "resourcePath": "/customers",
-        "httpMethod": "POST",
-        "apiId": "abcdefghij",
-        "path": "/Prod/customers"
+        "elb": {
+            "targetGroupArn": "arn:aws:elasticloadbalancing:us-west-2:123456789012:targetgroup/applic-Appli-ER6WQDFMVNBU/ec35398481df7cf6"
+        }
     },
-    "body": "{\"person\":{\"firstname\":\"Alease\",\"lastname\":\"Buemi\",\"company\":\"Porto Cayo At Hawks Cay\",\"street\":\"4 Webbs Chapel Rd\",\"city\":\"Boulder\",\"county\":\"Boulder\",\"state\":\"CO\",\"zip\":\"80303\",\"homePhone\":\"303-301-4946\",\"cellPhone\":\"303-521-9860\",\"email\":\"alease@buemi.com\",\"website\":\"http://www.portocayoathawkscay.com\"},\"id\":\"TestCustomers0607-12-2023-22-07-09-100\"}",
+    "httpMethod": "POST",
+    "path": "/customers",
+    "queryStringParameters": {},
+    "headers": {
+        "accept": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2",
+        "connection": "keep-alive",
+        "content-length": "363",
+        "content-type": "application/json",
+        "host": "appli-Appli-ABCDEFGHIJKL-1082263160.us-west-2.elb.amazonaws.com",
+        "user-agent": "Java/17.0.7",
+        "x-amzn-trace-id": "Root=1-64b1fa5f-52e21a8975f2e1555903b35f",
+        "x-forwarded-for": "10.100.10.100",
+        "x-forwarded-port": "80",
+        "x-forwarded-proto": "http"
+    },
+    "body": "{\"person\":{\"firstname\":\"Jamal\",\"lastname\":\"Vanausdal\",\"company\":\"\\\"Hubbard, Bruce Esq\\\"\",\"street\":\"53075 Sw 152nd Ter #615\",\"city\":\"Monroe Township\",\"county\":\"Middlesex\",\"state\":\"NJ\",\"zip\":\"8831\",\"homePhone\":\"732-234-1546\",\"cellPhone\":\"732-904-2931\",\"email\":\"jamal@vanausdal.org\",\"website\":\"http://www.hubbardbruceesq.com\"},\"id\":\"Message0707-15-2023-01-07-58-61\"}",
     "isBase64Encoded": false
 }

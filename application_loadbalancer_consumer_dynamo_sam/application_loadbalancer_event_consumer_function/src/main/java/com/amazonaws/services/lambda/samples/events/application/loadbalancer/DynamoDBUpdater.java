@@ -1,8 +1,5 @@
 package com.amazonaws.services.lambda.samples.events.application.loadbalancer;
 
-
-
-import java.util.List;
 import java.util.Map;
 import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
@@ -12,7 +9,7 @@ import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
-import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
+import com.amazonaws.services.lambda.runtime.events.ApplicationLoadBalancerRequestEvent;
 import com.google.gson.Gson;
 
 public class DynamoDBUpdater {
@@ -42,34 +39,21 @@ public class DynamoDBUpdater {
 		this.dynamoTable = dynamoDB.getTable(this.dynamoDBTableName);
 	}
 	
-	public PutItemOutcome insertIntoDynamoDB(APIGatewayProxyRequestEvent input, String customerId, Gson gson, LambdaLogger logger) {
+	public PutItemOutcome insertIntoDynamoDB(ApplicationLoadBalancerRequestEvent input, String customerId, Gson gson, LambdaLogger logger) {
 		logger.log("Now inserting a row in DynamoDB for CustomerID = " + customerId);
 		Item item = new Item();
 		item.withPrimaryKey("CustomerID", customerId);
-		item.withString("Resource", input.getResource());
+		
+		item.withString("TargetGroupArn = ", input.getRequestContext().getElb().getTargetGroupArn());
+		item.withString("HttpMethod", input.getHttpMethod());
 		item.withString("Path", input.getPath());
-		item.withString("HTTPMethod", input.getHttpMethod());
-		item.withString("RequestContextAccountID", input.getRequestContext().getAccountId());
-		item.withString("RequestContextStage", input.getRequestContext().getStage());
-		item.withString("RequestContextResourceID", input.getRequestContext().getResourceId());
-		item.withString("RequestContextRequestID", input.getRequestContext().getRequestId());
-		item.withString("RequestContextIdentitySourceIP", input.getRequestContext().getIdentity().getSourceIp());
-		item.withString("RequestContextIdentityUserAgent", input.getRequestContext().getIdentity().getUserAgent());
-		item.withString("RequestContextResourcePath", input.getRequestContext().getResourcePath());
-		item.withString("RequestContextHTTPMethod", input.getRequestContext().getHttpMethod());
-		item.withString("RequestContextApiID", input.getRequestContext().getApiId());
-		item.withString("RequestContextPath", input.getRequestContext().getPath());
+    	Map<String, String> queryStringParameters = input.getQueryStringParameters();
+    	queryStringParameters.forEach((k,v) -> {
+    		item.withString("QueryStringParameter_" + k , v);
+    	});
     	Map<String, String> inputHeaders = input.getHeaders();
     	inputHeaders.forEach((k, v) -> {
-    		item.withString("Headers" + k, v);
-    	});
-    	Map<String, List<String>> inputMultiValueHeaders = input.getMultiValueHeaders();
-    	inputMultiValueHeaders.forEach((k1, v1) -> {
-    		int i= 1;
-    		for (String v2 : v1) {
-    			item.withString("MultiValueHeaders" + k1 + i, v2);
-    			i++;
-    		}
+    		item.withString("Headers_" + k, v);
     	});
     	PersonWithID thisPerson = gson.fromJson(input.getBody(), PersonWithID.class);
     	item.withString("PersonID", thisPerson.getId());
