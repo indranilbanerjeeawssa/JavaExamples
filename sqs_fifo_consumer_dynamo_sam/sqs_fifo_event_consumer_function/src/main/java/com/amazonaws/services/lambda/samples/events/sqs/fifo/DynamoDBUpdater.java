@@ -41,10 +41,12 @@ public class DynamoDBUpdater {
 		this.dynamoTable = dynamoDB.getTable(this.dynamoDBTableName);
 	}
 	
-	public PutItemOutcome insertIntoDynamoDB(SQSMessage msg, Gson gson, LambdaLogger logger) {
+	public PutItemOutcome insertIntoDynamoDB(SQSMessage msg, Gson gson, LambdaLogger logger, long batchReceiptTime, String lambdaMicroVMID) {
 		logger.log("Now inserting a row in DynamoDB for messageID = " + msg.getMessageId());
 		Item item = new Item();
 		item.withPrimaryKey("MessageID", msg.getMessageId());
+		item.withString("LambdaMicroVMID", lambdaMicroVMID);
+		item.withLong("BatchReceiptTime", batchReceiptTime);
 		item.withString("ReceiptHandle", msg.getReceiptHandle());
 		item.withString("EventSourceARN", msg.getEventSourceArn());
 		item.withString("EventSource", msg.getEventSource());

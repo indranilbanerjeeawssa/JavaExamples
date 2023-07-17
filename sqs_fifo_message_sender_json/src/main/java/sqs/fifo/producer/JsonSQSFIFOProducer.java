@@ -70,7 +70,7 @@ public class JsonSQSFIFOProducer {
 			System.out.println("**********************************************************");
 			System.out.println("Now going to send one SQS message to queue - " + queueName);
 			System.out.println(
-					"Message Key = " + messageKey + " and Message Number = " + messageNumber);
+					"Message Key = " + messageKey + " and Message Number = " + messageNumber + " and Repitition Number = " + repititionNumber);
 			System.out.println("Message Body = " + thisPerson.toJson());
 			sqsClient.sendMessage(sendMsgRequest);
 			System.out.println("Now done sending one SQS message");

@@ -352,7 +352,6 @@ class HandlerSQSFIFOTest {
 		DynamoDBUpdater dbUpdater = mock(DynamoDBUpdater.class);
 		HandlerSQSFIFO handler = new HandlerSQSFIFO();
 		handler.ddbUpdater = dbUpdater;
-		when(handler.ddbUpdater.insertIntoDynamoDB(ArgumentMatchers.any(SQSMessage.class), ArgumentMatchers.any(Gson.class), ArgumentMatchers.any(LambdaLogger.class))).thenReturn(putItemOutcome);
 		SQSBatchResponse result = handler.handleRequest(event, context);
 		assertEquals(result.getBatchItemFailures().size(), 0);
 	}

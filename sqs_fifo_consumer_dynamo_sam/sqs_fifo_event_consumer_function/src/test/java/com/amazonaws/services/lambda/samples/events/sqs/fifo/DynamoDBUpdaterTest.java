@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
@@ -367,7 +370,7 @@ class DynamoDBUpdaterTest {
 		    ddbUpdater.dynamoDB = dynamoDB;
 		    ddbUpdater.dynamoTable = dynamoDbTable;
 		    when(ddbUpdater.dynamoTable.putItem(ArgumentMatchers.any(Item.class))).thenReturn(putoutcome);
-			PutItemOutcome putOutcome = ddbUpdater.insertIntoDynamoDB(msg, gson, logger);
+			PutItemOutcome putOutcome = ddbUpdater.insertIntoDynamoDB(msg, gson, logger, System.currentTimeMillis(), UUID.randomUUID().toString());
 			assertNotNull(putOutcome);
 		}
 	    

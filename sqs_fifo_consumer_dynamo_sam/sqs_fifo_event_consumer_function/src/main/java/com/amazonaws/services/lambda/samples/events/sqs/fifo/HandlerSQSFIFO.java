@@ -17,6 +17,8 @@ package com.amazonaws.services.lambda.samples.events.sqs.fifo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
@@ -36,11 +38,15 @@ public class HandlerSQSFIFO implements RequestHandler<SQSEvent, SQSBatchResponse
 	DynamoDBUpdater ddbUpdater = new DynamoDBUpdater(dynamoDBTableName);
 	boolean addToDynamoDB;
 	ObjectMapper objectMapper = new ObjectMapper();
+	String lambdaMicroVMID = UUID.randomUUID().toString();
 	@Override
 	public SQSBatchResponse handleRequest(SQSEvent event, Context context)
 	{
+		long receiveTime = System.currentTimeMillis();
 		List<SQSBatchResponse.BatchItemFailure> batchItemFailures = new ArrayList<SQSBatchResponse.BatchItemFailure>();
 		LambdaLogger logger = context.getLogger();
+		logger.log("Lambda MicroVM ID = " + lambdaMicroVMID);
+		logger.log("Batch Receipt Time = " + receiveTime);
 		logger.log("Begin Event *************");
 		try {
 			logger.log(objectMapper.writeValueAsString(event));
@@ -77,7 +83,7 @@ public class HandlerSQSFIFO implements RequestHandler<SQSEvent, SQSBatchResponse
 				});
 				String AWS_SAM_LOCAL = System.getenv("AWS_SAM_LOCAL");
 				if ((null == AWS_SAM_LOCAL) && (addToDynamoDB)) {
-					ddbUpdater.insertIntoDynamoDB(msg, gson, logger);
+					ddbUpdater.insertIntoDynamoDB(msg, gson, logger, receiveTime, lambdaMicroVMID);
 				}
 			} catch (Exception e) {
 				logger.log("An exception occurred while processing this SQS message - " + e.getMessage());
