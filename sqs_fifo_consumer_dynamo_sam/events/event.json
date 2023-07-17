@@ -1,30 +1,40 @@
 {
-    "Records": [
+    "records": [
         {
-            "messageId": "c042b80c-1d2b-4397-9515-5fed7ad002be",
-            "receiptHandle": "AQEBbjgjsU2aTAQSs9Fz0CN2GkORJV+0zLubBMyDL1Xi6pEft2/SfM1YaRJ0UURkb1O0PXNi+bbsqvaLZ/RRK8v5Pjg4ERFwcyOOZRFBtrgkvCJRNbK1XrwtmWfpbmrWkx0Ng7phokIAJeWzJT46aURHnFvYXvHJJ96WBwYufEiVVhSPoorW8aWTC4TsCl/pLs145fUcBAX9bf4ZKVaLTLCxQ3XzaL9bS2Ywxojh5Yrj5LHhNjVCQLC4yGKqvkvp9DFAtXhZm35vugcr2YAVCkqVTfWjn5GteOi4xFylCakS6fkGoWhcFfasfuqWZzBprE4Wezo4z2lEs4399kYF2OC8PCZX7IH5MF2bPTzYweCqW3EniIDQ7frSjwDYGMWtWK62pF5xRXM49Dq4Qhvsatf50oEHQgyqOHoL27DzSilxwL8=",
-            "body": "{\"firstname\":\"Lenna\",\"lastname\":\"Paprocki\",\"company\":\"Feltz Printing Service\",\"street\":\"639 Main St\",\"city\":\"Anchorage\",\"county\":\"Anchorage\",\"state\":\"AK\",\"zip\":\"99501\",\"homePhone\":\"907-385-4412\",\"cellPhone\":\"907-921-2010\",\"email\":\"lpaprocki@hotmail.com\",\"website\":\"http://www.feltzprintingservice.com\"}",
-            "md5OfBody": "813e0c41eecf124a9b87f66c10211028",
-            "md5OfMessageAttributes": "1a99acfa073da054d796b9291dda857a",
-            "eventSourceArn": "arn:aws:sqs:us-west-2:664251831272:SQSLambdaDynamoDBSAMQueue",
+            "messageId": "8f10fc89-3ad5-435a-9482-3cc9182845ae",
+            "receiptHandle": "AQEBeTKUaAQm4+0PC0LsQbZRYe69wgnCit0FtbDXIi3wbeCbFSd5OCODuAqdG7zTl8lWFYaCatE+jKbv5gNTKMn2uugVXd1q14TgX6DDWJknbzv6x5o6vVtwolMreHzsgaOxny2PytQ71umMURwFWlnmOeLTQN5zexCyivcut/S/wwpupadad95ocWio4Pb7nZpXdT70q1kvxmDA3v9L7JRUEyaibY0NxAcjdnnhS91zUQT8ScfxQ42XZxpumnGV4D/pISCMRCfoV4faj5CaEHMS9ilhdhiytm0hw9/uI2yWoBtySasxG529sPebpBFOyu9x",
+            "body": "{\"firstname\":\"Youlanda\",\"lastname\":\"Schemmer\",\"company\":\"Tri M Tool Inc\",\"street\":\"2881 Lewis Rd\",\"city\":\"Prineville\",\"county\":\"Crook\",\"state\":\"OR\",\"zip\":\"97754\",\"homePhone\":\"541-548-8197\",\"cellPhone\":\"541-993-2611\",\"email\":\"youlanda@aol.com\",\"website\":\"http://www.trimtoolinc.com\"}",
+            "md5OfBody": "74ae704a75e3f6fb0bc02533394779da",
+            "md5OfMessageAttributes": "176dd6e75fe5dbc3e122baeebc78f9a4",
+            "eventSourceArn": "arn:aws:sqs:us-west-2:664251831272:SQSFIFOLambdaDynamoDBSAMQueue.fifo",
             "eventSource": "aws:sqs",
             "awsRegion": "us-west-2",
             "attributes": {
                 "ApproximateReceiveCount": "1",
-                "SentTimestamp": "1684739385421",
+                "SentTimestamp": "1689554641783",
+                "SequenceNumber": "18879270062006000384",
+                "MessageGroupId": "TestKey01-07-17-2023-00-07-86-OR",
                 "SenderId": "AROAZVKD6SPUBDQBNO3D6:i-006b46228e77ad83f",
-                "ApproximateFirstReceiveTimestamp": "1684739385425"
+                "MessageDeduplicationId": "TestKey01-07-17-2023-00-07-86-40",
+                "ApproximateFirstReceiveTimestamp": "1689554643554"
             },
             "messageAttributes": {
                 "MessageKey": {
-                    "stringValue": "TestKey11-05-22-2023-07-05-40",
+                    "stringValue": "TestKey01-07-17-2023-00-07-86",
                     "binaryValue": null,
                     "stringListValues": [],
                     "binaryListValues": [],
                     "dataType": "String"
                 },
                 "MessageNumber": {
-                    "stringValue": "3",
+                    "stringValue": "40",
+                    "binaryValue": null,
+                    "stringListValues": [],
+                    "binaryListValues": [],
+                    "dataType": "String"
+                },
+                "RepititionNumber": {
+                    "stringValue": "1",
                     "binaryValue": null,
                     "stringListValues": [],
                     "binaryListValues": [],
@@ -33,30 +43,40 @@
             }
         },
         {
-            "messageId": "391f2589-190d-48d8-b23e-67499d83d58a",
-            "receiptHandle": "AQEBAMcL9xn10GuiOBm5AA6lvXVddKbSmqgZh14GPIBAOhbVb/wL4v8I4MaYynpDDKMluuNUIzoT/EgOEA5aEl2z3np1ZuGFpjMx2cx1whMaHgZop5JRojvvxMP7WYFZV31i6v9aanIg8OuqlKCYxe1FX0K70Q9+rY8bE3xOEqkMBIWiu+uLgdd6Zajz0j/Puq0DL77xZeW1KDmxRjg8IdwhMLnNOR2CepG627iV7oxev/nFQdKYvjGx8KWBhNS2zdhVg/oXxysy0WcKqBGTn1VsrxBkB9hSTxoRuwDP4sGtS3paX1nrAihXbTP2d3DUVBNR3OyS9alSdqcugUWR4aIopy4tvp1rw5NLjMGSGXvHPi5oY4D9Rp+iK314HIC+Py3eQhTDXxwoXWdfMOO5PiexQXSlrvjBoDviCePvpX3hn6E=",
-            "body": "{\"firstname\":\"Sage\",\"lastname\":\"Wieser\",\"company\":\"Truhlar And Truhlar Attys\",\"street\":\"5 Boston Ave #88\",\"city\":\"Sioux Falls\",\"county\":\"Minnehaha\",\"state\":\"SD\",\"zip\":\"57105\",\"homePhone\":\"605-414-2147\",\"cellPhone\":\"605-794-4895\",\"email\":\"sage_wieser@cox.net\",\"website\":\"http://www.truhlarandtruhlarattys.com\"}",
-            "md5OfBody": "8e479ee12f65abcc37cb61a755ee2931",
-            "md5OfMessageAttributes": "afe539d97afc9b665e737c32ea9d7de2",
-            "eventSourceArn": "arn:aws:sqs:us-west-2:664251831272:SQSLambdaDynamoDBSAMQueue",
+            "messageId": "e1a1a265-269d-4728-9285-714e31d16d03",
+            "receiptHandle": "AQEBm2Wf9lF9vsgQ3bat89pOuautciTjavX5HM2UUoFWojgZeCXDgb5nRd2tmXOZ+JOmz4VafWk4VwluFx1v7R4LPj4MrT86CLEc6Hv//KKE2jOEJhC41L47HJS90oKPMlHcGKctqxz7QjG4ky9LSCalEF3Gej5nAC5VEu4OESvp1/4GsFBSS8g0w3KT/Yngxk74r5X2LLNglynf4Gj50ivmr+Wsyy7PSuhiocGISguDgd4jlBR9onSvvdFrYmNrzm7DQQwaSBUWy/wVJo0U0JNa2Wfs4GMCOnmFw0RJNhat4iaTfuqWBXSasWHdrtQBsLI2",
+            "body": "{\"firstname\":\"Lavera\",\"lastname\":\"Perin\",\"company\":\"Abc Enterprises Inc\",\"street\":\"678 3rd Ave\",\"city\":\"Miami\",\"county\":\"Miami-Dade\",\"state\":\"FL\",\"zip\":\"33196\",\"homePhone\":\"305-606-7291\",\"cellPhone\":\"305-995-2078\",\"email\":\"lperin@perin.org\",\"website\":\"http://www.abcenterprisesinc.com\"}",
+            "md5OfBody": "1262b3ae08b2cb5fcd64a4fed44442b1",
+            "md5OfMessageAttributes": "567e89bf2fedd2385298cbee516ddce3",
+            "eventSourceArn": "arn:aws:sqs:us-west-2:664251831272:SQSFIFOLambdaDynamoDBSAMQueue.fifo",
             "eventSource": "aws:sqs",
             "awsRegion": "us-west-2",
             "attributes": {
                 "ApproximateReceiveCount": "1",
-                "SentTimestamp": "1684739385554",
+                "SentTimestamp": "1689554641929",
+                "SequenceNumber": "18879270062043377664",
+                "MessageGroupId": "TestKey01-07-17-2023-00-07-86-FL",
                 "SenderId": "AROAZVKD6SPUBDQBNO3D6:i-006b46228e77ad83f",
-                "ApproximateFirstReceiveTimestamp": "1684739385556"
+                "MessageDeduplicationId": "TestKey01-07-17-2023-00-07-86-43",
+                "ApproximateFirstReceiveTimestamp": "1689554643554"
             },
             "messageAttributes": {
                 "MessageKey": {
-                    "stringValue": "TestKey11-05-22-2023-07-05-54",
+                    "stringValue": "TestKey01-07-17-2023-00-07-86",
                     "binaryValue": null,
                     "stringListValues": [],
                     "binaryListValues": [],
                     "dataType": "String"
                 },
                 "MessageNumber": {
-                    "stringValue": "8",
+                    "stringValue": "43",
+                    "binaryValue": null,
+                    "stringListValues": [],
+                    "binaryListValues": [],
+                    "dataType": "String"
+                },
+                "RepititionNumber": {
+                    "stringValue": "1",
                     "binaryValue": null,
                     "stringListValues": [],
                     "binaryListValues": [],
@@ -65,30 +85,40 @@
             }
         },
         {
-            "messageId": "572105e1-b986-4de6-b964-a37cd6090378",
-            "receiptHandle": "AQEBLMN83SISy2raysVSlLerh+UOTYUTeBXwsrAbxNg3Wx0x7R/Jx6WTvVZi6FtasXJeO8HBajtueevT4Ayiem5L+bm7Wp7M+UeLm4fYQBFcHSq70HvF7otuGC9oWnryMs+RzkjQpftlLODuw5ygtO3V030DfXwiDuMrrRktf9pWOjSjaVoBzMwYAiMtrGAVeLajDxkzfzUhQy0mBuQ8FHdoEZQyeqOYwTmM3zZqYcl1OjXxKInEZ4NWf0to1dM7ItcZL23ygWYyYw9fQb23ib2vuYTO/PoVnTiW/H7vEj8lIu2XqndaHgScfaUGTumCvFFwduk/h9QbH6/JPQpeolufp6hDzk+nlHbqXqJASC3Cl0tbiD7WG0qdGRtUmSCml2t/BQar+x613kUpBOLvE5mlljfElghbP1WuVTOM8swLqJk=",
-            "body": "{\"firstname\":\"Abel\",\"lastname\":\"Maclead\",\"company\":\"Rangoni Of Florence\",\"street\":\"37275 St  Rt 17m M\",\"city\":\"Middle Island\",\"county\":\"Suffolk\",\"state\":\"NY\",\"zip\":\"11953\",\"homePhone\":\"631-335-3414\",\"cellPhone\":\"631-677-3675\",\"email\":\"amaclead@gmail.com\",\"website\":\"http://www.rangoniofflorence.com\"}",
-            "md5OfBody": "e0113d8a717033df6d10ab8ab9515437",
-            "md5OfMessageAttributes": "97a07ebfad0a127f09305449ac8494c3",
-            "eventSourceArn": "arn:aws:sqs:us-west-2:664251831272:SQSLambdaDynamoDBSAMQueue",
+            "messageId": "447bcb89-f496-471c-8dd7-fb50e5aed3d6",
+            "receiptHandle": "AQEBvcqB944Pk23OopzJE1Vd7DGQfaktum2VyxS4Ev5K37hY2X2JNGiierqUkXlnar8glYfWgUFWk9IzMowygqh1f7vK4IXOiPB49ZAA27oT6jxjhsR05Bi/H2TvESIwPdT3bB+yVT6jkvunHCiX2YsToC5fw4yfbAclVgfRQOruY6vo2U4LRygVlAFioYCQSL8C+h9AmCQeF6G+k03NGfJEZB9GMj0QOZ/iS/jerFM2YGyqUEuzhyWSzvcUQQ8qQ9gogoWZJiTwWZG3CoP40EU6/Urw9dUmpGKe4IUpks9EyuO+YOaqGCTR0rxZxC/Fjiih",
+            "body": "{\"firstname\":\"Arlette\",\"lastname\":\"Honeywell\",\"company\":\"Smc Inc\",\"street\":\"11279 Loytan St\",\"city\":\"Jacksonville\",\"county\":\"Duval\",\"state\":\"FL\",\"zip\":\"32254\",\"homePhone\":\"904-775-4480\",\"cellPhone\":\"904-514-9918\",\"email\":\"ahoneywell@honeywell.com\",\"website\":\"http://www.smcinc.com\"}",
+            "md5OfBody": "6da4588286bf3b37f79f262d26d68e2d",
+            "md5OfMessageAttributes": "55fae44ec71e40037896d5c9e51462df",
+            "eventSourceArn": "arn:aws:sqs:us-west-2:664251831272:SQSFIFOLambdaDynamoDBSAMQueue.fifo",
             "eventSource": "aws:sqs",
             "awsRegion": "us-west-2",
             "attributes": {
                 "ApproximateReceiveCount": "1",
-                "SentTimestamp": "1684739385642",
+                "SentTimestamp": "1689554642959",
+                "SequenceNumber": "18879270062307056896",
+                "MessageGroupId": "TestKey01-07-17-2023-00-07-86-FL",
                 "SenderId": "AROAZVKD6SPUBDQBNO3D6:i-006b46228e77ad83f",
-                "ApproximateFirstReceiveTimestamp": "1684739385643"
+                "MessageDeduplicationId": "TestKey01-07-17-2023-00-07-86-82",
+                "ApproximateFirstReceiveTimestamp": "1689554643554"
             },
             "messageAttributes": {
                 "MessageKey": {
-                    "stringValue": "TestKey11-05-22-2023-07-05-63",
+                    "stringValue": "TestKey01-07-17-2023-00-07-86",
                     "binaryValue": null,
                     "stringListValues": [],
                     "binaryListValues": [],
                     "dataType": "String"
                 },
                 "MessageNumber": {
-                    "stringValue": "11",
+                    "stringValue": "82",
+                    "binaryValue": null,
+                    "stringListValues": [],
+                    "binaryListValues": [],
+                    "dataType": "String"
+                },
+                "RepititionNumber": {
+                    "stringValue": "1",
                     "binaryValue": null,
                     "stringListValues": [],
                     "binaryListValues": [],
@@ -97,30 +127,40 @@
             }
         },
         {
-            "messageId": "77c14ed2-f9f3-4782-928f-c18431cd04ab",
-            "receiptHandle": "AQEBoMB/iYqiLSSdkI/UEYDHru2+EwtNKUFiKts55ei2zoeaktgtErk6G0DB6adLtpZ1z95U36yHXdHKvO3cSI+Xvk6ypbd9F3GcrwgyAwbxrhc3fWi4A9XegL7DZipnK9zSYN5GfS40q3qHt3++TUlbMCGCRzJ1jyzJ/SaWw12a0/sryBKQHtpDW81FD/uZsTB+U7TPv3aFTbx7myGsfUsYSMq9+Kw/062dK23Cfkl4ScJmKSZIPUq7ggpsp5MhMlGkMVu3jTld8XnBnbajpdu8t2hLXPuriCc7ZEQRlCLbCMx6GD/l4HdsCdeVXaHGQeItIA9OuuCYYXQpfJ4Vumm0RvrUgQYQwe+QnZkHX/MXltBafM1FO+V2ZNV+wQVMY7ynsUpXs9vsUWywBaeEla/FknlVf9OerKQtVThlT3XuaWE=",
-            "body": "{\"firstname\":\"Cammy\",\"lastname\":\"Albares\",\"company\":\"\\\"Rousseaux, Michael Esq\\\"\",\"street\":\"56 E Morehead St\",\"city\":\"Laredo\",\"county\":\"Webb\",\"state\":\"TX\",\"zip\":\"78045\",\"homePhone\":\"956-537-6195\",\"cellPhone\":\"956-841-7216\",\"email\":\"calbares@gmail.com\",\"website\":\"http://www.rousseauxmichaelesq.com\"}",
-            "md5OfBody": "5aebded37328e6b8bb2db15ab4251c13",
-            "md5OfMessageAttributes": "078cfb599bbea12e633206bca95af47e",
-            "eventSourceArn": "arn:aws:sqs:us-west-2:664251831272:SQSLambdaDynamoDBSAMQueue",
+            "messageId": "446984d3-c4c6-4b4f-8d55-333e0c8e6ce4",
+            "receiptHandle": "AQEBPWA6Xh+CVDMKMkcWebY78ZndY/9GJo4c6ccGMHBKVx6qSt4UHMhXBxhkMZaZXwecJ77gT/aBmlBTFLqYA24n2ENxYlWhQCWertTT5Xy/1w6hwu0TgkA+Q/L7row+wDOkyoFQ4hTkTnv85cssJm5E6jHMx7trpmLTEMxTT+G1loGf24ASkjr89RjSc0F6y9xXL2b6W88url4LswVAQsuH8q++8p36ccNiQT+7cHuwCXz4Ah125EuIuW/BSOOdbMMUQYbuu3q4k7/NV2In6MtHaY+J3/jdwKdtOZ0U7OyXePlTuvCc8+BJ10VPhOhsp6Up",
+            "body": "{\"firstname\":\"Fatima\",\"lastname\":\"Saylors\",\"company\":\"\\\"Stanton, James D Esq\\\"\",\"street\":\"2 Lighthouse Ave\",\"city\":\"Hopkins\",\"county\":\"Hennepin\",\"state\":\"MN\",\"zip\":\"55343\",\"homePhone\":\"952-768-2416\",\"cellPhone\":\"952-479-2375\",\"email\":\"fsaylors@saylors.org\",\"website\":\"http://www.stantonjamesdesq.com\"}",
+            "md5OfBody": "4b0f49a42d201a696bb7edeee9779923",
+            "md5OfMessageAttributes": "5a42b4e5e5d5e5400110b436025a3a1b",
+            "eventSourceArn": "arn:aws:sqs:us-west-2:664251831272:SQSFIFOLambdaDynamoDBSAMQueue.fifo",
             "eventSource": "aws:sqs",
             "awsRegion": "us-west-2",
             "attributes": {
                 "ApproximateReceiveCount": "1",
-                "SentTimestamp": "1684739385699",
+                "SentTimestamp": "1689554641982",
+                "SequenceNumber": "18879270062056944640",
+                "MessageGroupId": "TestKey01-07-17-2023-00-07-86-MN",
                 "SenderId": "AROAZVKD6SPUBDQBNO3D6:i-006b46228e77ad83f",
-                "ApproximateFirstReceiveTimestamp": "1684739385700"
+                "MessageDeduplicationId": "TestKey01-07-17-2023-00-07-86-45",
+                "ApproximateFirstReceiveTimestamp": "1689554643554"
             },
             "messageAttributes": {
                 "MessageKey": {
-                    "stringValue": "TestKey11-05-22-2023-07-05-69",
+                    "stringValue": "TestKey01-07-17-2023-00-07-86",
                     "binaryValue": null,
                     "stringListValues": [],
                     "binaryListValues": [],
                     "dataType": "String"
                 },
                 "MessageNumber": {
-                    "stringValue": "14",
+                    "stringValue": "45",
+                    "binaryValue": null,
+                    "stringListValues": [],
+                    "binaryListValues": [],
+                    "dataType": "String"
+                },
+                "RepititionNumber": {
+                    "stringValue": "1",
                     "binaryValue": null,
                     "stringListValues": [],
                     "binaryListValues": [],
@@ -129,30 +169,40 @@
             }
         },
         {
-            "messageId": "2ef9efa3-781b-45a1-8645-8452b2ed9124",
-            "receiptHandle": "AQEBguYb2+oIBp7SWBzcyoQYou7ixarV0ffpZOg9fzJIBS/CM6rpIzt0NKGydO2qmNlusRNl+4NWKJSnzoR3xWAffmlZ7yxyXwbdc8wdJLA1q3G1tKIAHByjqkTjY838guUoZd6iPXOIbAA+LZGB9w/dzvMnMopKaC6tXWo1GW9dAntYPHKIfgV3CD+ixJvG54oKMv/yw4wCZZCwZEwXPrWj4IB39iZMdabL6iqx45OhcBaUWZaisQz9h10FHzeau7fxtY8+FnkpkwsusvQ75V9lcTI+Ir9gajDSeg89lp/GUVA2CXMYqEqs3jh0m4mU64wCKC++ZXzY2gv+e5fSRTgHo9vZ21ETEJUYoJxtxxUtRpZXsluWbdLCMJoSXqfptqnc1bU/L6jk+oG7QGuEXijY40cff5SP1nkr2q1vKtnsKlA=",
-            "body": "{\"firstname\":\"Fletcher\",\"lastname\":\"Flosi\",\"company\":\"Post Box Services Plus\",\"street\":\"394 Manchester Blvd\",\"city\":\"Rockford\",\"county\":\"Winnebago\",\"state\":\"IL\",\"zip\":\"61109\",\"homePhone\":\"815-828-2147\",\"cellPhone\":\"815-426-5657\",\"email\":\"fletcher.flosi@yahoo.com\",\"website\":\"http://www.postboxservicesplus.com\"}",
-            "md5OfBody": "cfa4463a9555814204a58d408d312d3f",
-            "md5OfMessageAttributes": "02a104e4907ff7edef1e32264e98d6bd",
-            "eventSourceArn": "arn:aws:sqs:us-west-2:664251831272:SQSLambdaDynamoDBSAMQueue",
+            "messageId": "1e6f3dad-415a-4ded-b6ac-c055a16f80ec",
+            "receiptHandle": "AQEB8ATCxbt2gmWPQbRBGwxzdbVoGCVGGpq9Zp8kE4OHCbNHPRznOfqiWAaiEoT17xRT7PUuSjrSp7kfGdWVW6/wLn0SswzcjD3GKeWU/hwhGpd087K3vOri2dADuuHeJgEmcQ/iiWRsOAtlAdEgGRizNxND8HQHNi3UJDzKJRsZF1qcrp4LgkDLBAETe3qR6Ut94SD0fNSp4ZzshOVEnvubsXOHUOEgVMXZwQRxWX/iIerqCdWwLDoWoZ7Cdn2lLveDii9E4GV7OH573+GB5GZVxu3p/TAULuic2tLz64YaNuhrq5PdIL5eMTfgZl11YhDN",
+            "body": "{\"firstname\":\"Jina\",\"lastname\":\"Briddick\",\"company\":\"Grace Pastries Inc\",\"street\":\"38938 Park Blvd\",\"city\":\"Boston\",\"county\":\"Suffolk\",\"state\":\"MA\",\"zip\":\"2128\",\"homePhone\":\"617-399-5124\",\"cellPhone\":\"617-997-5771\",\"email\":\"jina_briddick@briddick.com\",\"website\":\"http://www.gracepastriesinc.com\"}",
+            "md5OfBody": "2419236f71b3810fe5655021f312edfe",
+            "md5OfMessageAttributes": "8bb603fdd8d71a3ca6f4cd14fa4d2d5a",
+            "eventSourceArn": "arn:aws:sqs:us-west-2:664251831272:SQSFIFOLambdaDynamoDBSAMQueue.fifo",
             "eventSource": "aws:sqs",
             "awsRegion": "us-west-2",
             "attributes": {
                 "ApproximateReceiveCount": "1",
-                "SentTimestamp": "1684739385831",
+                "SentTimestamp": "1689554642010",
+                "SequenceNumber": "18879270062064112896",
+                "MessageGroupId": "TestKey01-07-17-2023-00-07-86-MA",
                 "SenderId": "AROAZVKD6SPUBDQBNO3D6:i-006b46228e77ad83f",
-                "ApproximateFirstReceiveTimestamp": "1684739385832"
+                "MessageDeduplicationId": "TestKey01-07-17-2023-00-07-86-46",
+                "ApproximateFirstReceiveTimestamp": "1689554643554"
             },
             "messageAttributes": {
                 "MessageKey": {
-                    "stringValue": "TestKey11-05-22-2023-07-05-81",
+                    "stringValue": "TestKey01-07-17-2023-00-07-86",
                     "binaryValue": null,
                     "stringListValues": [],
                     "binaryListValues": [],
                     "dataType": "String"
                 },
                 "MessageNumber": {
-                    "stringValue": "19",
+                    "stringValue": "46",
+                    "binaryValue": null,
+                    "stringListValues": [],
+                    "binaryListValues": [],
+                    "dataType": "String"
+                },
+                "RepititionNumber": {
+                    "stringValue": "1",
                     "binaryValue": null,
                     "stringListValues": [],
                     "binaryListValues": [],
@@ -161,30 +211,40 @@
             }
         },
         {
-            "messageId": "0217caba-d2b8-4064-a69b-61bfa9cd2b21",
-            "receiptHandle": "AQEBXoAnVQX7C1+k54aR1mGqan6xInORMd4Wth0YRu8dufDupSwgsSY8rmr0wdUCzojfPl/zFFcYQP7OMU+9TmFuVVMDvpgARxlDgNLMtw0ZHwiTJnuqvQvKQNQoWMUC4p+2lOSYU8s4/ighTgQ7HrFI2kw3itwIa929XdVZb8k4TjEOPtWTTVzAbKzF1X8bG1kuekK3/mcjq4gyRqRBTBwOT/IVDDCbesZN8E+pTEpt7XjKXh1wJRX519trSapdEeewVkfygB7Y6+HeXYHz5Kc4yv1sWm+GAvBdjqiw3yHBN93je6a2MZ+nX9pJBViXMop45mVpwTX5eaTdNg4/hBtjRLR3p17GJFQrAVYq4vNW0LLtiGiRoEazRROkwUqyL2qD3VVmzjOntzrlR4AVsXZ8RyahkkVr7aWRllKDp8x5jS4=",
-            "body": "{\"firstname\":\"Bette\",\"lastname\":\"Nicka\",\"company\":\"Sport En Art\",\"street\":\"6 S 33rd St\",\"city\":\"Aston\",\"county\":\"Delaware\",\"state\":\"PA\",\"zip\":\"19014\",\"homePhone\":\"610-545-3615\",\"cellPhone\":\"610-492-4643\",\"email\":\"bette_nicka@cox.net\",\"website\":\"http://www.sportenart.com\"}",
-            "md5OfBody": "123bc3d2c20b55fbc7264c0e80c7d212",
-            "md5OfMessageAttributes": "6d53f4082c09a29e6459a1484dc3d722",
-            "eventSourceArn": "arn:aws:sqs:us-west-2:664251831272:SQSLambdaDynamoDBSAMQueue",
+            "messageId": "545c28ad-3ed9-4104-8754-0cceb439f117",
+            "receiptHandle": "AQEBF0RV9UszSOF8hRAs6yKv91l5g07VzSrK9jgezKuGVPLcg7dXZ2guIKVxaDUgOnSTHZhCUOFZ97GVfVt3DKwM7oyqq9hdGASx4DKRx0ON4e2oIUYLZFqiEuUbAfSomPflEB5kfSMTYkzcY3yOmTgKA5SxcJC9paxc/zOJ0T5i/YOh0FmnWPZuiuXdQDWYM6g2yZyeQIUF0I2q1OtyzhzT2SGo2D/hofhYwIxp3lpLQEHCulQO17NbSWYAUd6v1vnl786EPlTxtVBK117zDm5aOAWjyvPnjJcsZcmFezoaZDhDOFO0E1kpz+POsLk7JEzI",
+            "body": "{\"firstname\":\"Sabra\",\"lastname\":\"Uyetake\",\"company\":\"Lowy Limousine Service\",\"street\":\"98839 Hawthorne Blvd #6101\",\"city\":\"Columbia\",\"county\":\"Richland\",\"state\":\"SC\",\"zip\":\"29201\",\"homePhone\":\"803-925-5213\",\"cellPhone\":\"803-681-3678\",\"email\":\"sabra@uyetake.org\",\"website\":\"http://www.lowylimousineservice.com\"}",
+            "md5OfBody": "5a007b7dd73f11012dbb26e20dfa4738",
+            "md5OfMessageAttributes": "b29256b899104c7ea9562d770ab01380",
+            "eventSourceArn": "arn:aws:sqs:us-west-2:664251831272:SQSFIFOLambdaDynamoDBSAMQueue.fifo",
             "eventSource": "aws:sqs",
             "awsRegion": "us-west-2",
             "attributes": {
                 "ApproximateReceiveCount": "1",
-                "SentTimestamp": "1684739385867",
+                "SentTimestamp": "1689554642154",
+                "SequenceNumber": "18879270062100976128",
+                "MessageGroupId": "TestKey01-07-17-2023-00-07-86-SC",
                 "SenderId": "AROAZVKD6SPUBDQBNO3D6:i-006b46228e77ad83f",
-                "ApproximateFirstReceiveTimestamp": "1684739385868"
+                "MessageDeduplicationId": "TestKey01-07-17-2023-00-07-86-52",
+                "ApproximateFirstReceiveTimestamp": "1689554643554"
             },
             "messageAttributes": {
                 "MessageKey": {
-                    "stringValue": "TestKey11-05-22-2023-07-05-85",
+                    "stringValue": "TestKey01-07-17-2023-00-07-86",
                     "binaryValue": null,
                     "stringListValues": [],
                     "binaryListValues": [],
                     "dataType": "String"
                 },
                 "MessageNumber": {
-                    "stringValue": "20",
+                    "stringValue": "52",
+                    "binaryValue": null,
+                    "stringListValues": [],
+                    "binaryListValues": [],
+                    "dataType": "String"
+                },
+                "RepititionNumber": {
+                    "stringValue": "1",
                     "binaryValue": null,
                     "stringListValues": [],
                     "binaryListValues": [],
@@ -193,30 +253,40 @@
             }
         },
         {
-            "messageId": "9ae39f0a-8cc6-491d-a401-f3d24c43a9d9",
-            "receiptHandle": "AQEBtqjkQx/A6PMlM7kjfxaNxn2tKhVSnTmwkJ6uG392LB98aHwEQQK7+n9WnqteGMZt1muXrqQv7Ob+hQlRL0cnb0ZyT2Vb7+OAQbZPkF9KyW8Fc0fmFgyeSWq6C7A8Up65BY+Ugja58Px3Giv4vgJwTbpnCR7R4irU89JkzvznMyiH/G6/LP0tk98LwXUsvm4kaVl9z3Dq0dWrTqiysZLfTiRJU84xa2greimIc5xdMP2XsJJO4uW5SIpiocDSd9YveeHjD5Fz59UA9MOMtMltoW+sRyTHlMxNwpbWt3v1XWj8Ml8OIwyzIMoCQ78MSmyPefAI89ckYKj5Q183fKwisD6sMvl7HXInbRqnDN/1aC0LbX6lnReaRUZWuR47+9hKj3mfVVcZxzaJlUh1GAm2yLjqQvdQ93PkLIh6L/IDM3g=",
-            "body": "{\"firstname\":\"Chanel\",\"lastname\":\"Caudy\",\"company\":\"Professional Image Inc\",\"street\":\"86 Nw 66th St #8673\",\"city\":\"Shawnee\",\"county\":\"Johnson\",\"state\":\"KS\",\"zip\":\"66218\",\"homePhone\":\"913-388-2079\",\"cellPhone\":\"913-899-1103\",\"email\":\"chanel.caudy@caudy.org\",\"website\":\"http://www.professionalimageinc.com\"}",
-            "md5OfBody": "1bf5c867c25bae86f9bae390b3738fcb",
-            "md5OfMessageAttributes": "15520b3126c222dfd66bc21950c16fb0",
-            "eventSourceArn": "arn:aws:sqs:us-west-2:664251831272:SQSLambdaDynamoDBSAMQueue",
+            "messageId": "68ffe70e-b912-4d31-be9e-f82893d1da34",
+            "receiptHandle": "AQEB+d0Alwy0oItFLX/RGQk0xxOBxg/IEduFqrLDgUDz4we7/oYtKom22VVoR5nxaSXXNfj85yEhkw6XvIti8mD8hPjZBjo7+zZhmImYhpJ9tA38ieJ9pXUBzMcr1h5ErrMkxAzUW2xW2M7rg7WDHtjtGxAUWcyfrTSUbuXe86CspEdXvgpGU4i6TGkpZwspNXNtcOqIeq60zDoGq4XeHNAZTbOG+QyTTZwxY5in62v+LKsWuiTHA/zp0mzYSIc0XScb55UZ1a57dD8F5qC+74mlSWUYSPl1IO7mDh0EYvIB69JkvG1XSKKyxra0GrbN6lvu",
+            "body": "{\"firstname\":\"Delmy\",\"lastname\":\"Ahle\",\"company\":\"Wye Technologies Inc\",\"street\":\"65895 S 16th St\",\"city\":\"Providence\",\"county\":\"Providence\",\"state\":\"RI\",\"zip\":\"2909\",\"homePhone\":\"401-458-2547\",\"cellPhone\":\"401-559-8961\",\"email\":\"delmy.ahle@hotmail.com\",\"website\":\"http://www.wyetechnologiesinc.com\"}",
+            "md5OfBody": "62695cdd13ba05fd5516cb4d8e1bb863",
+            "md5OfMessageAttributes": "43de3bb1a1e4e64a84969e6b319ca38c",
+            "eventSourceArn": "arn:aws:sqs:us-west-2:664251831272:SQSFIFOLambdaDynamoDBSAMQueue.fifo",
             "eventSource": "aws:sqs",
             "awsRegion": "us-west-2",
             "attributes": {
                 "ApproximateReceiveCount": "1",
-                "SentTimestamp": "1684739386022",
+                "SentTimestamp": "1689554642302",
+                "SequenceNumber": "18879270062138865664",
+                "MessageGroupId": "TestKey01-07-17-2023-00-07-86-RI",
                 "SenderId": "AROAZVKD6SPUBDQBNO3D6:i-006b46228e77ad83f",
-                "ApproximateFirstReceiveTimestamp": "1684739386023"
+                "MessageDeduplicationId": "TestKey01-07-17-2023-00-07-86-58",
+                "ApproximateFirstReceiveTimestamp": "1689554643554"
             },
             "messageAttributes": {
                 "MessageKey": {
-                    "stringValue": "TestKey11-05-22-2023-07-05-01",
+                    "stringValue": "TestKey01-07-17-2023-00-07-86",
                     "binaryValue": null,
                     "stringListValues": [],
                     "binaryListValues": [],
                     "dataType": "String"
                 },
                 "MessageNumber": {
-                    "stringValue": "26",
+                    "stringValue": "58",
+                    "binaryValue": null,
+                    "stringListValues": [],
+                    "binaryListValues": [],
+                    "dataType": "String"
+                },
+                "RepititionNumber": {
+                    "stringValue": "1",
                     "binaryValue": null,
                     "stringListValues": [],
                     "binaryListValues": [],
@@ -225,30 +295,40 @@
             }
         },
         {
-            "messageId": "5d9e3b58-db05-4500-9f21-6cad3b2342c4",
-            "receiptHandle": "AQEByVt6pD85r/njVkJSEgIn3c2XbAp4pczCReHTJP3NRbP2RebUTk9jaKcxSc02ya7yEtcNmd/BXS0RMoG0u6Gy6vAAaeuTDtuhG8QhWcw/RpdpnnoCKywib1pC+++THu/43cJGVvUth7O1D2vhUM2UbJVU3oKpcBJLH7wtg+O7hXVBSMC+P/Nf5hPSv2j7NXaUVvyYHHi/qxrx7SlNWzWuDnXRkoEaLDWw/6I1mhL68Be4FSIJg9m+z7xjatyzqn1/wcO7Zg2NOwxHQZBxjrwBQ5TM8d0HWYrjji/8cosrSKWeWH9y4mzhI4Ael/Zamn+BOgJdK7BikI3MraUU490b+QNhrOQnZ5iqTocfdo6WPWDVogUMOos/lyBZ/EqeJDqyXpYbJPOcMVwhDZYXvsy6LVf//z394qO/T6xKLLJsn8I=",
-            "body": "{\"firstname\":\"Solange\",\"lastname\":\"Shinko\",\"company\":\"\\\"Mosocco, Ronald A\\\"\",\"street\":\"426 Wolf St\",\"city\":\"Metairie\",\"county\":\"Jefferson\",\"state\":\"LA\",\"zip\":\"70002\",\"homePhone\":\"504-979-9175\",\"cellPhone\":\"504-265-8174\",\"email\":\"solange@shinko.com\",\"website\":\"http://www.mosoccoronalda.com\"}",
-            "md5OfBody": "0c72d6bacd9f2c29807a5aa9ac08d0e2",
-            "md5OfMessageAttributes": "ea54ef0d50120a3f2a2c2e6c4ee6d3b9",
-            "eventSourceArn": "arn:aws:sqs:us-west-2:664251831272:SQSLambdaDynamoDBSAMQueue",
+            "messageId": "09e74dee-e2fb-46f9-a1a0-dd80990c70a7",
+            "receiptHandle": "AQEBnh1EEopY+XwlM23VgyVi8Vq8tPgoVGIWQRT8dLw2BRPpmyuuu+PG0Gi3qbRrMZsFf6miUhatkhHDt+PMvENoIgj120Bo3eLe8PcCnPT0NkyD0D3AHwHkbWMSBsPH1H8E70HjcI6MZgcRK3KYJnR3sKl2HfhTO+hXp+rwE0j1WEFb/iBFCDX8GaOJhiJDoRkeBKqtBvaqh8i0TtBdhZ5V0Ce6viL31Drx2ozZBM1GGCZW9wklkYWwii+TlmlQas/3DIvB14H0A8DK5c8rNoECueExY9j6HhBUYiLhPlkf6zI9rkaN9nj5JzRy5VaEP+Y1",
+            "body": "{\"firstname\":\"Blondell\",\"lastname\":\"Pugh\",\"company\":\"Alpenlite Inc\",\"street\":\"201 Hawk Ct\",\"city\":\"Providence\",\"county\":\"Providence\",\"state\":\"RI\",\"zip\":\"2904\",\"homePhone\":\"401-960-8259\",\"cellPhone\":\"401-300-8122\",\"email\":\"bpugh@aol.com\",\"website\":\"http://www.alpenliteinc.com\"}",
+            "md5OfBody": "6b7e089cffbca5d5d62ddacd5f8d7592",
+            "md5OfMessageAttributes": "d51288091532172dbf1cdaef7383abf9",
+            "eventSourceArn": "arn:aws:sqs:us-west-2:664251831272:SQSFIFOLambdaDynamoDBSAMQueue.fifo",
             "eventSource": "aws:sqs",
             "awsRegion": "us-west-2",
             "attributes": {
                 "ApproximateReceiveCount": "1",
-                "SentTimestamp": "1684739386204",
+                "SentTimestamp": "1689554642371",
+                "SequenceNumber": "18879270062156527616",
+                "MessageGroupId": "TestKey01-07-17-2023-00-07-86-RI",
                 "SenderId": "AROAZVKD6SPUBDQBNO3D6:i-006b46228e77ad83f",
-                "ApproximateFirstReceiveTimestamp": "1684739386205"
+                "MessageDeduplicationId": "TestKey01-07-17-2023-00-07-86-60",
+                "ApproximateFirstReceiveTimestamp": "1689554643554"
             },
             "messageAttributes": {
                 "MessageKey": {
-                    "stringValue": "TestKey11-05-22-2023-07-05-19",
+                    "stringValue": "TestKey01-07-17-2023-00-07-86",
                     "binaryValue": null,
                     "stringListValues": [],
                     "binaryListValues": [],
                     "dataType": "String"
                 },
                 "MessageNumber": {
-                    "stringValue": "35",
+                    "stringValue": "60",
+                    "binaryValue": null,
+                    "stringListValues": [],
+                    "binaryListValues": [],
+                    "dataType": "String"
+                },
+                "RepititionNumber": {
+                    "stringValue": "1",
                     "binaryValue": null,
                     "stringListValues": [],
                     "binaryListValues": [],
@@ -257,30 +337,40 @@
             }
         },
         {
-            "messageId": "e84d05c5-4e52-4840-8520-1f02e1af0624",
-            "receiptHandle": "AQEBmPGVDO/he7PUQUJWjGse2KJfL8yLX+LcyAhBJPQqXNB88fWMOWZxqL7HfbOdIFv/ZNJTb/7J9Wv4ZtdYRcsQI36Ij+5SBfHa38Jh2d8BqbnP8oGlKURh0Vqov3o3TPdWM43yuKJD/4jS9zlnhGelr2dyYZVYbvTsU9vy6TolCNpjzu+bV5OYrGyXmhcR6/s6SWBZZC8+Hj7xEGiJK8+ApWtcTIt5jsohZbBLJHcKquatrdBbdvld1gRnf+XB/CTsBpQKJ6hp4tAhMSR9hKltnA4SRij0xKqd1jlpTG3wlBJhQXXWBfPLDYypLybTq7eZsz5fUQgWcgwtA+5O2HUz9tqAbmSC1VPoEJ3Wm3QxYLAwX3rvGg9d4mG45rTwfOrZl6+yOv2AFvREEPyG9+/u4zH9zDPGbdd+5/JBtvHzJ5c=",
-            "body": "{\"firstname\":\"Albina\",\"lastname\":\"Glick\",\"company\":\"\\\"Giampetro, Anthony D\\\"\",\"street\":\"4 Ralph Ct\",\"city\":\"Dunellen\",\"county\":\"Middlesex\",\"state\":\"NJ\",\"zip\":\"8812\",\"homePhone\":\"732-924-7882\",\"cellPhone\":\"732-782-6701\",\"email\":\"albina@glick.com\",\"website\":\"http://www.giampetroanthonyd.com\"}",
-            "md5OfBody": "5dee3eb215c2b8ae9f2e910c7efa9533",
-            "md5OfMessageAttributes": "01fd73c121cc94fafc7a3bbebb63a911",
-            "eventSourceArn": "arn:aws:sqs:us-west-2:664251831272:SQSLambdaDynamoDBSAMQueue",
+            "messageId": "7fde7a86-eeee-4c22-a4e0-e695a59996c8",
+            "receiptHandle": "AQEBG20qDujHQuXFRP396lGW3tByf9veHRnHs1VMn/3iltL0wxcbOLoUk9SzAqDBWgJnL2sqi+5zPqupSdH95yJDyJh8h2zRAoXeQAe+zgKLlTaVE1WriNx/2612cKxq4OzOmnIh8nkUCpNikmdT4ipibM+vwVfanRAzMlimIvRUBuL9mh5dkt9esw6+MJg9uGNnT22BZnqCRU5c9ifa47kN/rdPRx8ACsd+VlCgWbmsdIELSrkF6hRM3dDSQje1PpbytjPIsvkRqqgcZVzdZpwgSdOPWJrnYrX96RF6izVknuhbNyOUyeeOhvdotQtV3UnG",
+            "body": "{\"firstname\":\"Carmelina\",\"lastname\":\"Lindall\",\"company\":\"George Jessop Carter Jewelers\",\"street\":\"2664 Lewis Rd\",\"city\":\"Littleton\",\"county\":\"Douglas\",\"state\":\"CO\",\"zip\":\"80126\",\"homePhone\":\"303-724-7371\",\"cellPhone\":\"303-874-5160\",\"email\":\"carmelina_lindall@lindall.com\",\"website\":\"http://www.georgejessopcarterjewelers.com\"}",
+            "md5OfBody": "74ec24be5ca141167f142d46b482a6ee",
+            "md5OfMessageAttributes": "5eca3ba1b48186613ffc349768d8faf3",
+            "eventSourceArn": "arn:aws:sqs:us-west-2:664251831272:SQSFIFOLambdaDynamoDBSAMQueue.fifo",
             "eventSource": "aws:sqs",
             "awsRegion": "us-west-2",
             "attributes": {
                 "ApproximateReceiveCount": "1",
-                "SentTimestamp": "1684739386172",
+                "SentTimestamp": "1689554642432",
+                "SequenceNumber": "18879270062172143616",
+                "MessageGroupId": "TestKey01-07-17-2023-00-07-86-CO",
                 "SenderId": "AROAZVKD6SPUBDQBNO3D6:i-006b46228e77ad83f",
-                "ApproximateFirstReceiveTimestamp": "1684739386174"
+                "MessageDeduplicationId": "TestKey01-07-17-2023-00-07-86-63",
+                "ApproximateFirstReceiveTimestamp": "1689554643554"
             },
             "messageAttributes": {
                 "MessageKey": {
-                    "stringValue": "TestKey11-05-22-2023-07-05-16",
+                    "stringValue": "TestKey01-07-17-2023-00-07-86",
                     "binaryValue": null,
                     "stringListValues": [],
                     "binaryListValues": [],
                     "dataType": "String"
                 },
                 "MessageNumber": {
-                    "stringValue": "33",
+                    "stringValue": "63",
+                    "binaryValue": null,
+                    "stringListValues": [],
+                    "binaryListValues": [],
+                    "dataType": "String"
+                },
+                "RepititionNumber": {
+                    "stringValue": "1",
                     "binaryValue": null,
                     "stringListValues": [],
                     "binaryListValues": [],
@@ -289,30 +379,40 @@
             }
         },
         {
-            "messageId": "a8708215-b6d9-4d48-9bc1-09ed90565e40",
-            "receiptHandle": "AQEBLEJsoN8kru2qz99II8vBPzgHtggzGVyYrHlMZKBCLkFoIs496T1lGN0xwCAR83KBLpmfLMKCeWIaXoLTkjnELGpQtJmYhqsJrhVqAh2zlh0wrliP73LQHttRNPrNrhIlTV4b5svz0PWWtFfr2bumbKjT9ssGShveGTQ2c4E8WkOUb5TfsFjjVdFwshj8kk4pJC+uhq5XJM8j3D/9w0F4MFDI28Iz4ZfIPHBFX+w8Tm1OW9RcJ91TwRofyPKwnKYz1q0iX0vBSSVKiycIvKZci7BYluIRZd67BK0JgHzyDzwd5Orbgfg8Cebywi0DoMeCI8nbbdLVYZZ9edZAEwmAyF7hvd12oK7UtEkra8LuPTGBmXwH3AlLJLN9LSgQR5wqKs6z2C2tWPbYmBvuC//unJd6DRUPWcsj/9gvP7eQJx8=",
-            "body": "{\"firstname\":\"Jose\",\"lastname\":\"Stockham\",\"company\":\"Tri State Refueler Co\",\"street\":\"128 Bransten Rd\",\"city\":\"New York\",\"county\":\"New York\",\"state\":\"NY\",\"zip\":\"10011\",\"homePhone\":\"212-675-8570\",\"cellPhone\":\"212-569-4233\",\"email\":\"jose@yahoo.com\",\"website\":\"http://www.tristaterefuelerco.com\"}",
-            "md5OfBody": "3492ebe9032d8490203383fa7bab59c3",
-            "md5OfMessageAttributes": "54a6aab6f4b191f5b482309229fe98a4",
-            "eventSourceArn": "arn:aws:sqs:us-west-2:664251831272:SQSLambdaDynamoDBSAMQueue",
+            "messageId": "12d8e9b9-c2fe-44fe-85b9-a0061e660718",
+            "receiptHandle": "AQEBz14EyGhqKSc6dPDJvMDtsgUQpNJKzFimYZDhVxP50MbnUoaDbaBI1P6JJ7d+JSLpl3xQwoOLSYDS2xpea7MXltTrsWEVVDYlgpzGOxseKSWur6bBuIN4yCu5ObWCaUNztoxFfxkLT5h3BisjbmDEjhZuPDhwkP21mdkeiRAbNcPmey3lEvqc6wYyRiqycAcuXsc4Eqvy4dd/Za4cf/JqVXgw+7tbtLqYwiIGN/7V3P3qWfkooYvS/GFlVD8t7YQ7g68kmLRk0w5P+WR96hfxwDeshBcc2/yMqwPN2vODGKJLgl9Jm3SLOwfMtUGQjer0",
+            "body": "{\"firstname\":\"Alease\",\"lastname\":\"Buemi\",\"company\":\"Porto Cayo At Hawks Cay\",\"street\":\"4 Webbs Chapel Rd\",\"city\":\"Boulder\",\"county\":\"Boulder\",\"state\":\"CO\",\"zip\":\"80303\",\"homePhone\":\"303-301-4946\",\"cellPhone\":\"303-521-9860\",\"email\":\"alease@buemi.com\",\"website\":\"http://www.portocayoathawkscay.com\"}",
+            "md5OfBody": "5d98aae9eb83ef2de26a7437f112a35f",
+            "md5OfMessageAttributes": "3800cd5b73cc149bada4d7043eb067c7",
+            "eventSourceArn": "arn:aws:sqs:us-west-2:664251831272:SQSFIFOLambdaDynamoDBSAMQueue.fifo",
             "eventSource": "aws:sqs",
             "awsRegion": "us-west-2",
             "attributes": {
                 "ApproximateReceiveCount": "1",
-                "SentTimestamp": "1684739386222",
+                "SentTimestamp": "1689554643329",
+                "SequenceNumber": "18879270062401776128",
+                "MessageGroupId": "TestKey01-07-17-2023-00-07-86-CO",
                 "SenderId": "AROAZVKD6SPUBDQBNO3D6:i-006b46228e77ad83f",
-                "ApproximateFirstReceiveTimestamp": "1684739386223"
+                "MessageDeduplicationId": "TestKey01-07-17-2023-00-07-86-100",
+                "ApproximateFirstReceiveTimestamp": "1689554643554"
             },
             "messageAttributes": {
                 "MessageKey": {
-                    "stringValue": "TestKey11-05-22-2023-07-05-21",
+                    "stringValue": "TestKey01-07-17-2023-00-07-86",
                     "binaryValue": null,
                     "stringListValues": [],
                     "binaryListValues": [],
                     "dataType": "String"
                 },
                 "MessageNumber": {
-                    "stringValue": "36",
+                    "stringValue": "100",
+                    "binaryValue": null,
+                    "stringListValues": [],
+                    "binaryListValues": [],
+                    "dataType": "String"
+                },
+                "RepititionNumber": {
+                    "stringValue": "1",
                     "binaryValue": null,
                     "stringListValues": [],
                     "binaryListValues": [],
