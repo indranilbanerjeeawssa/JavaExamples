@@ -1,4 +1,4 @@
-package sns.producer;
+package sns.fifo.producer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,11 +20,11 @@ import software.amazon.awssdk.services.sns.model.SnsException;
 import software.amazon.awssdk.services.sns.model.Topic;
 import software.amazon.awssdk.services.sns.model.MessageAttributeValue;
 
-public class JsonSNSProducer {
+public class JsonSNSFIFOProducer {
 	
 	public static void main(String[] args) {
 		try {
-			JsonSNSProducer.snsSender(args[0], args[1].concat("-").concat(JsonSNSProducer.getTodayDate()), Integer.parseInt(args[2]));
+			JsonSNSFIFOProducer.snsSender(args[0], args[1].concat("-").concat(JsonSNSFIFOProducer.getTodayDate()), Integer.parseInt(args[2]));
 		} catch (NumberFormatException e) {
 			System.out.println("Pass three parameters in that order - 1 - The Topic Name, 2 - A string to be used as a unique batch identifier, 3 - Total number of messages to send out in this batch");
 			e.printStackTrace();
@@ -33,8 +33,8 @@ public class JsonSNSProducer {
 	
 	public static void snsSender(String snsTopic, String messageKey, int numberOfMessages) {
 		SnsClient snsClient = SnsClient.builder().build();
-		String snsTopicARN = JsonSNSProducer.getTopicARNFromTopicName(snsClient, snsTopic);
-		List<String> people = JsonSNSProducer.readDataFile(); 
+		String snsTopicARN = JsonSNSFIFOProducer.getTopicARNFromTopicName(snsClient, snsTopic);
+		List<String> people = JsonSNSFIFOProducer.readDataFile(); 
 		 int numberOfMessagesToSend=0; 
 		 if (people.size() > numberOfMessages) { 
 			 numberOfMessagesToSend = numberOfMessages; 
@@ -43,8 +43,8 @@ public class JsonSNSProducer {
 		 }
 		 for (int i=1;i<=5;i++) {
 		for (int j=1;j<= numberOfMessagesToSend; j++) {
-			Person thisPerson = JsonSNSProducer.getPersonFromLine(people.get(j));
-			JsonSNSProducer.sendMessage(snsClient, snsTopicARN, thisPerson, messageKey, i, j);
+			Person thisPerson = JsonSNSFIFOProducer.getPersonFromLine(people.get(j));
+			JsonSNSFIFOProducer.sendMessage(snsClient, snsTopicARN, thisPerson, messageKey, i, j);
 		}
 		 }
 	}
@@ -104,7 +104,7 @@ public class JsonSNSProducer {
 	
 	public static List<String> readDataFile() {
 		List<String> personList = new ArrayList<String>();
-		InputStream is = JsonSNSProducer.class.getClassLoader().getResourceAsStream("us-500.csv");
+		InputStream is = JsonSNSFIFOProducer.class.getClassLoader().getResourceAsStream("us-500.csv");
 		BufferedReader bf = new BufferedReader(new InputStreamReader(is));
 		String thisLine = null;
 		try {

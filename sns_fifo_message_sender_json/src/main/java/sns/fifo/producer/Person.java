@@ -1,4 +1,4 @@
-package sns.producer;
+package sns.fifo.producer;
 
 import java.util.Objects;
 
