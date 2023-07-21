@@ -23,8 +23,14 @@ import software.amazon.awssdk.services.sns.model.MessageAttributeValue;
 public class JsonSNSFIFOProducer {
 	
 	public static void main(String[] args) {
+		String snsFIFOTopic = "";
+		if (args[0].endsWith(".fifo")) {
+			snsFIFOTopic = args[0];
+		} else {
+			snsFIFOTopic = args[0].concat(".fifo");
+		}
 		try {
-			JsonSNSFIFOProducer.snsSender(args[0], args[1].concat("-").concat(JsonSNSFIFOProducer.getTodayDate()), Integer.parseInt(args[2]));
+			JsonSNSFIFOProducer.snsSender(snsFIFOTopic, args[1].concat("-").concat(JsonSNSFIFOProducer.getTodayDate()), Integer.parseInt(args[2]));
 		} catch (NumberFormatException e) {
 			System.out.println("Pass three parameters in that order - 1 - The Topic Name, 2 - A string to be used as a unique batch identifier, 3 - Total number of messages to send out in this batch");
 			e.printStackTrace();
@@ -78,6 +84,7 @@ public class JsonSNSFIFOProducer {
 			Map<String, MessageAttributeValue> attributes = new HashMap<String, MessageAttributeValue>();
             attributes.put("MessageKey", MessageAttributeValue.builder().dataType("String").stringValue(messageKey).build());
             attributes.put("MessageNumber", MessageAttributeValue.builder().dataType("String").stringValue(Integer.toString(messageNumber)).build());
+            attributes.put("MessageRepititionNumber", MessageAttributeValue.builder().dataType("String").stringValue(Integer.toString(repititionNumber)).build());
             PublishRequest request = PublishRequest.builder()
                 .message(person.toJson())
                 .topicArn(topicARN)
