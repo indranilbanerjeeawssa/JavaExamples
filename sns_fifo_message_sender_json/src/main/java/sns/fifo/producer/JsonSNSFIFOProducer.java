@@ -44,7 +44,7 @@ public class JsonSNSFIFOProducer {
 		 for (int i=1;i<=5;i++) {
 		for (int j=1;j<= numberOfMessagesToSend; j++) {
 			Person thisPerson = JsonSNSFIFOProducer.getPersonFromLine(people.get(j));
-			JsonSNSFIFOProducer.sendMessage(snsClient, snsTopicARN, thisPerson, messageKey, i, j);
+			JsonSNSFIFOProducer.sendMessage(snsClient, snsTopicARN, thisPerson, messageKey, j, i);
 		}
 		 }
 	}

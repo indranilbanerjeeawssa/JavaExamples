@@ -73,6 +73,7 @@ Resources:
     Type: AWS::SNS::Subscription
     Properties:
       Protocol: sqs
+      RawMessageDelivery: true
       TopicArn: !Ref LambdaSNSFIFOTopic
       Endpoint: !GetAtt FifoSqsQueue.Arn
   SQSQueuePolicy:
