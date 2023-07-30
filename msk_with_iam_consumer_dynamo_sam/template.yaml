@@ -1,9 +1,9 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  kafka_event_consumer_function
+  msk_iam_event_consumer_function
 
-  Sample SAM Template for simple-kafka-consumer-with-sam
+  Sample SAM Template for simple-msk-iam-consumer-with-sam
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -14,9 +14,10 @@ Resources:
   LambdaMSKConsumerJavaFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: kafka_event_consumer_function
+      CodeUri: msk_iam_event_consumer_function
       Handler: com.amazonaws.services.lambda.samples.events.msk.HandlerMSK::handleRequest
       Runtime: java11
+      FunctionName: java-msk-iam-consumer-dynamodb-sam
       Architectures:
         - x86_64
       MemorySize: 512

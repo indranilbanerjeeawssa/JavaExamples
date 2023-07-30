@@ -16,8 +16,8 @@ import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+//import com.google.gson.Gson;
+//import com.google.gson.GsonBuilder;
 
 import org.mockito.ArgumentMatchers;
 
@@ -340,8 +340,7 @@ class DynamoDBUpdaterTest {
 
 	@Test
 	void testInsertIntoDynamoDB() {
-
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		//Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		//SQSEvent event = gson.fromJson(sqsEventJson, SQSEvent.class);
 		ObjectMapper om = new ObjectMapper();
 		//SQSEvent event = gson.fromJson(sqsEventJson, SQSEvent.class);
@@ -366,7 +365,15 @@ class DynamoDBUpdaterTest {
 		    ddbUpdater.dynamoDB = dynamoDB;
 		    ddbUpdater.dynamoTable = dynamoDbTable;
 		    when(ddbUpdater.dynamoTable.putItem(ArgumentMatchers.any(Item.class))).thenReturn(putoutcome);
-			PutItemOutcome putOutcome = ddbUpdater.insertIntoDynamoDB(msg, gson, logger);
+			Person thisPerson = null;
+			try {
+				thisPerson = om.readValue(msg.getBody(), Person.class);
+			} catch (JsonMappingException e) {
+				e.printStackTrace();
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
+		    PutItemOutcome putOutcome = ddbUpdater.insertIntoDynamoDB(msg, thisPerson, logger);
 			assertNotNull(putOutcome);
 		}
 	    

@@ -2,21 +2,21 @@ package com.amazonaws.services.lambda.samples.events.sqs;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+//import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
+//import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.events.SQSBatchResponse;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
+//import com.amazonaws.services.lambda.runtime.LambdaLogger;
 
-import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
+//import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import org.mockito.ArgumentMatchers;
+//import com.google.gson.Gson;
+//import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -346,11 +346,11 @@ class HandlerSQSTest {
 			e.printStackTrace();
 		}
 		Context context = new TestContext();
-		PutItemOutcome putItemOutcome = mock(PutItemOutcome.class);
+		//PutItemOutcome putItemOutcome = mock(PutItemOutcome.class);
 		DynamoDBUpdater dbUpdater = mock(DynamoDBUpdater.class);
 		HandlerSQS handler = new HandlerSQS();
 		handler.ddbUpdater = dbUpdater;
-		when(handler.ddbUpdater.insertIntoDynamoDB(ArgumentMatchers.any(SQSMessage.class), ArgumentMatchers.any(Gson.class), ArgumentMatchers.any(LambdaLogger.class))).thenReturn(putItemOutcome);
+		//when(handler.ddbUpdater.insertIntoDynamoDB(ArgumentMatchers.any(SQSMessage.class), ArgumentMatchers.any(Gson.class), ArgumentMatchers.any(LambdaLogger.class))).thenReturn(putItemOutcome);
 		SQSBatchResponse result = handler.handleRequest(event, context);
 		assertEquals(result.getBatchItemFailures().size(), 2);
 		assertEquals(result.getBatchItemFailures().get(0).getItemIdentifier(), "44c836c0-c8c5-4804-8398-ff3e99ff6d3f");

@@ -1,4 +1,6 @@
-package kafka.producer;
+package com.amazonaws.services.lambda.samples.events.msk;
+
+import java.util.Objects;
 
 import com.google.gson.Gson;
 
@@ -102,6 +104,27 @@ public class Person {
 	public String toJson() {
 		Gson gson = new Gson();
 		return gson.toJson(this);
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(cellPhone, city, company, county, email, firstname, homePhone, lastname, state, street,
+				website, zip);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Person other = (Person) obj;
+		return Objects.equals(cellPhone, other.cellPhone) && Objects.equals(city, other.city)
+				&& Objects.equals(company, other.company) && Objects.equals(county, other.county)
+				&& Objects.equals(email, other.email) && Objects.equals(firstname, other.firstname)
+				&& Objects.equals(homePhone, other.homePhone) && Objects.equals(lastname, other.lastname)
+				&& Objects.equals(state, other.state) && Objects.equals(street, other.street)
+				&& Objects.equals(website, other.website) && Objects.equals(zip, other.zip);
 	}
 	
 }

@@ -113,7 +113,6 @@ public class JsonKafkaProducer {
 	
 	public static Person getPersonFromLine(String line) {
 		
-		//String[] fields = line.split(",");
 		String[] fields = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
 		Person thisPerson = new Person();
 		thisPerson.setFirstname(fields[0]);
