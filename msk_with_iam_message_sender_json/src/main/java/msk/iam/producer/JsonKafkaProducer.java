@@ -1,4 +1,4 @@
-package kafka.producer;
+package msk.iam.producer;
 
 import java.util.ArrayList;
 import java.util.List;

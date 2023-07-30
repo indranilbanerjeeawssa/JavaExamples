@@ -1,4 +1,4 @@
-package kafka.producer;
+package msk.iam.producer;
 
 import com.google.gson.Gson;
 

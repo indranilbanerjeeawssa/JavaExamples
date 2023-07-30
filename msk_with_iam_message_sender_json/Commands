@@ -44,5 +44,5 @@ sasl.client.callback.handler.class=software.amazon.msk.auth.iam.IAMClientCallbac
 java -classpath /home/ec2-user/environment/JavaExamples/kafka_message_sender/target/simple-kafka-producer-0.0.1-SNAPSHOT.jar kafka.producer.SimpleKafkaProducer /home/ec2-user/environment/kafkaProperties MskIamSimpleTestTopic HelloKey HelloValue 100
 
 
-java -classpath /home/ec2-user/environment/JavaExamples/kafka_message_sender_json/target/json-kafka-producer-0.0.1-SNAPSHOT.jar kafka.producer.JsonKafkaProducer /home/ec2-user/environment/kafkaProperties MskIamJsonTestTopic TestKey02 100
+java -classpath /home/ec2-user/environment/JavaExamples/msk_with_iam_message_sender_json/target/json-msk-iam-producer-0.0.1-SNAPSHOT.jar msk.iam.producer.JsonKafkaProducer /home/ec2-user/environment/kafkaProperties MskIamJsonTestTopic TestKey01 100
 
