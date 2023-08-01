@@ -12,9 +12,6 @@ import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.events.SNSEvent;
 import com.amazonaws.services.lambda.runtime.events.SNSEvent.SNSRecord;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent.MessageAttribute;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
-import com.google.gson.Gson;
 
 public class DynamoDBUpdater {
 
@@ -43,7 +40,7 @@ public class DynamoDBUpdater {
 		this.dynamoTable = dynamoDB.getTable(this.dynamoDBTableName);
 	}
 	
-	public PutItemOutcome insertIntoDynamoDB(SNSRecord record, Gson gson, LambdaLogger logger) {
+	public PutItemOutcome insertIntoDynamoDB(SNSRecord record, Person thisPerson, LambdaLogger logger) {
 		logger.log("Now inserting a row in DynamoDB for messageID = " + record.getSNS().getMessageId());
 		Item item = new Item();
 		item.withPrimaryKey("MessageID", record.getSNS().getMessageId());
@@ -59,7 +56,6 @@ public class DynamoDBUpdater {
 		item.withString("Type", record.getSNS().getType());
 		item.withString("TopicARN", record.getSNS().getTopicArn());
 		item.withString("Timestamp", record.getSNS().getTimestamp().toString());
-		Person thisPerson = gson.fromJson(record.getSNS().getMessage(), Person.class);
 		item.withString("Firstname", thisPerson.getFirstname());
 		item.withString("Lastname", thisPerson.getLastname());
 		item.withString("Company", thisPerson.getCompany());

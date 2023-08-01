@@ -15,15 +15,12 @@ import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.events.SNSEvent;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent;
 import com.amazonaws.services.lambda.runtime.events.SNSEvent.SNSRecord;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+
 
 import org.mockito.ArgumentMatchers;
 
@@ -73,7 +70,6 @@ class DynamoDBUpdaterTest {
 
 	@Test
 	void testInsertIntoDynamoDB() {
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		ObjectMapper om = new ObjectMapper().registerModule(new JodaModule());
 		SNSEvent event = null;
 		try {
@@ -94,8 +90,14 @@ class DynamoDBUpdaterTest {
 		    ddbUpdater.client = client;
 		    ddbUpdater.dynamoDB = dynamoDB;
 		    ddbUpdater.dynamoTable = dynamoDbTable;
+		    Person person = new Person();
+			try {
+				person = om.readValue(msg.getSNS().getMessage(), Person.class);
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
 		    when(ddbUpdater.dynamoTable.putItem(ArgumentMatchers.any(Item.class))).thenReturn(putoutcome);
-			PutItemOutcome putOutcome = ddbUpdater.insertIntoDynamoDB(msg, gson, logger);
+			PutItemOutcome putOutcome = ddbUpdater.insertIntoDynamoDB(msg, person, logger);
 			assertNotNull(putOutcome);
 		}
 	    

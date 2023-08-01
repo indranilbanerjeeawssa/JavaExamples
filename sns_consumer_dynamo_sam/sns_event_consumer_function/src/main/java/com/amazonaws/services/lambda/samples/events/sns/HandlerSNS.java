@@ -14,29 +14,19 @@ objects of the KafkaMessage class
 
 package com.amazonaws.services.lambda.samples.events.sns;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent.MessageAttribute;
 import com.amazonaws.services.lambda.runtime.events.SNSEvent;
 import com.amazonaws.services.lambda.runtime.events.SNSEvent.SNSRecord;
-import com.amazonaws.services.lambda.runtime.events.SQSBatchResponse;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 
-// Handler value: example.HandlerSQS
 public class HandlerSNS implements RequestHandler<SNSEvent, String>{
-	Gson gson = new GsonBuilder().setPrettyPrinting().create();
+	//Gson gson = new GsonBuilder().setPrettyPrinting().create();
 	String dynamoDBTableName = System.getenv("DYNAMO_DB_TABLE");
 	DynamoDBUpdater ddbUpdater = new DynamoDBUpdater(dynamoDBTableName);
 	boolean addToDynamoDB=true;
@@ -69,7 +59,7 @@ public class HandlerSNS implements RequestHandler<SNSEvent, String>{
 				logger.log("Topic ARN = " + record.getSNS().getTopicArn());
 				logger.log("Timestamp = " + record.getSNS().getTimestamp().toString());
 				String message = record.getSNS().getMessage();
-				Person person = gson.fromJson(message, Person.class);
+				Person person = objectMapper.readValue(message, Person.class);
 				logger.log("This person = " + person.toString());
 				Map<String, SNSEvent.MessageAttribute> attributes = record.getSNS().getMessageAttributes();
 				attributes.forEach((k,v) -> {
@@ -78,10 +68,10 @@ public class HandlerSNS implements RequestHandler<SNSEvent, String>{
 				logger.log(record.getSNS().getSignatureVersion());
 				String AWS_SAM_LOCAL = System.getenv("AWS_SAM_LOCAL");
 				if ((null == AWS_SAM_LOCAL) && (addToDynamoDB)) {
-					ddbUpdater.insertIntoDynamoDB(record, gson, logger);
+					ddbUpdater.insertIntoDynamoDB(record, person, logger);
 				}
 			}
-		} catch (JsonSyntaxException e) {
+		} catch (Exception e) {
 			logger.log("An exception occurred " + e.getMessage());
 			throw new RuntimeException(e);
 		}

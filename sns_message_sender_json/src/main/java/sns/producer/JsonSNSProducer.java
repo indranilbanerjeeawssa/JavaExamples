@@ -26,7 +26,7 @@ public class JsonSNSProducer {
 		try {
 			JsonSNSProducer.snsSender(args[0], args[1].concat("-").concat(JsonSNSProducer.getTodayDate()), Integer.parseInt(args[2]));
 		} catch (NumberFormatException e) {
-			System.out.println("Pass three parameters in that order - 1 - The Topic Name, 2 - The");
+			System.out.println("Pass three parameters in that order - 1 - The Topic Name, 2 - A String representing this batch of messages, 3 - Total number of messages in this batch");
 			e.printStackTrace();
 		}
 	}
