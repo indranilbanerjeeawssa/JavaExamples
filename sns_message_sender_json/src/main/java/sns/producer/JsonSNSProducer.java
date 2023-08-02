@@ -57,8 +57,9 @@ public class JsonSNSProducer {
             List<Topic> topics = result.topics();
             for (Topic topic: topics) {
             	String currentTopicARN = topic.topicArn();
-            	if (currentTopicARN.endsWith(topicARN)) {
+            	if (currentTopicARN.endsWith(topicName)) {
             		topicARN = currentTopicARN;
+            		System.out.println("Matching TopicARN = " + topicARN);
             		break;
             	}
             }
