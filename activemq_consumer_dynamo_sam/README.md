@@ -68,11 +68,11 @@ You should get a message "Successfully created/updated stack - <StackName> in <R
 
 ## Test the sample application
 
-Once the lambda function is deployed, send some SQS messages on the queue that the lambda function is listening on.
+Once the lambda function is deployed, send some ActiveMQ messages on the queue that the lambda function is listening on.
 
-Use the project ../sqs_message_sender_json.
+Use the project ../activemq_message_sender_json.
 
-Look at the Readme of that project to determine how to build that project and run the command that will send SQS messages with a Json payload to the lambda function built using this project. The lambda function will receive the SQS messages with a JSON payload and input fields from the SQS message into a DynamoDB table.
+Look at the Readme of that project to determine how to build that project and run the command that will send ActiveMQ messages with a Json payload to the lambda function built using this project. The lambda function will receive the ActiveMQ messages with a JSON payload and input fields from the ActiveMQ message into a DynamoDB table.
 
 The value field of each SQS message that will be sent out will be a Json element of the format
 
@@ -95,10 +95,10 @@ Either send at least 10 messages or wait for 300 seconds (check the values of Ba
 
 Then check Cloudwatch logs and you should see messages for the Cloudwatch Log Group with the name of the deployed Lambda function.
 
-The lambda code parses the SQS messages and outputs the fields in the SQS messages to Cloudwatch logs
+The lambda code parses the ActiveMQ messages and outputs the fields in the ActiveMQ messages to Cloudwatch logs
 
 A single lambda function receives a batch of messages.
 
-The code in this example prints out the fields in the SQS message and logs them in Cloudwatch logs.
+The code in this example prints out the fields in the ActiveMQ message and logs them in Cloudwatch logs.
 
-Apart from outputting to Cloudwatch logs, the lambda function also inputs fields from the SQS message (both message metadata fields as well as payload fields from the JSON payload) into a DynamoDB table created by the SAM template. You can log into the AWS console and look at the DynamoDB table and run a scan to see data getting input from the Kafka message into the DynamoDB table
+Apart from outputting to Cloudwatch logs, the lambda function also inputs fields from the ActiveMQ message (both message metadata fields as well as payload fields from the JSON payload) into a DynamoDB table created by the SAM template. You can log into the AWS console and look at the DynamoDB table and run a scan to see data getting input from the Kafka message into the DynamoDB table
