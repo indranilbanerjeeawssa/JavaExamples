@@ -1,7 +1,6 @@
 package com.amazonaws.services.lambda.samples.events.eventbridge;
 
 import java.util.List;
-import java.util.Map;
 import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
@@ -11,7 +10,6 @@ import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.events.ScheduledEvent;
-import com.google.gson.Gson;
 
 public class DynamoDBUpdater {
 
@@ -35,12 +33,11 @@ public class DynamoDBUpdater {
 			this.client = AmazonDynamoDBClientBuilder.standard().withEndpointConfiguration(new EndpointConfiguration("http://127.0.0.1:8000", "")).build();
 			this.dynamoDBTableName = "SQS_LAMBDA_DYNAMO_TABLE";
 		}
-		//this.client = AmazonDynamoDBClientBuilder.standard().build();
 		this.dynamoDB = new DynamoDB(client);
 		this.dynamoTable = dynamoDB.getTable(this.dynamoDBTableName);
 	}
 	
-	public PutItemOutcome insertIntoDynamoDB(ScheduledEvent event, Gson gson, LambdaLogger logger) {
+	public PutItemOutcome insertIntoDynamoDB(ScheduledEvent event, PersonWithKeyAndNumber personWithKeyAndNumber, LambdaLogger logger) {
 		logger.log("Now inserting a row in DynamoDB for eventID = " + event.getId());
 		Item item = new Item();
 		item.withPrimaryKey("EventID", event.getId());
@@ -55,8 +52,6 @@ public class DynamoDBUpdater {
 				item.withString("ResourceNumber_" + i, resources.get(i));
 			}
 		}
-		Map<String, Object> eventDetail = event.getDetail();
-		PersonWithKeyAndNumber personWithKeyAndNumber = gson.fromJson(gson.toJson(eventDetail), PersonWithKeyAndNumber.class);
 		item.withString("MessageKey", personWithKeyAndNumber.getMessageKey());
 		item.withInt("MessageNumber", personWithKeyAndNumber.messageNumber);
 		item.withString("Firstname", personWithKeyAndNumber.getPerson().getFirstname());

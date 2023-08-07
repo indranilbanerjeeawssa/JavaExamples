@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-//import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -59,11 +58,9 @@ class HandlerEventbridgeTest {
 			e.printStackTrace();
 		}
 		Context context = new TestContext();
-		//PutItemOutcome putItemOutcome = mock(PutItemOutcome.class);
 		DynamoDBUpdater dbUpdater = mock(DynamoDBUpdater.class);
 		HandlerEventbridge handler = new HandlerEventbridge();
 		handler.ddbUpdater = dbUpdater;
-		//when(handler.ddbUpdater.insertIntoDynamoDB(ArgumentMatchers.any(SNSRecord.class), ArgumentMatchers.any(Gson.class), ArgumentMatchers.any(LambdaLogger.class))).thenReturn(putItemOutcome);
 		String result = handler.handleRequest(event, context);
 		assertEquals(result, "200-OK");
 	}

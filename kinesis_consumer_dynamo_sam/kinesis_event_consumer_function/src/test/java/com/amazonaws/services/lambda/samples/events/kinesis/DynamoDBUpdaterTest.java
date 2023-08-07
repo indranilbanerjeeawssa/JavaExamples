@@ -15,9 +15,6 @@ import com.amazonaws.services.lambda.runtime.events.KinesisEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import org.mockito.ArgumentMatchers;
 
 class DynamoDBUpdaterTest {
@@ -210,34 +207,33 @@ class DynamoDBUpdaterTest {
 	@Test
 	void testInsertIntoDynamoDB() {
 
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		//SQSEvent event = gson.fromJson(sqsEventJson, SQSEvent.class);
 		ObjectMapper om = new ObjectMapper();
-		//SQSEvent event = gson.fromJson(sqsEventJson, SQSEvent.class);
 		KinesisEvent event = null;
 		try {
 			event = om.readValue(kinesisEventJson, KinesisEvent.class);
+			for(KinesisEvent.KinesisEventRecord msg : event.getRecords()){
+				KinesisEvent.Record kinesisRecord = msg.getKinesis();
+				final byte[] bytes = new byte[kinesisRecord.getData().remaining()];
+				kinesisRecord.getData().duplicate().get(bytes);
+				String payload = new String(bytes);
+				Person person = om.readValue(payload, Person.class);
+				Table dynamoDbTable = mock(Table.class);
+			    AmazonDynamoDB client = mock(AmazonDynamoDB.class);
+				DynamoDB dynamoDB = mock(DynamoDB.class);
+			    PutItemOutcome putoutcome = mock(PutItemOutcome.class);
+			    LambdaLogger logger = mock(LambdaLogger.class);
+			    DynamoDBUpdater ddbUpdater = new DynamoDBUpdater("DBTable");
+			    ddbUpdater.client = client;
+			    ddbUpdater.dynamoDB = dynamoDB;
+			    ddbUpdater.dynamoTable = dynamoDbTable;
+			    when(ddbUpdater.dynamoTable.putItem(ArgumentMatchers.any(Item.class))).thenReturn(putoutcome);
+				PutItemOutcome putOutcome = ddbUpdater.insertIntoDynamoDB(msg, person, logger);
+				assertNotNull(putOutcome);
+			}
 		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		for(KinesisEvent.KinesisEventRecord msg : event.getRecords()){
-			Table dynamoDbTable = mock(Table.class);
-		    AmazonDynamoDB client = mock(AmazonDynamoDB.class);
-			DynamoDB dynamoDB = mock(DynamoDB.class);
-		    PutItemOutcome putoutcome = mock(PutItemOutcome.class);
-		    LambdaLogger logger = mock(LambdaLogger.class);
-		    DynamoDBUpdater ddbUpdater = new DynamoDBUpdater("DBTable");
-		    ddbUpdater.client = client;
-		    ddbUpdater.dynamoDB = dynamoDB;
-		    ddbUpdater.dynamoTable = dynamoDbTable;
-		    when(ddbUpdater.dynamoTable.putItem(ArgumentMatchers.any(Item.class))).thenReturn(putoutcome);
-			PutItemOutcome putOutcome = ddbUpdater.insertIntoDynamoDB(msg, gson, logger);
-			assertNotNull(putOutcome);
-		}
-	    
 	}
 }

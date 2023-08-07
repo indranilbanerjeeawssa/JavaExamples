@@ -20,16 +20,14 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.ScheduledEvent;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 
-// Handler value: example.HandlerSQS
 public class HandlerEventbridge implements RequestHandler<ScheduledEvent, String>{
-	Gson gson = new GsonBuilder().setPrettyPrinting().create();
 	String dynamoDBTableName = System.getenv("DYNAMO_DB_TABLE");
 	DynamoDBUpdater ddbUpdater = new DynamoDBUpdater(dynamoDBTableName);
 	boolean addToDynamoDB=true;
-	//ObjectMapper objectMapper = new ObjectMapper().registerModule(new JodaModule());
+	ObjectMapper objectMapper = new ObjectMapper().registerModule(new JodaModule());
 	@Override
 	public String handleRequest(ScheduledEvent event, Context context)
 	{
@@ -37,8 +35,7 @@ public class HandlerEventbridge implements RequestHandler<ScheduledEvent, String
 		
 		try {
 			logger.log("Begin Event *************");
-			//logger.log(objectMapper.writeValueAsString(event));
-			logger.log(gson.toJson(event));
+			logger.log(objectMapper.writeValueAsString(event));
 			logger.log("End Event ***************");
 			logger.log("AWS Account = " + event.getAccount());
 			logger.log("AWS Region = " + event.getRegion());
@@ -55,7 +52,7 @@ public class HandlerEventbridge implements RequestHandler<ScheduledEvent, String
 				}
 			}
 			Map<String, Object> eventDetail = event.getDetail();
-			PersonWithKeyAndNumber personWithKeyAndNumber = gson.fromJson(gson.toJson(eventDetail), PersonWithKeyAndNumber.class);
+			PersonWithKeyAndNumber personWithKeyAndNumber = objectMapper.readValue(objectMapper.writeValueAsString(eventDetail), PersonWithKeyAndNumber.class);
 			logger.log("PersonWithKeyAndNumber = " + personWithKeyAndNumber.toString());
 			logger.log("Message Key = " + personWithKeyAndNumber.getMessageKey());
 			logger.log("Message Number = " + personWithKeyAndNumber.messageNumber);
@@ -73,7 +70,7 @@ public class HandlerEventbridge implements RequestHandler<ScheduledEvent, String
 			logger.log("Website = " + personWithKeyAndNumber.getPerson().getWebsite());
 			String AWS_SAM_LOCAL = System.getenv("AWS_SAM_LOCAL");
 			if ((null == AWS_SAM_LOCAL) && (addToDynamoDB)) {
-				ddbUpdater.insertIntoDynamoDB(event, gson, logger);
+				ddbUpdater.insertIntoDynamoDB(event, personWithKeyAndNumber, logger);
 			}
 		} catch (Exception e1) {
 			logger.log("An exception occurred " + e1.getMessage());

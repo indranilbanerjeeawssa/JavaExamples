@@ -14,27 +14,17 @@ objects of the KafkaMessage class
 
 package com.amazonaws.services.lambda.samples.events.kinesis;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent.MessageAttribute;
 import com.amazonaws.services.lambda.runtime.events.KinesisEvent;
-import com.amazonaws.services.lambda.runtime.events.SQSBatchResponse;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
 import com.amazonaws.services.lambda.runtime.events.StreamsEventResponse;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class HandlerKinesis implements RequestHandler<KinesisEvent, StreamsEventResponse>{
-	Gson gson = new GsonBuilder().setPrettyPrinting().create();
 	String dynamoDBTableName = System.getenv("DYNAMO_DB_TABLE");
 	DynamoDBUpdater ddbUpdater = new DynamoDBUpdater(dynamoDBTableName);
 	boolean addToDynamoDB;
@@ -82,7 +72,7 @@ public class HandlerKinesis implements RequestHandler<KinesisEvent, StreamsEvent
 				} else {
 					logger.log("Encryption Type = " + msg.getKinesis().getEncryptionType());
 				}
-				Person person = gson.fromJson(payload, Person.class);
+				Person person = objectMapper.readValue(payload, Person.class);
 				logger.log("Person details = " + person.toString());
 				long timeNow = System.currentTimeMillis();
 				long receiveTime = msg.getKinesis().getApproximateArrivalTimestamp().getTime();
@@ -98,7 +88,7 @@ public class HandlerKinesis implements RequestHandler<KinesisEvent, StreamsEvent
 				}
 				String AWS_SAM_LOCAL = System.getenv("AWS_SAM_LOCAL");
 				if ((null == AWS_SAM_LOCAL) && (addToDynamoDB)) {
-					ddbUpdater.insertIntoDynamoDB(msg, gson, logger);
+					ddbUpdater.insertIntoDynamoDB(msg, person, logger);
 				}
 			} catch (Exception e) {
 				logger.log("An exception occurred while processing this Kinesis message - " + e.toString());

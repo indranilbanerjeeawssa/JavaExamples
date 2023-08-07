@@ -1,13 +1,13 @@
-# sqs-consumer-dynamo-sam
+# activemq-consumer-dynamo-sam
 
 This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. It includes the following files and folders.
 
-- sqs_event_consumer_function/src/main/java - Code for the application's Lambda function.
+- activemq_event_consumer_function/src/main/java - Code for the application's Lambda function.
 - events - Invocation events that you can use to invoke the function.
-- sqs_event_consumer_function/src/test/java - Unit tests for the application code. 
+- activemq_event_consumer_function/src/test/java - Unit tests for the application code. 
 - template.yaml - A template that defines the application's AWS resources.
 
-The application uses several AWS resources, including a Lambda function, an SQS event source and a DynamoDB table to which the lambda function will write. These resources are defined in the `template.yaml` file in this project. You can update the template to add AWS resources through the same deployment process that updates your application code.
+The application uses several AWS resources, including a Lambda function, an ActiveMQ event source and a DynamoDB table to which the lambda function will write. These resources are defined in the `template.yaml` file in this project. You can update the template to add AWS resources through the same deployment process that updates your application code.
 
 
 ## Use the SAM CLI to build and test locally
@@ -18,7 +18,7 @@ Build your application with the `sam build` command.
 sam build
 ```
 
-The SAM CLI installs dependencies defined in `sqs_event_consumer_function/pom.xml`, creates a deployment package, and saves it in the `.aws-sam/build` folder.
+The SAM CLI installs dependencies defined in `activemq_event_consumer_function/pom.xml`, creates a deployment package, and saves it in the `.aws-sam/build` folder.
 
 Test a single function by invoking it directly with a test event. An event is a JSON document that represents the input that the function receives from the event source. Test events are included in the `events` folder in this project.
 
@@ -48,7 +48,14 @@ The first command will build the source of your application. The second command 
 
 * **Stack Name**: The name of the stack to deploy to CloudFormation. This should be unique to your account and region, and a good starting point would be something matching your project name.
 * **AWS Region**: The AWS region you want to deploy your app to.
-* **Parameter SQSQueueName**: The name of the SQS Queue
+* **Parameter ActiveMQBrokerName**: The name of the ActiveMQ Broker
+* **Parameter ActiveMQBrokerUniqueString**: The unique string of the ActiveMQ Broker
+* **Parameter ActiveMQQueue**: The name of the ActiveMQ Queue
+* **Parameter SecretsManagerSecretForMQName**: The name of the Secrets Manager secret that has the ActiveMQ broker Username and Password
+* **Parameter SecretsManagerSecretForMQUniqueString**: The unique string of the Secrets Manager secret that has the ActiveMQ broker Username and Password
+* **Parameter Subnet1**: The name of the first subnet where the ActiveMQ broker has been configured
+* **Parameter Subnet2**: The name of the second subnet where the ActiveMQ broker has been configured
+* **Parameter SecurityGroup**: The name of the security group where the ActiveMQ broker has been configured
 * **Confirm changes before deploy**: If set to yes, any change sets will be shown to you before execution for manual review. If set to no, the AWS SAM CLI will automatically deploy application changes.
 * **Allow SAM CLI IAM role creation**: Many AWS SAM templates, including this example, create AWS IAM roles required for the AWS Lambda function(s) included to access AWS services. By default, these are scoped down to minimum required permissions. To deploy an AWS CloudFormation stack which creates or modifies IAM roles, the `CAPABILITY_IAM` value for `capabilities` must be provided. If permission isn't provided through this prompt, to deploy this example you must explicitly pass `--capabilities CAPABILITY_IAM` to the `sam deploy` command.
 * **Disable rollback**: Defaults to No and it preserves the state of previously provisioned resources when an operation fails

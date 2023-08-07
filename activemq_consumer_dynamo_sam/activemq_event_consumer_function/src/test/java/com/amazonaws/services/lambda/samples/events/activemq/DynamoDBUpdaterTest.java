@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import java.util.Base64;
+
 import org.junit.jupiter.api.Test;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
@@ -15,9 +18,6 @@ import com.amazonaws.services.lambda.runtime.events.ActiveMQEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import org.mockito.ArgumentMatchers;
 
 class DynamoDBUpdaterTest {
@@ -222,13 +222,31 @@ class DynamoDBUpdaterTest {
 	@Test
 	void testInsertIntoDynamoDB() {
 
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		
 		ObjectMapper om = new ObjectMapper();
-		
 		ActiveMQEvent event = null;
 		try {
 			event = om.readValue(mqEventJson, ActiveMQEvent.class);
+			for(ActiveMQEvent.ActiveMQMessage msg : event.getMessages()){
+				String base64EncodedData = msg.getData();
+				String decodedData = "";
+				if (null != base64EncodedData) {
+					byte[] decodedDataBytes = Base64.getDecoder().decode(base64EncodedData);
+					decodedData = new String(decodedDataBytes);
+				}
+				Person thisPerson = om.readValue(decodedData, Person.class);
+				Table dynamoDbTable = mock(Table.class);
+			    AmazonDynamoDB client = mock(AmazonDynamoDB.class);
+				DynamoDB dynamoDB = mock(DynamoDB.class);
+			    PutItemOutcome putoutcome = mock(PutItemOutcome.class);
+			    LambdaLogger logger = mock(LambdaLogger.class);
+			    DynamoDBUpdater ddbUpdater = new DynamoDBUpdater("DBTable");
+			    ddbUpdater.client = client;
+			    ddbUpdater.dynamoDB = dynamoDB;
+			    ddbUpdater.dynamoTable = dynamoDbTable;
+			    when(ddbUpdater.dynamoTable.putItem(ArgumentMatchers.any(Item.class))).thenReturn(putoutcome);
+				PutItemOutcome putOutcome = ddbUpdater.insertIntoDynamoDB(msg, thisPerson, logger, System.currentTimeMillis(), event.getEventSource(), event.getEventSourceArn());
+				assertNotNull(putOutcome);
+			}
 		} catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -236,20 +254,7 @@ class DynamoDBUpdaterTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		for(ActiveMQEvent.ActiveMQMessage msg : event.getMessages()){
-			Table dynamoDbTable = mock(Table.class);
-		    AmazonDynamoDB client = mock(AmazonDynamoDB.class);
-			DynamoDB dynamoDB = mock(DynamoDB.class);
-		    PutItemOutcome putoutcome = mock(PutItemOutcome.class);
-		    LambdaLogger logger = mock(LambdaLogger.class);
-		    DynamoDBUpdater ddbUpdater = new DynamoDBUpdater("DBTable");
-		    ddbUpdater.client = client;
-		    ddbUpdater.dynamoDB = dynamoDB;
-		    ddbUpdater.dynamoTable = dynamoDbTable;
-		    when(ddbUpdater.dynamoTable.putItem(ArgumentMatchers.any(Item.class))).thenReturn(putoutcome);
-			PutItemOutcome putOutcome = ddbUpdater.insertIntoDynamoDB(msg, gson, logger, System.currentTimeMillis(), event.getEventSource(), event.getEventSourceArn());
-			assertNotNull(putOutcome);
-		}
+		
 	    
 	}
 }

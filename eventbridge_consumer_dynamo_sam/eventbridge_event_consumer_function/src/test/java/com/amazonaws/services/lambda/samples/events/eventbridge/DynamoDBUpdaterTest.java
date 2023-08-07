@@ -15,8 +15,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.amazonaws.services.lambda.runtime.events.ScheduledEvent;
 
 import org.mockito.ArgumentMatchers;
@@ -63,17 +61,10 @@ class DynamoDBUpdaterTest {
 
 	@Test
 	void testInsertIntoDynamoDB() {
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		ObjectMapper om = new ObjectMapper().registerModule(new JodaModule());
 		ScheduledEvent event = null;
 		try {
 			event = om.readValue(eventbridgeEventJson, ScheduledEvent.class);
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
-
 			Table dynamoDbTable = mock(Table.class);
 		    AmazonDynamoDB client = mock(AmazonDynamoDB.class);
 			DynamoDB dynamoDB = mock(DynamoDB.class);
@@ -83,9 +74,17 @@ class DynamoDBUpdaterTest {
 		    ddbUpdater.client = client;
 		    ddbUpdater.dynamoDB = dynamoDB;
 		    ddbUpdater.dynamoTable = dynamoDbTable;
+		    PersonWithKeyAndNumber personWithKeyAndNumber = om.readValue(om.writeValueAsString(event.getDetail()), PersonWithKeyAndNumber.class);
 		    when(ddbUpdater.dynamoTable.putItem(ArgumentMatchers.any(Item.class))).thenReturn(putoutcome);
-			PutItemOutcome putOutcome = ddbUpdater.insertIntoDynamoDB(event, gson, logger);
+			PutItemOutcome putOutcome = ddbUpdater.insertIntoDynamoDB(event, personWithKeyAndNumber, logger);
 			assertNotNull(putOutcome);
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+
+
 		
 	    
 	}

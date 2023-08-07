@@ -1,7 +1,5 @@
 package com.amazonaws.services.lambda.samples.events.activemq;
 
-
-import java.util.Base64;
 import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
@@ -11,7 +9,6 @@ import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.events.ActiveMQEvent;
-import com.google.gson.Gson;
 
 public class DynamoDBUpdater {
 
@@ -40,19 +37,12 @@ public class DynamoDBUpdater {
 		this.dynamoTable = dynamoDB.getTable(this.dynamoDBTableName);
 	}
 	
-	public PutItemOutcome insertIntoDynamoDB(ActiveMQEvent.ActiveMQMessage msg, Gson gson, LambdaLogger logger, long receiveTime, String eventSource, String eventSourceARN) {
+	public PutItemOutcome insertIntoDynamoDB(ActiveMQEvent.ActiveMQMessage msg, Person thisPerson, LambdaLogger logger, long receiveTime, String eventSource, String eventSourceARN) {
 		logger.log("Now inserting a row in DynamoDB for messageID = " + msg.getMessageID());
 		Item item = new Item();
 		item.withPrimaryKey("MessageID", msg.getMessageID());
 		item.withString("EventSource", eventSource);
 		item.withString("EventSourceARN", eventSourceARN);
-		String base64EncodedData = msg.getData();
-		String decodedData = "";
-		if (null != base64EncodedData) {
-			byte[] decodedDataBytes = Base64.getDecoder().decode(base64EncodedData);
-			decodedData = new String(decodedDataBytes);
-		}
-		Person thisPerson = gson.fromJson(decodedData, Person.class);
 		item.withString("Firstname", thisPerson.getFirstname());
 		item.withString("Lastname", thisPerson.getLastname());
 		item.withString("Company", thisPerson.getCompany());

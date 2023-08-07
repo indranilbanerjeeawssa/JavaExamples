@@ -2,18 +2,14 @@ package com.amazonaws.services.lambda.samples.events.activemq;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
+//import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.events.ActiveMQEvent;
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -225,11 +221,11 @@ class HandlerSQSTest {
 			e.printStackTrace();
 		}
 		Context context = new TestContext();
-		PutItemOutcome putItemOutcome = mock(PutItemOutcome.class);
+		//PutItemOutcome putItemOutcome = mock(PutItemOutcome.class);
 		DynamoDBUpdater dbUpdater = mock(DynamoDBUpdater.class);
 		HandlerActiveMQ handler = new HandlerActiveMQ();
 		handler.ddbUpdater = dbUpdater;
-		when(handler.ddbUpdater.insertIntoDynamoDB(ArgumentMatchers.any(ActiveMQEvent.ActiveMQMessage.class), ArgumentMatchers.any(Gson.class), ArgumentMatchers.any(LambdaLogger.class), ArgumentMatchers.anyLong(), ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(putItemOutcome);
+		//when(handler.ddbUpdater.insertIntoDynamoDB(ArgumentMatchers.any(ActiveMQEvent.ActiveMQMessage.class), ArgumentMatchers.any(Gson.class), ArgumentMatchers.any(LambdaLogger.class), ArgumentMatchers.anyLong(), ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(putItemOutcome);
 		String result = handler.handleRequest(event, context);
 		assertEquals(result, "200");
 	}

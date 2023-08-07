@@ -2,19 +2,14 @@ package com.amazonaws.services.lambda.samples.events.kinesis;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.events.KinesisEvent;
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.events.StreamsEventResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -212,11 +207,11 @@ class HandlerKinesisTest {
 			e.printStackTrace();
 		}
 		Context context = new TestContext();
-		PutItemOutcome putItemOutcome = mock(PutItemOutcome.class);
+		//PutItemOutcome putItemOutcome = mock(PutItemOutcome.class);
 		DynamoDBUpdater dbUpdater = mock(DynamoDBUpdater.class);
 		HandlerKinesis handler = new HandlerKinesis();
 		handler.ddbUpdater = dbUpdater;
-		when(handler.ddbUpdater.insertIntoDynamoDB(ArgumentMatchers.any(KinesisEvent.KinesisEventRecord.class), ArgumentMatchers.any(Gson.class), ArgumentMatchers.any(LambdaLogger.class))).thenReturn(putItemOutcome);
+		//when(handler.ddbUpdater.insertIntoDynamoDB(ArgumentMatchers.any(KinesisEvent.KinesisEventRecord.class), ArgumentMatchers.any(Gson.class), ArgumentMatchers.any(LambdaLogger.class))).thenReturn(putItemOutcome);
 		StreamsEventResponse result = handler.handleRequest(event, context);
 		assertEquals(result.getBatchItemFailures().size(), 1);
 		assertEquals(result.getBatchItemFailures().get(0).getItemIdentifier(), "49641044100202119009656361363617265814835551819947573298");

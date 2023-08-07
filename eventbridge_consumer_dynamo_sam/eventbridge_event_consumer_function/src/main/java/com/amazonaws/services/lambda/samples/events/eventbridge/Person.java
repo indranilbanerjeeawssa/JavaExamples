@@ -2,8 +2,9 @@ package com.amazonaws.services.lambda.samples.events.eventbridge;
 
 import java.util.Objects;
 
-import com.google.gson.Gson;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 
 public class Person {
 	
@@ -103,8 +104,14 @@ public class Person {
 	}
 	
 	public String toJson() {
-		Gson gson = new Gson();
-		return gson.toJson(this);
+		ObjectMapper objectMapper = new ObjectMapper().registerModule(new JodaModule());
+		String returnString = this.toString();
+		try {
+			return objectMapper.writeValueAsString(this);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return returnString;
+		}
 	}
 	@Override
 	public int hashCode() {

@@ -19,14 +19,11 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.ActiveMQEvent;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 // Handler value: example.HandlerSQS
 public class HandlerActiveMQ implements RequestHandler<ActiveMQEvent, String>{
-	Gson gson = new GsonBuilder().setPrettyPrinting().create();
 	String dynamoDBTableName = System.getenv("DYNAMO_DB_TABLE");
 	DynamoDBUpdater ddbUpdater = new DynamoDBUpdater(dynamoDBTableName);
 	boolean addToDynamoDB;
@@ -74,11 +71,12 @@ public class HandlerActiveMQ implements RequestHandler<ActiveMQEvent, String>{
 				logger.log("TimeStamp = " + msg.getTimestamp());
 				logger.log("Queue = " + msg.getDestination().getPhysicalName());
 				logger.log("WhetherRedelivered = " + msg.getRedelivered());
-				Person thisPerson = gson.fromJson(decodedData, Person.class);
+				Person thisPerson = objectMapper.readValue(decodedData, Person.class);
+				//Person thisPerson = gson.fromJson(decodedData, Person.class);
 				logger.log("This person = " + thisPerson.toJson());
 				String AWS_SAM_LOCAL = System.getenv("AWS_SAM_LOCAL");
 				if ((null == AWS_SAM_LOCAL) && (addToDynamoDB)) {
-					ddbUpdater.insertIntoDynamoDB(msg, gson, logger, currentTime, event.getEventSource(), event.getEventSourceArn());
+					ddbUpdater.insertIntoDynamoDB(msg, thisPerson, logger, currentTime, event.getEventSource(), event.getEventSourceArn());
 				}
 			} catch (Exception e) {
 				logger.log("An exception happened - " + e.getMessage());

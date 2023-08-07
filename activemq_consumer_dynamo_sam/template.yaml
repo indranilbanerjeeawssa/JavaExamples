@@ -8,7 +8,7 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 15
+    Timeout: 60
 
 Resources:
   LambdaActiveMQConsumerJavaFunction:
@@ -35,7 +35,7 @@ Resources:
         MQEvent:
           Type: MQ
           Properties:
-            BatchSize: 10
+            BatchSize: 100
             MaximumBatchingWindowInSeconds: 5
             Broker:
               !Join ['', ["arn:", "aws:", "mq:", !Ref "AWS::Region", ":", !Ref "AWS::AccountId", ":", "broker:", !Ref ActiveMQBrokerName, ":", !Ref ActiveMQBrokerUniqueString]]
@@ -106,10 +106,10 @@ Parameters:
     Description: Enter the unique string of the secret that has username/password for Active MQ
   Subnet1:
     Type: String
-    Description: The first of the two private subnets in the ActiveMQ broker's VPC
+    Description: The first of the three private subnets in the ActiveMQ broker's VPC
   Subnet2:
     Type: String
-    Description: The second of the two private subnets in the ActiveMQ broker's VPC
+    Description: The second of the three private subnets in the ActiveMQ broker's VPC
   SecurityGroup:
     Type: String
     Description: The security group associated with this function (use same ActiveMQ)
