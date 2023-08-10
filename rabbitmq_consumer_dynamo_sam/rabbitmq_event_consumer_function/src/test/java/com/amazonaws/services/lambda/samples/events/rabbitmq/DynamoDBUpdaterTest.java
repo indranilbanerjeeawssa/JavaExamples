@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -16,12 +17,9 @@ import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.events.RabbitMQEvent;
-//import com.amazonaws.services.lambda.samples.events.rabbitmq.DynamoDBUpdater;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import org.mockito.ArgumentMatchers;
 
@@ -649,18 +647,13 @@ class DynamoDBUpdaterTest {
 	@Test
 	void testInsertIntoDynamoDB() {
 
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		
 		ObjectMapper om = new ObjectMapper();
-		
 		RabbitMQEvent event = null;
 		try {
 			event = om.readValue(mqEventJson, RabbitMQEvent.class);
 		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		String eventSource = event.getEventSource();
@@ -669,6 +662,14 @@ class DynamoDBUpdaterTest {
 		mapOfMessages.forEach((k, v) -> {
 			String currentQueueName = k.substring(0, k.indexOf("::/"));
 			for (RabbitMQEvent.RabbitMessage thisMessage: v) {
+				String encodedData = thisMessage.getData();
+				String decodedData = new String(Base64.getDecoder().decode(encodedData));
+				Person thisPerson = new Person();
+				try {
+					thisPerson = om.readValue(decodedData, Person.class);
+				} catch (JsonProcessingException e) {
+					e.printStackTrace();
+				}
 				Table dynamoDbTable = mock(Table.class);
 			    AmazonDynamoDB client = mock(AmazonDynamoDB.class);
 				DynamoDB dynamoDB = mock(DynamoDB.class);
@@ -679,7 +680,7 @@ class DynamoDBUpdaterTest {
 			    ddbUpdater.dynamoDB = dynamoDB;
 			    ddbUpdater.dynamoTable = dynamoDbTable;
 			    when(ddbUpdater.dynamoTable.putItem(ArgumentMatchers.any(Item.class))).thenReturn(putoutcome);
-				PutItemOutcome putOutcome = ddbUpdater.insertIntoDynamoDB(thisMessage, gson, logger, System.currentTimeMillis(), currentQueueName, eventSource, eventSourceArn);
+				PutItemOutcome putOutcome = ddbUpdater.insertIntoDynamoDB(thisMessage, thisPerson, logger, System.currentTimeMillis(), currentQueueName, eventSource, eventSourceArn);
 				assertNotNull(putOutcome);
 			}
 			

@@ -2,20 +2,14 @@ package com.amazonaws.services.lambda.samples.events.rabbitmq;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
+//import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.events.RabbitMQEvent;
-//import com.amazonaws.services.lambda.samples.events.rabbitmq.DynamoDBUpdater;
-//import com.amazonaws.services.lambda.samples.events.rabbitmq.HandlerRabbitMQ;
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -650,7 +644,7 @@ class HandlerRabbitMQTest {
 			e.printStackTrace();
 		}
 		Context context = new TestContext();
-		PutItemOutcome putItemOutcome = mock(PutItemOutcome.class);
+		//PutItemOutcome putItemOutcome = mock(PutItemOutcome.class);
 		DynamoDBUpdater dbUpdater = mock(DynamoDBUpdater.class);
 		HandlerRabbitMQ handler = new HandlerRabbitMQ();
 		handler.ddbUpdater = dbUpdater;

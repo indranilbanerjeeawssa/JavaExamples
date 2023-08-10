@@ -1,7 +1,6 @@
 package com.amazonaws.services.lambda.samples.events.rabbitmq;
 
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -15,7 +14,6 @@ import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.events.RabbitMQEvent;
 import com.amazonaws.services.lambda.runtime.events.RabbitMQEvent.BasicProperties;
-import com.google.gson.Gson;
 
 public class DynamoDBUpdater {
 
@@ -42,7 +40,7 @@ public class DynamoDBUpdater {
 		this.dynamoTable = dynamoDB.getTable(this.dynamoDBTableName);
 	}
 	
-	public PutItemOutcome insertIntoDynamoDB(RabbitMQEvent.RabbitMessage thisMessage, Gson gson, LambdaLogger logger, long receiveTime, String queueName, String eventSource, String eventSourceARN) {
+	public PutItemOutcome insertIntoDynamoDB(RabbitMQEvent.RabbitMessage thisMessage, Person thisPerson, LambdaLogger logger, long receiveTime, String queueName, String eventSource, String eventSourceARN) {
 		BasicProperties thisMessageProperties = thisMessage.getBasicProperties();
 		logger.log("Now inserting a row in DynamoDB for messageID = " + thisMessageProperties.getMessageId());
 		Item item = new Item();
@@ -50,13 +48,6 @@ public class DynamoDBUpdater {
 		item.withString("EventSource", eventSource);
 		item.withString("EventSourceARN", eventSourceARN);
 		item.withString("Queue", queueName);
-		String base64EncodedData = thisMessage.getData();
-		String decodedData = "";
-		if (null != base64EncodedData) {
-			byte[] decodedDataBytes = Base64.getDecoder().decode(base64EncodedData);
-			decodedData = new String(decodedDataBytes);
-		}
-		Person thisPerson = gson.fromJson(decodedData, Person.class);
 		item.withString("Firstname", thisPerson.getFirstname());
 		item.withString("Lastname", thisPerson.getLastname());
 		item.withString("Company", thisPerson.getCompany());

@@ -1,17 +1,3 @@
-//Lambda Runtime delivers a batch of messages to the lambda function
-//Each batch of messages has two fields EventSource and EventSourceARN
-//Each batch of messages also has a field called Records
-//The Records is a map with multiple keys and values
-//Each key is a combination of the Topic Name and the Partition Number
-//One batch of messages can contain messages from multiple partitions
-
-/*
-To simplify representing a batch of Kafka messages as a list of messages
-We have created a Java class called KafkaMessage under the models package
-Here we are mapping the structure of an incoming Kafka event to a list of
-objects of the KafkaMessage class
- */
-
 package com.amazonaws.services.lambda.samples.events.rabbitmq;
 
 import java.util.ArrayList;
@@ -19,20 +5,15 @@ import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-//import com.amazonaws.services.lambda.runtime.events.ActiveMQEvent;
 import com.amazonaws.services.lambda.runtime.events.RabbitMQEvent;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.amazonaws.services.lambda.runtime.events.RabbitMQEvent.BasicProperties;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-// Handler value: example.HandlerSQS
 public class HandlerRabbitMQ implements RequestHandler<RabbitMQEvent, String>{
-	Gson gson = new GsonBuilder().setPrettyPrinting().create();
 	String dynamoDBTableName = System.getenv("DYNAMO_DB_TABLE");
 	DynamoDBUpdater ddbUpdater = new DynamoDBUpdater(dynamoDBTableName);
 	boolean addToDynamoDB;
@@ -60,7 +41,12 @@ public class HandlerRabbitMQ implements RequestHandler<RabbitMQEvent, String>{
 					logger.log("EncodedData = " + encodedData);
 					String decodedData = new String(Base64.getDecoder().decode(encodedData));
 					logger.log("DecodedData = " + decodedData);
-					Person thisPerson = gson.fromJson(decodedData, Person.class);
+					Person thisPerson = new Person();
+					try {
+						thisPerson = objectMapper.readValue(decodedData, Person.class);
+					} catch (JsonProcessingException e) {
+						logger.log(e.getMessage());
+					}
 					logger.log("This person = " + thisPerson.toString());
 					logger.log("Whether Redelivered = " + thisMessage.getRedelivered());
 					BasicProperties thisMessageProperties = thisMessage.getBasicProperties();
@@ -100,7 +86,7 @@ public class HandlerRabbitMQ implements RequestHandler<RabbitMQEvent, String>{
 					logger.log("Now done logging a new message");
 					String AWS_SAM_LOCAL = System.getenv("AWS_SAM_LOCAL");
 					if ((null == AWS_SAM_LOCAL) && (addToDynamoDB)) {
-						ddbUpdater.insertIntoDynamoDB(thisMessage, gson, logger, System.currentTimeMillis(), currentQueueName, event.getEventSource(), event.getEventSourceArn());
+						ddbUpdater.insertIntoDynamoDB(thisMessage, thisPerson, logger, System.currentTimeMillis(), currentQueueName, event.getEventSource(), event.getEventSourceArn());
 					}
 				}
 				logger.log("Now done iterating through each message in this queue");	

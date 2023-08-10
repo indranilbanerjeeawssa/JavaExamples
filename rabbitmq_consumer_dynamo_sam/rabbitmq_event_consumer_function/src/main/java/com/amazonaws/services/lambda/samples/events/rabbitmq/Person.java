@@ -2,8 +2,8 @@ package com.amazonaws.services.lambda.samples.events.rabbitmq;
 
 import java.util.Objects;
 
-import com.google.gson.Gson;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Person {
 	
@@ -103,8 +103,14 @@ public class Person {
 	}
 	
 	public String toJson() {
-		Gson gson = new Gson();
-		return gson.toJson(this);
+		ObjectMapper om = new ObjectMapper();
+		String returnValue = "";
+		try {
+			returnValue = om.writeValueAsString(this);
+		} catch (JsonProcessingException e) {
+			returnValue = this.toString();
+		}
+		return returnValue;
 	}
 	@Override
 	public int hashCode() {
