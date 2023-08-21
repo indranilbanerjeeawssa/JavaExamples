@@ -25,14 +25,12 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.DynamodbEvent;
 import com.amazonaws.services.lambda.runtime.events.DynamodbEvent.DynamodbStreamRecord;
 import com.amazonaws.services.lambda.runtime.events.models.dynamodb.AttributeValue;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 public class HandlerDynamoDBStreams implements RequestHandler<DynamodbEvent, String>{
-	Gson gson = new GsonBuilder().setPrettyPrinting().create();
+	
 	String dynamoDBTableName = System.getenv("DYNAMO_DB_TABLE");
 	DynamoDBUpdater ddbUpdater = new DynamoDBUpdater(dynamoDBTableName);
 	boolean addToDynamoDB;
@@ -93,7 +91,7 @@ public class HandlerDynamoDBStreams implements RequestHandler<DynamodbEvent, Str
 			    logger.log("Now done logging a new message");
 			    String AWS_SAM_LOCAL = System.getenv("AWS_SAM_LOCAL");
 				if ((null == AWS_SAM_LOCAL) && (addToDynamoDB)) {
-					ddbUpdater.insertIntoDynamoDB(record, gson, logger);
+					ddbUpdater.insertIntoDynamoDB(record, logger);
 				}
 			}
 		} catch (Exception e) {

@@ -67,7 +67,7 @@ Use the project ../eventbridge_message_sender_json.
 
 Look at the Readme of that project to determine how to build that project and run the command that will send Eventbridge events with a Json payload to the lambda function built using this project. The lambda function will receive the Eventbridge events with a JSON payload and input fields from the Eventbridge events into a DynamoDB table.
 
-The value field of each SQS message that will be sent out will be a Json element of the format
+The value field of each Eventbridge event that will be sent out will be a Json element of the format
 
 "person": {
         "firstname": "Myra",
@@ -88,7 +88,7 @@ Then check Cloudwatch logs and you should see messages for the Cloudwatch Log Gr
 
 The lambda code parses the Eventbridge events and outputs the fields in the Eventbridge events to Cloudwatch logs
 
-A single lambda function receives a single event.
+A single lambda function invocation receives a single event.
 
 The code in this example prints out the fields in the Eventbridge events and logs them in Cloudwatch logs.
 

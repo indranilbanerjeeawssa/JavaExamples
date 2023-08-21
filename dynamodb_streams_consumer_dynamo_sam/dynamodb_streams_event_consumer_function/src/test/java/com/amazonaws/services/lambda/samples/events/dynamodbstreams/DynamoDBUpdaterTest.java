@@ -4,9 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 import java.io.InputStream;
-
 import org.junit.jupiter.api.Test;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
@@ -19,8 +17,6 @@ import com.amazonaws.services.lambda.runtime.events.DynamodbEvent.DynamodbStream
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.mockito.ArgumentMatchers;
 
 class DynamoDBUpdaterTest {
@@ -47,10 +43,7 @@ class DynamoDBUpdaterTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		
 		ObjectMapper om = new ObjectMapper();
-		
 		DynamodbEvent event = null;
 		try {
 			event = om.readValue(dynamodbStreamsEventJson, DynamodbEvent.class);
@@ -72,7 +65,7 @@ class DynamoDBUpdaterTest {
 		    ddbUpdater.dynamoDB = dynamoDB;
 		    ddbUpdater.dynamoTable = dynamoDbTable;
 		    when(ddbUpdater.dynamoTable.putItem(ArgumentMatchers.any(Item.class))).thenReturn(putoutcome);
-			PutItemOutcome putOutcome = ddbUpdater.insertIntoDynamoDB(msg, gson, logger);
+			PutItemOutcome putOutcome = ddbUpdater.insertIntoDynamoDB(msg, logger);
 			assertNotNull(putOutcome);
 		}
 	    

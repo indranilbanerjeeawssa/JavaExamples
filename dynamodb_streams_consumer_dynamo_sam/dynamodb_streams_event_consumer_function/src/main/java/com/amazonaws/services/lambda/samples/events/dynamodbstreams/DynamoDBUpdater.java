@@ -1,6 +1,5 @@
 package com.amazonaws.services.lambda.samples.events.dynamodbstreams;
 
-
 import java.nio.ByteBuffer;
 import java.util.Base64;
 import java.util.HashMap;
@@ -14,10 +13,7 @@ import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.events.DynamodbEvent.DynamodbStreamRecord;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent.MessageAttribute;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
 import com.amazonaws.services.lambda.runtime.events.models.dynamodb.AttributeValue;
-import com.google.gson.Gson;
 
 public class DynamoDBUpdater {
 
@@ -45,12 +41,10 @@ public class DynamoDBUpdater {
 		this.dynamoTable = dynamoDB.getTable(this.dynamoDBTableName);
 	}
 	
-	public PutItemOutcome insertIntoDynamoDB(DynamodbStreamRecord record, Gson gson, LambdaLogger logger) {
+	public PutItemOutcome insertIntoDynamoDB(DynamodbStreamRecord record, LambdaLogger logger) {
 		logger.log("Now inserting a row in DynamoDB for messageID = " + record.getEventID());
 		Item item = new Item();
 		item.withPrimaryKey("MessageID", record.getEventID());
-		
-		
 		item.withString("EventID", record.getEventID());
 		item.withString("EventName", record.getEventName());
 		item.withString("AWSRegion", record.getAwsRegion());

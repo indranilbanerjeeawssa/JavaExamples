@@ -101,4 +101,4 @@ A single lambda function receives a batch of messages.
 
 The code in this example prints out the fields in the ActiveMQ message and logs them in Cloudwatch logs.
 
-Apart from outputting to Cloudwatch logs, the lambda function also inputs fields from the ActiveMQ message (both message metadata fields as well as payload fields from the JSON payload) into a DynamoDB table created by the SAM template. You can log into the AWS console and look at the DynamoDB table and run a scan to see data getting input from the Kafka message into the DynamoDB table
+Apart from outputting to Cloudwatch logs, the lambda function also inputs fields from the ActiveMQ message (both message metadata fields as well as payload fields from the JSON payload) into a DynamoDB table created by the SAM template. You can log into the AWS console and look at the DynamoDB table and run a scan to see data getting input from the ActiveMQ message into the DynamoDB table

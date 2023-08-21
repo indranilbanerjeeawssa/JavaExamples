@@ -1,1 +1,5 @@
-java -classpath ~/environment/JavaExamples/sqs_message_sender_json/target/json-sqs-producer-0.0.1-SNAPSHOT.jar sqs.producer.JsonSQSProducer <QueueName> <Key To Identify This Set Of Messages> <Number Of Messages>
+java -classpath <Location of code>/JavaExamples/dynamodb_streams_message_sender_json/target/json-dynamodb-streams-producer-0.0.1-SNAPSHOT.jar dynamodb.streams.producer.DynamoDBStreamsProducer <Name of DynamoDB Table with Streams enabled> <Unique String to identify this batch of messages> <Number of messages in this batch>
+
+Example:
+
+java -classpath /home/ec2-user/environment/JavaExamples/dynamodb_streams_message_sender_json/target/json-dynamodb-streams-producer-0.0.1-SNAPSHOT.jar dynamodb.streams.producer.DynamoDBStreamsProducer StreamsProducerDynamoDBTable TestMessage01 100

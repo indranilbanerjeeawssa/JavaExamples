@@ -1,1 +1,5 @@
-java -classpath ~/environment/JavaExamples/kinesis_message_sender_json/target/json-kinesis-producer-0.0.1-SNAPSHOT.jar kinesis.producer.JsonKinesisProducer <Kinesis Stream Name> <Key To Identify This Set Of Messages> <Number Of Messages>
+java -classpath <Location Of Code>/JavaExamples/kinesis_message_sender_json/target/json-kinesis-producer-0.0.1-SNAPSHOT.jar kinesis.producer.JsonKinesisProducer <Kinesis Stream Name> <Key To Identify This Set Of Messages> <Number Of Messages>
+
+Example:
+
+java -classpath ~/environment/JavaExamples/kinesis_message_sender_json/target/json-kinesis-producer-0.0.1-SNAPSHOT.jar kinesis.producer.JsonKinesisProducer LambdaKinesisStream Messages01 100

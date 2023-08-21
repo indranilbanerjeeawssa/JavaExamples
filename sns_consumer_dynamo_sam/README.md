@@ -61,7 +61,7 @@ You should get a message "Successfully created/updated stack - <StackName> in <R
 
 ## Test the sample application
 
-Once the lambda function is deployed, send some SQS messages on the queue that the lambda function is listening on.
+Once the lambda function is deployed, send some SNS messages on the queue that the lambda function is listening on.
 
 Use the project ../sns_message_sender_json.
 
@@ -88,8 +88,8 @@ Then check Cloudwatch logs and you should see messages for the Cloudwatch Log Gr
 
 The lambda code parses the SNS messages and outputs the fields in the SNS messages to Cloudwatch logs
 
-A single lambda function receives a batch of messages.
+Unlike SQS, a single invocation of the lambda function receives a single message.
 
-The code in this example prints out the fields in the SQS message and logs them in Cloudwatch logs.
+The code in this example prints out the fields in the SNS message and logs them in Cloudwatch logs.
 
 Apart from outputting to Cloudwatch logs, the lambda function also inputs fields from the SNS message (both message metadata fields as well as payload fields from the JSON payload) into a DynamoDB table created by the SAM template. You can log into the AWS console and look at the DynamoDB table and run a scan to see data getting input from the SNS message into the DynamoDB table
