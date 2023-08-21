@@ -65,7 +65,4 @@ public class DynamoDBUpdater {
 	    logger.log("Now done inserting a row in DynamoDB for messageID = " + eventEvent.getFullDocument().get_id());
 		return dynamoTable.putItem(item);
 	}
-	
-
-	
 }

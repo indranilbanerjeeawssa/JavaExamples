@@ -19,13 +19,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.util.HashMap;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.amazonaws.services.lambda.samples.events.documentdbstreams.models.*;
 
 
@@ -34,7 +32,7 @@ public class HandlerDocumentDBStreams implements RequestStreamHandler{
 	String dynamoDBTableName = System.getenv("DYNAMO_DB_TABLE");
 	DynamoDBUpdater ddbUpdater = new DynamoDBUpdater(dynamoDBTableName);
 	boolean addToDynamoDB;
-	ObjectMapper objectMapper = new ObjectMapper();
+	//ObjectMapper objectMapper = new ObjectMapper();
 	@Override
 	public void handleRequest(InputStream inputStream, OutputStream outputStream, Context context) throws IOException
 	{
@@ -43,11 +41,6 @@ public class HandlerDocumentDBStreams implements RequestStreamHandler{
 		logger.log("Begin Event *************");
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-//			HashMap event = gson.fromJson(reader, HashMap.class);
-//		    logger.log("STREAM TYPE: " + inputStream.getClass().toString());
-//		    logger.log("EVENT TYPE: " + event.getClass().toString());
-//		    logger.log("EVENT: " + gson.toJson(event));
-//		    DocumentDBStreamMessage message = gson.fromJson(gson.toJson(event), DocumentDBStreamMessage.class);
 			DocumentDBStreamMessage message = gson.fromJson(reader, DocumentDBStreamMessage.class);
 			logger.log("EventSource = " + message.getEventSource());
 		    logger.log("EventSourceARN = " + message.getEventSourceArn());
