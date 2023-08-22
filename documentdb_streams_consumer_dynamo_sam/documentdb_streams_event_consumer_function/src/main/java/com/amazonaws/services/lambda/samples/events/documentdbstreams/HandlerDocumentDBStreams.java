@@ -42,6 +42,7 @@ public class HandlerDocumentDBStreams implements RequestStreamHandler{
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 			DocumentDBStreamMessage message = gson.fromJson(reader, DocumentDBStreamMessage.class);
+			logger.log("Message = " + message);
 			logger.log("EventSource = " + message.getEventSource());
 		    logger.log("EventSourceARN = " + message.getEventSourceArn());
 		    for (int i=0;i<message.getEvents().length;i++) {
