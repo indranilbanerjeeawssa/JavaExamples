@@ -3,7 +3,7 @@ Transform: AWS::Serverless-2016-10-31
 Description: >
   s3_notifications_event_consumer_function
 
-  Sample SAM Template for sqs-consumer-with-s3-notification-events
+  Sample SAM Template for s3-notifications-consumer-with-sam
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
