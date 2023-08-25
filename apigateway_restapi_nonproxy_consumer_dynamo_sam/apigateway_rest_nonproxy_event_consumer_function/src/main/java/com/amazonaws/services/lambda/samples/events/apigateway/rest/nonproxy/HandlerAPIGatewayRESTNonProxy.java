@@ -8,16 +8,15 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 /**
  * Handler for requests to Lambda function.
  */
 public class HandlerAPIGatewayRESTNonProxy implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
     
-	Gson gson = new GsonBuilder().setPrettyPrinting().create();
+	//Gson gson = new GsonBuilder().setPrettyPrinting().create();
 	String dynamoDBTableName = System.getenv("DYNAMO_DB_TABLE");
 	DynamoDBUpdater ddbUpdater = new DynamoDBUpdater(dynamoDBTableName);
 	boolean addToDynamoDB;
@@ -26,7 +25,11 @@ public class HandlerAPIGatewayRESTNonProxy implements RequestHandler<APIGatewayP
 	public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
 		addToDynamoDB = true;
 		LambdaLogger logger = context.getLogger();
-    	logger.log("Request = " + gson.toJson(input));
+		try {
+			logger.log("Request = " + objectMapper.writeValueAsString(input));
+		} catch (JsonProcessingException e2) {
+			logger.log(e2.getMessage());
+		}
     	logger.log("Request Body = " + input.getBody());
     	logger.log("Resource = " + input.getResource());
     	logger.log("Path = " + input.getPath());
@@ -59,7 +62,13 @@ public class HandlerAPIGatewayRESTNonProxy implements RequestHandler<APIGatewayP
     			i++;
     		}
     	});
-    	PersonWithID thisPerson = gson.fromJson(input.getBody(), PersonWithID.class);
+    	//PersonWithID thisPerson1 = gson.fromJson(input.getBody(), PersonWithID.class);
+    	PersonWithID thisPerson = new PersonWithID();
+		try {
+			thisPerson = objectMapper.readValue(input.getBody(), PersonWithID.class);
+		} catch (JsonProcessingException e1) {
+			logger.log("An exception occurred while parsing the Json - " + e1.getMessage());
+		}
     	logger.log("PersonID = " + thisPerson.getId());
     	logger.log("Firstname = " + thisPerson.getPerson().getFirstname());
     	logger.log("Lastname = " + thisPerson.getPerson().getLastname());
@@ -76,7 +85,7 @@ public class HandlerAPIGatewayRESTNonProxy implements RequestHandler<APIGatewayP
     	String customerId = java.util.UUID.randomUUID().toString();
     	String AWS_SAM_LOCAL = System.getenv("AWS_SAM_LOCAL");
 		if ((null == AWS_SAM_LOCAL) && (addToDynamoDB)) {
-			ddbUpdater.insertIntoDynamoDB(input, customerId, gson, logger);
+			ddbUpdater.insertIntoDynamoDB(input, customerId, thisPerson, logger);
 		}
     	
     	Map<String, String> outputHeaders = new HashMap<>();
@@ -91,14 +100,20 @@ public class HandlerAPIGatewayRESTNonProxy implements RequestHandler<APIGatewayP
             responseMessage.setMessage("Successfully created a new customer");
             return response
                     .withStatusCode(201)
-                    .withBody(gson.toJson(responseMessage));
+                    .withBody(objectMapper.writeValueAsString(responseMessage));
         } catch (Exception e) {
         	ResponseMessage responseMessage = new ResponseMessage();
         	responseMessage.setCustomerID("Could not create a new customer");
             responseMessage.setMessage(e.getMessage());
-            return response
-                    .withBody(gson.toJson(responseMessage))
-                    .withStatusCode(500);
+            try {
+				return response
+				        .withBody(objectMapper.writeValueAsString(responseMessage))
+				        .withStatusCode(500);
+			} catch (JsonProcessingException e1) {
+				return response
+				        .withBody("Could not create a new customer")
+				        .withStatusCode(500);
+			}
         }
     }
 
