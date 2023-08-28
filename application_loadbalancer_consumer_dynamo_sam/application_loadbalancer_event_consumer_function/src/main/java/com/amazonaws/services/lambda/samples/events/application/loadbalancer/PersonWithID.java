@@ -1,7 +1,8 @@
 package com.amazonaws.services.lambda.samples.events.application.loadbalancer;
 
 import java.util.Objects;
-import com.google.gson.Gson;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PersonWithID {
 	Person person;
@@ -66,7 +67,13 @@ public class PersonWithID {
 		return "PersonWithID [person=" + person + ", id=" + id + "]";
 	}
 	public String toJson() {
-		Gson gson = new Gson();
-		return gson.toJson(this);
+		ObjectMapper om = new ObjectMapper();
+		String returnString = "";
+		try {
+			returnString = om.writeValueAsString(this);
+		} catch(Exception e) {
+			returnString = this.toString();
+		}
+		return returnString;
 	}
 }

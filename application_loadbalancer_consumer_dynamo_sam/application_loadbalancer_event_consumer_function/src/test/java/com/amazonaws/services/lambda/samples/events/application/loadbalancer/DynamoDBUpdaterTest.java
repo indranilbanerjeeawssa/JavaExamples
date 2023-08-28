@@ -18,7 +18,6 @@ import com.amazonaws.services.lambda.runtime.events.ApplicationLoadBalancerReque
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import org.mockito.ArgumentMatchers;
 
 class DynamoDBUpdaterTest {
@@ -65,7 +64,13 @@ class DynamoDBUpdaterTest {
 		    ddbUpdater.dynamoDB = dynamoDB;
 		    ddbUpdater.dynamoTable = dynamoDbTable;
 		    when(ddbUpdater.dynamoTable.putItem(ArgumentMatchers.any(Item.class))).thenReturn(putoutcome);
-			PutItemOutcome putOutcome = ddbUpdater. insertIntoDynamoDB(request, java.util.UUID.randomUUID().toString(), new Gson(), logger);
+		    PersonWithID thisPerson = new PersonWithID();
+			try {
+				thisPerson = om.readValue(request.getBody(), PersonWithID.class);
+			} catch (JsonProcessingException e1) {
+				logger.log(e1.getMessage());
+			}
+		    PutItemOutcome putOutcome = ddbUpdater. insertIntoDynamoDB(request, java.util.UUID.randomUUID().toString(), thisPerson, logger);
 			assertNotNull(putOutcome);
 		
 	    

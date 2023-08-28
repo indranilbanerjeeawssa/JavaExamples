@@ -3,7 +3,7 @@ Transform: AWS::Serverless-2016-10-31
 Description: >
   application_loadbalancer_event_consumer_function
 
-  Sample SAM Template for apigateway_rest_nonproxy_event_consumer_function
+  Sample SAM Template for application_loadbalancer_event_consumer_function
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:

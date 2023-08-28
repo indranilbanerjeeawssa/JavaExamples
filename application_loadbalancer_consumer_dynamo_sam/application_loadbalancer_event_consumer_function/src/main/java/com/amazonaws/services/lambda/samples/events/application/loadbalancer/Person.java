@@ -2,8 +2,7 @@ package com.amazonaws.services.lambda.samples.events.application.loadbalancer;
 
 import java.util.Objects;
 
-import com.google.gson.Gson;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Person {
 	
@@ -103,8 +102,14 @@ public class Person {
 	}
 	
 	public String toJson() {
-		Gson gson = new Gson();
-		return gson.toJson(this);
+		ObjectMapper om = new ObjectMapper();
+		String returnString = "";
+		try {
+			returnString = om.writeValueAsString(this);
+		} catch(Exception e) {
+			returnString = this.toString();
+		}
+		return returnString;
 	}
 	@Override
 	public int hashCode() {

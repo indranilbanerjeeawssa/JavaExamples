@@ -10,7 +10,6 @@ import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.events.ApplicationLoadBalancerRequestEvent;
-import com.google.gson.Gson;
 
 public class DynamoDBUpdater {
 
@@ -34,16 +33,14 @@ public class DynamoDBUpdater {
 			this.client = AmazonDynamoDBClientBuilder.standard().withEndpointConfiguration(new EndpointConfiguration("http://127.0.0.1:8000", "")).build();
 			this.dynamoDBTableName = "APIGATEWAY_LAMBDA_DYNAMO_TABLE";
 		}
-		//this.client = AmazonDynamoDBClientBuilder.standard().build();
 		this.dynamoDB = new DynamoDB(client);
 		this.dynamoTable = dynamoDB.getTable(this.dynamoDBTableName);
 	}
 	
-	public PutItemOutcome insertIntoDynamoDB(ApplicationLoadBalancerRequestEvent input, String customerId, Gson gson, LambdaLogger logger) {
+	public PutItemOutcome insertIntoDynamoDB(ApplicationLoadBalancerRequestEvent input, String customerId, PersonWithID thisPerson, LambdaLogger logger) {
 		logger.log("Now inserting a row in DynamoDB for CustomerID = " + customerId);
 		Item item = new Item();
 		item.withPrimaryKey("CustomerID", customerId);
-		
 		item.withString("TargetGroupArn = ", input.getRequestContext().getElb().getTargetGroupArn());
 		item.withString("HttpMethod", input.getHttpMethod());
 		item.withString("Path", input.getPath());
@@ -55,7 +52,6 @@ public class DynamoDBUpdater {
     	inputHeaders.forEach((k, v) -> {
     		item.withString("Headers_" + k, v);
     	});
-    	PersonWithID thisPerson = gson.fromJson(input.getBody(), PersonWithID.class);
     	item.withString("PersonID", thisPerson.getId());
     	item.withString("Firstname", thisPerson.getPerson().getFirstname());
     	item.withString("Lastname", thisPerson.getPerson().getLastname());
@@ -72,5 +68,4 @@ public class DynamoDBUpdater {
 	    logger.log("Now done inserting a row in DynamoDB for CustomerID = " + customerId);
 		return dynamoTable.putItem(item);
 	}
-	
 }
