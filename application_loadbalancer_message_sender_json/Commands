@@ -1,5 +1,5 @@
-java -classpath <Location Of Code>/JavaExamples/application_loadbalancer_message_sender_json/target/json-application-load-balancer-producer-0.0.1-SNAPSHOT.jar application.loadbalancer.producer.JsonApplicationLoadBalancerProducer http://appli-Appli-IZIUUBHDP94L-732603180.us-west-2.elb.amazonaws.com:80/customers Message01 100
+java -classpath <Location Of Code>/JavaExamples/application_loadbalancer_message_sender_json/target/json-application-load-balancer-producer-0.0.1-SNAPSHOT.jar application.loadbalancer.producer.JsonApplicationLoadBalancerProducer <DNS Name of ALB>:80/customers <Unique String representing this batch of messages> <Total number of messages in this batch>
 
 Example:
 
-java -classpath /home/ec2-user/environment/JavaExamples/application_loadbalancer_message_sender_json/target/json-application-load-balancer-producer-0.0.1-SNAPSHOT.jar application.loadbalancer.producer.JsonApplicationLoadBalancerProducer http://appli-Appli-IZIUUBHDP94L-732603180.us-west-2.elb.amazonaws.com:80/customers Message01 100
+java -classpath /home/ec2-user/environment/JavaExamples/application_loadbalancer_message_sender_json/target/json-application-load-balancer-producer-0.0.1-SNAPSHOT.jar application.loadbalancer.producer.JsonApplicationLoadBalancerProducer http://appli-Appli-1AXLX5ZQM0LTK-349365445.us-west-2.elb.amazonaws.com:80/customers Message01 100

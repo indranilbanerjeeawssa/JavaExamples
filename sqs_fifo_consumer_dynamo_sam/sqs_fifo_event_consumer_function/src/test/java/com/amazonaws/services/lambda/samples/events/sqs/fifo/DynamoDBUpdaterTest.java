@@ -4,9 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 import java.util.UUID;
-
 import org.junit.jupiter.api.Test;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
@@ -16,12 +14,9 @@ import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
-import com.amazonaws.services.lambda.samples.events.sqs.fifo.DynamoDBUpdater;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import org.mockito.ArgumentMatchers;
 
@@ -465,18 +460,13 @@ class DynamoDBUpdaterTest {
 	@Test
 	void testInsertIntoDynamoDB() {
 
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		//SQSEvent event = gson.fromJson(sqsEventJson, SQSEvent.class);
 		ObjectMapper om = new ObjectMapper();
-		//SQSEvent event = gson.fromJson(sqsEventJson, SQSEvent.class);
 		SQSEvent event = null;
 		try {
 			event = om.readValue(sqsEventJson, SQSEvent.class);
 		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		for(SQSMessage msg : event.getRecords()){
@@ -489,8 +479,14 @@ class DynamoDBUpdaterTest {
 		    ddbUpdater.client = client;
 		    ddbUpdater.dynamoDB = dynamoDB;
 		    ddbUpdater.dynamoTable = dynamoDbTable;
+		    Person thisPerson = new Person();
+			try {
+				thisPerson = om.readValue(msg.getBody(), Person.class);
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
 		    when(ddbUpdater.dynamoTable.putItem(ArgumentMatchers.any(Item.class))).thenReturn(putoutcome);
-			PutItemOutcome putOutcome = ddbUpdater.insertIntoDynamoDB(msg, gson, logger, System.currentTimeMillis(), UUID.randomUUID().toString());
+			PutItemOutcome putOutcome = ddbUpdater.insertIntoDynamoDB(msg, thisPerson, logger, System.currentTimeMillis(), UUID.randomUUID().toString());
 			assertNotNull(putOutcome);
 		}
 	    

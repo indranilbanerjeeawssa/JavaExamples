@@ -1,6 +1,5 @@
 package com.amazonaws.services.lambda.samples.events.sqs.fifo;
 
-
 import java.util.Map;
 import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
@@ -12,7 +11,6 @@ import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent.MessageAttribute;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
-import com.google.gson.Gson;
 
 public class DynamoDBUpdater {
 
@@ -41,7 +39,7 @@ public class DynamoDBUpdater {
 		this.dynamoTable = dynamoDB.getTable(this.dynamoDBTableName);
 	}
 	
-	public PutItemOutcome insertIntoDynamoDB(SQSMessage msg, Gson gson, LambdaLogger logger, long batchReceiptTime, String lambdaMicroVMID) {
+	public PutItemOutcome insertIntoDynamoDB(SQSMessage msg, Person thisPerson, LambdaLogger logger, long batchReceiptTime, String lambdaMicroVMID) {
 		logger.log("Now inserting a row in DynamoDB for messageID = " + msg.getMessageId());
 		Item item = new Item();
 		item.withPrimaryKey("MessageID", msg.getMessageId());
@@ -52,7 +50,7 @@ public class DynamoDBUpdater {
 		item.withString("EventSource", msg.getEventSource());
 		item.withString("AWSRegion", msg.getAwsRegion());
 		item.withString("MD5OfBody", msg.getMd5OfBody());
-		Person thisPerson = gson.fromJson(msg.getBody(), Person.class);
+		//Person thisPerson = gson.fromJson(msg.getBody(), Person.class);
 		item.withString("Firstname", thisPerson.getFirstname());
 		item.withString("Lastname", thisPerson.getLastname());
 		item.withString("Company", thisPerson.getCompany());
@@ -77,5 +75,4 @@ public class DynamoDBUpdater {
 	    logger.log("Now done inserting a row in DynamoDB for messageID = " + msg.getMessageId());
 		return dynamoTable.putItem(item);
 	}
-	
 }

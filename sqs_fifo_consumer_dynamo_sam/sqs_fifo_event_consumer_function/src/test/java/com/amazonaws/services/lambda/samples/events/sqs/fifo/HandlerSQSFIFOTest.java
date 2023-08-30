@@ -2,23 +2,14 @@ package com.amazonaws.services.lambda.samples.events.sqs.fifo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.events.SQSBatchResponse;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
-
-import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
-import com.amazonaws.services.lambda.samples.events.sqs.fifo.DynamoDBUpdater;
-import com.amazonaws.services.lambda.samples.events.sqs.fifo.HandlerSQSFIFO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -468,7 +459,6 @@ class HandlerSQSFIFOTest {
 			e.printStackTrace();
 		}
 		Context context = new TestContext();
-		PutItemOutcome putItemOutcome = mock(PutItemOutcome.class);
 		DynamoDBUpdater dbUpdater = mock(DynamoDBUpdater.class);
 		HandlerSQSFIFO handler = new HandlerSQSFIFO();
 		handler.ddbUpdater = dbUpdater;
