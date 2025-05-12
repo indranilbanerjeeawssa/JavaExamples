@@ -1,8 +1,8 @@
-java -classpath <Project_Root_Folder>/rabbitmq_message_sender_json/target/json-rabbitmq-producer-0.0.1-SNAPSHOT.jar rabbitmq.producer.JsonRabbitMQProducer <RabbitMQ Server Host> <Exchange Name> <Queue Name> <Message Batch Identifier String> <Number Of Messages in Batch>
+java -classpath <Project_Root_Folder>/rabbitmq_message_sender_json/target/json-rabbitmq-producer-0.0.1-SNAPSHOT.jar rabbitmq.producer.JsonRabbitMQProducer <RabbitMQ Server Host> <RabbitMQ Virtual Host> <Exchange Name> <Queue Name> <Message Batch Identifier String> <Number Of Messages in Batch>
 
 Example:
 
-java -classpath /home/ec2-user/environment/JavaExamples/rabbitmq_message_sender_json/target/json-rabbitmq-producer-0.0.1-SNAPSHOT.jar rabbitmq.producer.JsonRabbitMQProducer b-22450561-3f76-4004-813d-392346f054fe.mq.us-west-2.amazonaws.com ib-test-exchange LambdaRabbitMQQueue TestMessage01 100
+java -classpath /home/ec2-user/environment/JavaExamples/rabbitmq_message_sender_json/target/json-rabbitmq-producer-0.0.1-SNAPSHOT.jar rabbitmq.producer.JsonRabbitMQProducer b-22450561-3f76-4004-813d-392346f054fe.mq.us-west-2.amazonaws.com ib-virtual-host ib-test-exchange LambdaRabbitMQQueue TestMessage01 100
 
 
 Make sure to put the host name without amqps:// and without port at the end (just the hostname of the RabbitMQ server)
