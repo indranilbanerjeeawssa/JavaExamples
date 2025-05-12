@@ -29,13 +29,15 @@ public class JsonRabbitMQProducer {
 		String rabbitMQEndpoint = args[0];
 		String rabbitMQUsername = SecretsManagerDecoder.getUsernameAndPassword().getUsername();
 		String rabbitMQPassword = SecretsManagerDecoder.getUsernameAndPassword().getPassword();
-		String rabbitMQExchange = args[1];
-		String rabbitMQQueue = args[2];
-		String seederKeyString = args[3];
-		int numberOfMessages = Integer.parseInt(args[4]);
+		String rabbitMQVirtualHost = args[1];
+		String rabbitMQExchange = args[2];
+		String rabbitMQQueue = args[3];
+		String seederKeyString = args[4];
+		int numberOfMessages = Integer.parseInt(args[5]);
 		String rabbitMQMessageKey = seederKeyString + "-" + JsonRabbitMQProducer.getTodayDate();
 		try {
-			JsonRabbitMQProducer.rabbitMQQueueSender(rabbitMQEndpoint, rabbitMQUsername, rabbitMQPassword, rabbitMQExchange, rabbitMQQueue, rabbitMQMessageKey, numberOfMessages);
+			
+			JsonRabbitMQProducer.rabbitMQQueueSender(rabbitMQEndpoint, rabbitMQUsername, rabbitMQPassword, rabbitMQVirtualHost, rabbitMQExchange, rabbitMQQueue, rabbitMQMessageKey, numberOfMessages);
 			System.exit(0);
 		} catch (Exception e) {
 			System.out.println("Exception occurred");
@@ -44,7 +46,7 @@ public class JsonRabbitMQProducer {
 		}
 	}
 
-	public static void rabbitMQQueueSender(String rabbitMQEndpoint, String rabbitMQUsername, String rabbitMQPassword, String rabbitMQExchange, String rabbitMQQueue, String seederKeyString, int numberOfMessages) throws Exception {
+	public static void rabbitMQQueueSender(String rabbitMQEndpoint, String rabbitMQUsername, String rabbitMQPassword, String rabbitMQVirtualHost, String rabbitMQExchange, String rabbitMQQueue, String seederKeyString, int numberOfMessages) throws Exception {
 		List<String> people = JsonRabbitMQProducer.readDataFile();
 		int numberOfMessagesToSend=0;
 		if (people.size() > numberOfMessages) {
@@ -61,6 +63,7 @@ public class JsonRabbitMQProducer {
 		//Replace the URL with your information
 		factory.setHost(rabbitMQEndpoint);
 		factory.setPort(5671);
+		factory.setVirtualHost(rabbitMQVirtualHost);
 
 		// Allows client to establish a connection over TLS
 		factory.useSslProtocol();
@@ -70,7 +73,7 @@ public class JsonRabbitMQProducer {
 
 		// Create a channel
 		Channel channel = conn.createChannel();
-		channel.exchangeDeclare(rabbitMQExchange, BuiltinExchangeType.DIRECT, true);
+		channel.exchangeDeclare(rabbitMQExchange, BuiltinExchangeType.FANOUT, true);
 		channel.queueDeclare(rabbitMQQueue, true, false, false, null);
 		channel.queueBind(rabbitMQQueue, rabbitMQExchange, rabbitMQExchange.concat("-").concat(rabbitMQQueue));
 		try {
@@ -101,6 +104,8 @@ public class JsonRabbitMQProducer {
 						             rabbitMQExchange.concat("-").concat(rabbitMQQueue),
 						             basicProperties,
 			                         messageBodyBytes);
+				
+				
 			    
 			    System.out.println("Sent out one message - Number " + i + " at time = " + System.currentTimeMillis());
 			}
