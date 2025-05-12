@@ -17,7 +17,7 @@ Resources:
       FunctionName: java-rabbitmq-consumer-dynamodb-sam
       CodeUri: rabbitmq_event_consumer_function
       Handler: com.amazonaws.services.lambda.samples.events.rabbitmq.HandlerRabbitMQ::handleRequest
-      Runtime: java11
+      Runtime: java21
       Architectures:
         - x86_64
       MemorySize: 512
@@ -31,6 +31,7 @@ Resources:
         SubnetIds:
           - !Ref Subnet1
           - !Ref Subnet2
+          - !Ref Subnet3
       Events:
         MQEvent:
           Type: MQ
@@ -45,6 +46,8 @@ Resources:
               - Type: BASIC_AUTH
                 URI:
                   !Join ['', ["arn:", "aws:", "secretsmanager:", !Ref "AWS::Region", ":", !Ref "AWS::AccountId", ":", "secret:", !Ref SecretsManagerSecretForMQName, "-", !Ref SecretsManagerSecretForMQUniqueString]]
+              - Type: VIRTUAL_HOST
+                URI: !Ref RabbitMQVirtualHost
             
       Policies:
       - Statement:
@@ -95,6 +98,9 @@ Parameters:
   RabbitMQBrokerUniqueString:
     Type: String
     Description: Enter the unique string of the RabbitMQBroker after the broker name in the ARN
+  RabbitMQVirtualHost:
+    Type: String
+    Description: Enter the name of the RabbitMQ virtualhost from which the lambda function will consume messages
   RabbitMQQueue:
     Type: String
     Description: Enter the name of the RabbitMQ queue from which the lambda function will consume messages
@@ -106,10 +112,13 @@ Parameters:
     Description: Enter the unique string of the secret that has username/password for Rabbit MQ
   Subnet1:
     Type: String
-    Description: The first of the two private subnets in the RabbitMQ broker's VPC
+    Description: The first of the three private subnets in the RabbitMQ broker's VPC
   Subnet2:
     Type: String
-    Description: The second of the two private subnets in the RabbitMQ broker's VPC
+    Description: The second of the three private subnets in the RabbitMQ broker's VPC
+  Subnet3:
+    Type: String
+    Description: The third of the three private subnets in the RabbitMQ broker's VPC
   SecurityGroup:
     Type: String
     Description: The security group associated with this function (use same RabbitMQ)
