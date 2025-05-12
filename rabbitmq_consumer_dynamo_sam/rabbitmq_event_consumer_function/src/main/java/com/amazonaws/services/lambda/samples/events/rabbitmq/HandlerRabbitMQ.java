@@ -32,7 +32,7 @@ public class HandlerRabbitMQ implements RequestHandler<RabbitMQEvent, String>{
 			logger.log("Now iterating through Map of all queues");
 			Map<String, List<RabbitMQEvent.RabbitMessage>> mapOfMessages = event.getRmqMessagesByQueue();
 			mapOfMessages.forEach((k, v) -> {
-				String currentQueueName = k.substring(0, k.indexOf("::/"));
+				String currentQueueName = k.substring(0, k.indexOf("::"));
 				logger.log("Current Queue Name = " + currentQueueName);
 				logger.log("Now iterating through each message in this queue - " + currentQueueName);
 				for (RabbitMQEvent.RabbitMessage thisMessage: v) {
