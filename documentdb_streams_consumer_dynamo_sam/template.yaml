@@ -17,7 +17,7 @@ Resources:
       FunctionName: java-documentdb-streams-consumer-dynamodb-sam
       CodeUri: documentdb_streams_event_consumer_function
       Handler: com.amazonaws.services.lambda.samples.events.documentdbstreams.HandlerDocumentDBStreams::handleRequest
-      Runtime: java11
+      Runtime: java21
       Architectures:
         - x86_64
       MemorySize: 512
