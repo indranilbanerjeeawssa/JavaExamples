@@ -17,7 +17,7 @@ Resources:
       FunctionName: java-activemq-consumer-dynamodb-sam
       CodeUri: activemq_event_consumer_function
       Handler: com.amazonaws.services.lambda.samples.events.activemq.HandlerActiveMQ::handleRequest
-      Runtime: java11
+      Runtime: java21
       Architectures:
         - x86_64
       MemorySize: 512
